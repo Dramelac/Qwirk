@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
-
-</body>
-</html>
+<ion-view title="Vos informations de connexion">
+  <ion-nav-buttons side="right">
+    <button ng-click="logger.login()" ng-disabled="!logger.username || logger.username.length === 0" class="button button-clear button-positive">Done</button>
+  </ion-nav-buttons>
+  <ion-content class="login">
+    <div class="text-center instructions">
+      Veuillez entrer vos informations de connexion
+    </div>
+    <div class="list">
+      <label class="item item-input">
+        <input ng-model="logger.username" on-return="logger.login()" type="text" placeholder="Identifiant">
+      </label>
+        <label class="item item-input">
+            <input ng-model="logger.password" on-return="logger.login()" type="password" placeholder="Mot de passe">
+        </label>
+    </div>
+      <a href="#!/signup">S'inscrire</a> <a href="#">Mot de passe oublié ?</a>
+  </ion-content>
+</ion-view>
