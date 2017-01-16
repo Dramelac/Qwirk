@@ -1,3 +1,4 @@
+accounts-base@1.2.14
 allow-deny@1.0.5
 angular-templates@1.0.9
 autopublish@1.0.7
@@ -15,6 +16,7 @@ check@1.2.4
 ddp@1.2.5
 ddp-client@1.2.9
 ddp-common@1.2.8
+ddp-rate-limiter@1.0.6
 ddp-server@1.2.10
 deps@1.0.12
 diff-sequence@1.0.7
@@ -33,6 +35,7 @@ insecure@1.0.7
 jquery@1.11.10
 launch-screen@1.0.12
 livedata@1.0.18
+localstorage@1.0.12
 logging@1.1.16
 meteor@1.6.0
 meteor-base@1.0.4
@@ -50,10 +53,12 @@ observe-sequence@1.0.14
 ordered-dict@1.0.9
 promise@0.8.8
 random@1.0.10
+rate-limit@1.0.6
 reactive-var@1.0.11
 reload@1.1.11
 retry@1.0.9
 routepolicy@1.0.12
+service-configuration@1.0.11
 shell-server@0.2.1
 spacebars@1.0.13
 spacebars-compiler@1.0.13
