@@ -1,13 +1,9 @@
 import { _ } from 'meteor/underscore';
 import { Config, Runner } from 'angular-ecmascript/module-helpers';
 
-//import chatsTemplateUrl from '../templates/chats.html';
-//import chatTemplateUrl from '../templates/chat.html';
-import confirmationTemplateUrl from '../templates/confirmation.html';
 import loginTemplateUrl from '../templates/login.html';
 import profileTemplateUrl from '../templates/profile.html';
 import settingsTemplateUrl from '../templates/settings.html';
-import tabsTemplateUrl from '../templates/tabs.html';
 import signupTemplateUrl from '../templates/signup.html'
 
 class RoutesConfig extends Config {
