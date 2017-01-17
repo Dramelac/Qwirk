@@ -30,7 +30,7 @@ class RoutesConfig extends Config {
           controller: 'SignupCtrl as signup'
       });
 
-    this.$urlRouterProvider.otherwise('tab/chats');
+    this.$urlRouterProvider.otherwise('/login');
   }
 
   isAuthorized($auth) {
