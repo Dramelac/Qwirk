@@ -12,7 +12,6 @@ export default class LoginCtrl extends Controller {
           console.log('succès');
       });
 
-
   }
 }
 
