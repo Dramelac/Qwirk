@@ -13,6 +13,7 @@ import { Meteor } from 'meteor/meteor';
 // Modules
 import LoginCtrl from '../controllers/login.controller';
 import ProfileCtrl from '../controllers/profile.controller';
+import PasswordForgottenCtrl from '../controllers/passwordforgotten.controller';
 import SettingsCtrl from '../controllers/settings.controller';
 import SignupCtrl from '../controllers/signup.controller'
 import InputDirective from '../directives/input.directive';
@@ -32,6 +33,7 @@ Angular.module(App, [
 new Loader(App)
   .load(LoginCtrl)
   .load(ProfileCtrl)
+  .load(PasswordForgottenCtrl)
   .load(SettingsCtrl)
   .load(SignupCtrl)
   .load(InputDirective)

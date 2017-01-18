@@ -4,7 +4,8 @@ import { Config, Runner } from 'angular-ecmascript/module-helpers';
 import loginTemplateUrl from '../templates/login.html';
 import profileTemplateUrl from '../templates/profile.html';
 import settingsTemplateUrl from '../templates/settings.html';
-import signupTemplateUrl from '../templates/signup.html'
+import signupTemplateUrl from '../templates/signup.html';
+import passwordForgottenTemplateUrl from '../templates/passwordforgotten.html';
 
 class RoutesConfig extends Config {
   constructor() {
@@ -24,6 +25,11 @@ class RoutesConfig extends Config {
           url: '/signup',
           templateUrl: signupTemplateUrl,
           controller: 'SignupCtrl as signup'
+      })
+      .state('passwordforgotten', {
+        url: '/passwordforgotten',
+        templateUrl: passwordForgottenTemplateUrl,
+        controller: 'PasswordForgottenCtrl as passwordforgotten'
       });
 
     this.$urlRouterProvider.otherwise('/login');
