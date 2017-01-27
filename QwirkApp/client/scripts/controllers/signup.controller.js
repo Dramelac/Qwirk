@@ -1,5 +1,5 @@
 import { Controller } from 'angular-ecmascript/module-helpers';
-
+import { ReactiveDict} from 'meteor/reactive-dict'
 export default class SignupCtrl extends Controller {
     constructor() {
         super(...arguments);

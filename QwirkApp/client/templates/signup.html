@@ -4,18 +4,20 @@
             <button ng-click="signup.signup()" ng-disabled="!logger.username || logger.username.length === 0" class="button button-clear button-positive">Done</button>
         </ion-nav-buttons>
             <div class="list">
-                <label class="item item-input">
-                    <input ng-model="signup.email" on-return="logger.register()" type="text" placeholder="Adresse mail">
-                </label>
-                <label class="item item-input">
-                    <input ng-model="signup.phone" on-return="logger.register()" type="text" placeholder="Téléphone">
-                </label>
-                <label class="item item-input">
-                    <input ng-model="signup.password" on-return="logger.register()" type="password" placeholder="Mot de passe">
-                </label>
-                <label class="item item-input">
-                    <input ng-model="signup.passwordconfirmation" on-return="logger.register()" type="password" placeholder="Confirmation mot de passe">
-                </label>
+                <form methods="post">
+                    <label class="item item-input">
+                        <input ng-model="signup.email" on-return="logger.register()" type="text" placeholder="Adresse mail">
+                    </label>
+                    <label class="item item-input">
+                        <input ng-model="signup.phone" on-return="logger.register()" type="text" placeholder="Téléphone">
+                    </label>
+                    <label class="item item-input">
+                        <input ng-model="signup.password" on-return="logger.register()" type="password" placeholder="Mot de passe">
+                    </label>
+                    <label class="item item-input">
+                        <input ng-model="signup.passwordconfirmation" on-return="logger.register()" type="password" placeholder="Confirmation mot de passe">
+                    </label>
+                </form>
             </div>
         <a href="#!/login">Connexion</a>
     </ion-content>
