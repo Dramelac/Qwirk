@@ -9,7 +9,6 @@ import 'ionic-scripts';
 import Angular from 'angular';
 import Loader from 'angular-ecmascript/module-loader';
 import { Meteor } from 'meteor/meteor';
-
 // Modules
 import LoginCtrl from '../controllers/login.controller';
 import ProfileCtrl from '../controllers/profile.controller';
@@ -19,6 +18,7 @@ import SignupCtrl from '../controllers/signup.controller'
 import InputDirective from '../directives/input.directive';
 import CalendarFilter from '../filters/calendar.filter';
 import Routes from '../routes';
+
 
 const App = 'Qwirk';
 
