@@ -1,0 +1,9 @@
+<form [formGroup]="addForm" (ngSubmit)="addMessage()">
+    <label>Content</label>
+    <input type="text" formControlName="content">
+
+    <label>User</label>
+    <input type="text" formControlName="user">
+
+    <button type="submit">Add</button>
+</form>

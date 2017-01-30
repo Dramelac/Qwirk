@@ -1,0 +1,13 @@
+<div class="app">
+    <h1>Hello Angular2-Meteor!</h1>
+    <demo></demo>
+
+    <message-form></message-form>
+    <ul>
+        <li *ngFor="let msg of messages | async">
+            <p>{{msg.content}}</p>
+            <p>By : {{msg.user}}</p>
+            <button (click)="removeMessage(msg)">X</button>
+        </li>
+    </ul>
+</div>
