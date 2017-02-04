@@ -1,0 +1,14 @@
+<div>
+    <message-form></message-form>
+
+    <ul>
+        <li *ngFor="let msg of messages | async">
+            <a [routerLink]="['/message', msg._id]">
+                <p>{{msg.content}}</p>
+                <p>By : {{msg.user}}</p>
+            </a>
+            <button (click)="removeMessage(msg)">X</button>
+            <p>======================================</p>
+        </li>
+    </ul>
+</div>

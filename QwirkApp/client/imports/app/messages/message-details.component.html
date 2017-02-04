@@ -1,0 +1,12 @@
+
+<form *ngIf="message" (submit)="saveMessage()">
+    <label>Content</label>
+    <input type="text" [(ngModel)]="message.content" name="content">
+
+    <label>User</label>
+    <input type="text" [(ngModel)]="message.user" name="description">
+
+
+    <button type="submit">Save</button>
+    <a [routerLink]="['/']">Cancel</a>
+</form>
