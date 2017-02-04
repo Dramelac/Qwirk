@@ -2,9 +2,10 @@ import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from "@angular/router";
+import { AccountsModule } from 'angular2-meteor-accounts-ui';
 
 import {AppComponent} from "./app.component";
-import {routes} from './app.route';
+import {routes, ROUTES_PROVIDERS} from './app.route';
 import {MESSAGE_DECLARATIONS} from './messages';
 
 // TO REMOVE
@@ -25,6 +26,7 @@ import {DemoDataService} from "./demo/demo-data.service";
     ],
     // Providers
     providers: [
+        ...ROUTES_PROVIDERS,
         DemoDataService
     ],
     // Modules
@@ -32,7 +34,8 @@ import {DemoDataService} from "./demo/demo-data.service";
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forRoot(routes)
+        RouterModule.forRoot(routes),
+        AccountsModule
     ],
     // Main Component
     bootstrap: [AppComponent]

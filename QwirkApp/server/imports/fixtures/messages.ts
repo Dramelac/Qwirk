@@ -5,13 +5,16 @@ export function loadMessages() {
     if (Messages.find().cursor.count() === 0) {
         const msgs: Message[] = [{
             content: 'Hello there !',
-            user: 'Droopy'
+            user: 'Droopy',
+            publicly: true
         }, {
             content: 'Hey !What\'s up',
-            user: 'Dramelac'
+            user: 'Dramelac',
+            publicly: true
         }, {
             content: 'Nothing and u ?',
-            user: 'Droopy'
+            user: 'Droopy',
+            publicly: false
         }];
 
         msgs.forEach((msg: Message) => Messages.insert(msg));

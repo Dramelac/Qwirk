@@ -19,13 +19,18 @@ export class MessageFormComponent implements OnInit {
     ngOnInit() {
         this.addForm = this.formBuilder.group({
             content: ['', Validators.required],
-            user: ['', Validators.required]
+            user: ['', Validators.required],
+            publicly: [false]
         });
     }
 
     addMessage(): void {
+        if (!Meteor.userId()){
+            alert('Please log in to add a message');
+            return;
+        }
         if (this.addForm.valid){
-            Messages.insert(this.addForm.value);
+            Messages.insert(Object.assign({}, this.addForm.value, { owner: Meteor.userId() }));
 
             this.addForm.reset();
         }
