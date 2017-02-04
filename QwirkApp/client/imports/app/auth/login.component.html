@@ -1,0 +1,23 @@
+<div>
+    <p> Sign in with your email</p>
+
+    <form [formGroup]="loginForm" #f="ngForm" (ngSubmit)="login()">
+
+        <input formControlName="email" type="email" placeholder="Email">
+        <input formControlName="password" type="password" placeholder="Password">
+
+        <div>
+            <a [routerLink]="['/recover']">Forgot password?</a>
+            <button type="submit" aria-label="login">Sign In</button>
+        </div>
+    </form>
+
+    <div [hidden]="error == ''">
+        <p>{{ error }}</p>
+    </div>
+
+
+    <div>
+        <a [routerLink]="['/signup']">Need an account?</a>
+    </div>
+</div>

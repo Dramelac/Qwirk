@@ -1,0 +1,22 @@
+<div>
+
+    <p>Sign up</p>
+
+    <form [formGroup]="signupForm" #f="ngForm" (ngSubmit)="signup()">
+
+        <input formControlName="email" type="email" placeholder="Email">
+        <input formControlName="password" type="password" placeholder="Password">
+
+        <div>
+            <button type="submit" aria-label="login">Sign Up</button>
+        </div>
+    </form>
+
+    <div [hidden]="error == ''">
+        <p>{{ error }}</p>
+    </div>
+
+    <div>
+        <a [routerLink]="['/login']">Already a user?</a>
+    </div>
+</div>

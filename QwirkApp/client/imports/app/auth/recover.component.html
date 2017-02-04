@@ -1,0 +1,21 @@
+<div>
+
+    <p>Recover Your Password</p>
+
+    <form [formGroup]="recoverForm" #f="ngForm" (ngSubmit)="recover()">
+
+        <input formControlName="email" type="email" placeholder="Email">
+
+        <div>
+            <button type="submit" aria-label="Recover">Recover</button>
+        </div>
+    </form>
+
+    <div [hidden]="error == ''">
+        <p>{{ error }}</p>
+    </div>
+
+    <div>
+        <a [routerLink]="['/login']">Remember your password?</a>
+    </div>
+</div>

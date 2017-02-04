@@ -7,6 +7,8 @@ import { AccountsModule } from 'angular2-meteor-accounts-ui';
 import {AppComponent} from "./app.component";
 import {routes, ROUTES_PROVIDERS} from './app.route';
 import {MESSAGE_DECLARATIONS} from './messages';
+import { SHARED_DECLARATIONS } from './shared';
+import {AUTH_DECLARATIONS} from "./auth/index"
 
 // TO REMOVE
 import {DemoComponent} from "./demo/demo.component";
@@ -18,7 +20,9 @@ import {DemoDataService} from "./demo/demo-data.service";
     declarations: [
         AppComponent,
         DemoComponent,
-        ...MESSAGE_DECLARATIONS
+        ...MESSAGE_DECLARATIONS,
+        ...SHARED_DECLARATIONS,
+        ...AUTH_DECLARATIONS
     ],
     // Entry Components
     entryComponents: [
