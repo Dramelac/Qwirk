@@ -3,6 +3,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from "@angular/router";
 import { AccountsModule } from 'angular2-meteor-accounts-ui';
+import { MaterialModule } from "@angular/material";
 
 import {AppComponent} from "./app.component";
 import {routes, ROUTES_PROVIDERS} from './app.route';
@@ -39,7 +40,8 @@ import {DemoDataService} from "./demo/demo-data.service";
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forRoot(routes),
-        AccountsModule
+        AccountsModule,
+        MaterialModule.forRoot()
     ],
     // Main Component
     bootstrap: [AppComponent]
