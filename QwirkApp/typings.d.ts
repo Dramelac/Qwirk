@@ -30,10 +30,9 @@ declare module "*.sass" {
 }
 
 declare module "meteor/hwillson:stub-collections" {
-  import { Mongo } from "meteor/mongo";
 
   interface IStubCollections {
-    stub(collection: Mongo.Collection);
+    stub<T>(collection: Mongo.Collection<T>);
     restore();
   }
 
