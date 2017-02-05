@@ -12,7 +12,7 @@ Meteor.startup(() => {
 
     Accounts.emailTemplates.resetPassword.text = function (user, url) {
         url = url.replace('#/', '');
-        return "Hello , \n\nTo reset your password, simply click the link below.\n\n" + url +
+        return "Hello ,\n\nTo reset your password, simply click the link below.\n\n" + url +
             "\n\nThanks.";
     }
 
