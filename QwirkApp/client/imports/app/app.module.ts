@@ -11,16 +11,10 @@ import {MESSAGE_DECLARATIONS} from './messages';
 import { SHARED_DECLARATIONS } from './shared';
 import {AUTH_DECLARATIONS} from "./auth/index"
 
-// TO REMOVE
-import {DemoComponent} from "./demo/demo.component";
-import {DemoDataService} from "./demo/demo-data.service";
-// ----------
-
 @NgModule({
     // Components, Pipes, Directive
     declarations: [
         AppComponent,
-        DemoComponent,
         ...MESSAGE_DECLARATIONS,
         ...SHARED_DECLARATIONS,
         ...AUTH_DECLARATIONS
@@ -31,8 +25,7 @@ import {DemoDataService} from "./demo/demo-data.service";
     ],
     // Providers
     providers: [
-        ...ROUTES_PROVIDERS,
-        DemoDataService
+        ...ROUTES_PROVIDERS
     ],
     // Modules
     imports: [
