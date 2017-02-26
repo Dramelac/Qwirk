@@ -34,7 +34,7 @@ import {AUTH_DECLARATIONS} from "./auth/index"
         ReactiveFormsModule,
         RouterModule.forRoot(routes),
         AccountsModule,
-        MaterialModule.forRoot()
+        MaterialModule
     ],
     // Main Component
     bootstrap: [AppComponent]
