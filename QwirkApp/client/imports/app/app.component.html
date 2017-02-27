@@ -8,6 +8,7 @@
     <div [hidden]="!user">
         <span>{{ user | displayName }}</span>
         <button md-button (click)="logout()">Logout</button>
+        <a md-button [routerLink]="['/profile']">Your Profile</a>
     </div>
 </md-toolbar>
 <router-outlet></router-outlet>

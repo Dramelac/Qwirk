@@ -6,6 +6,7 @@ import {LoginComponent} from "./auth/login.component";
 import {SignupComponent} from "./auth/signup.component";
 import {RecoverComponent} from "./auth/recover.component";
 import {ResetPasswordComponent} from "./auth/reset-password.component";
+import {ProfileComponent} from "./userSetUp/profile.component";
 
 export const routes: Route[] = [
     {path: '', component: MessagesListComponent},
@@ -13,7 +14,8 @@ export const routes: Route[] = [
     {path: 'login', component: LoginComponent},
     {path: 'signup', component: SignupComponent},
     {path: 'recover', component: RecoverComponent},
-    {path: 'reset-password/:token', component: ResetPasswordComponent}
+    {path: 'reset-password/:token', component: ResetPasswordComponent},
+    {path: 'profile', component: ProfileComponent}
 ];
 
 export const ROUTES_PROVIDERS = [{

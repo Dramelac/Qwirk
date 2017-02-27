@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            email: ['', Validators.required],
+            log: ['', Validators.required],
             password: ['', Validators.required]
         });
 
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
 
     login() {
         if (this.loginForm.valid) {
-            Meteor.loginWithPassword(this.loginForm.value.email, this.loginForm.value.password, (err) => {
+            Meteor.loginWithPassword(this.loginForm.value.log, this.loginForm.value.password, (err) => {
                 this.zone.run(() => {
                     if (err) {
                         this.error = err;

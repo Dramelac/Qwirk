@@ -9,7 +9,8 @@ import {AppComponent} from "./app.component";
 import {routes, ROUTES_PROVIDERS} from './app.route';
 import {MESSAGE_DECLARATIONS} from './messages';
 import { SHARED_DECLARATIONS } from './shared';
-import {AUTH_DECLARATIONS} from "./auth/index"
+import {AUTH_DECLARATIONS} from "./auth"
+import {USERSETUP_DECLARATIONS} from "./userSetUp";
 
 @NgModule({
     // Components, Pipes, Directive
@@ -17,7 +18,8 @@ import {AUTH_DECLARATIONS} from "./auth/index"
         AppComponent,
         ...MESSAGE_DECLARATIONS,
         ...SHARED_DECLARATIONS,
-        ...AUTH_DECLARATIONS
+        ...AUTH_DECLARATIONS,
+        ...USERSETUP_DECLARATIONS
     ],
     // Entry Components
     entryComponents: [

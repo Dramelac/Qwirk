@@ -17,6 +17,7 @@ export class SignupComponent implements OnInit {
     ngOnInit() {
         this.signupForm = this.formBuilder.group({
             email: ['', Validators.required],
+            username:['',Validators.required],
             password: ['', Validators.required],
             confirmPassword: ['',Validators.required]
         });
@@ -29,7 +30,8 @@ export class SignupComponent implements OnInit {
         if (this.signupForm.valid && formValue.confirmPassword == formValue.password) {
             Accounts.createUser({
                 email: this.signupForm.value.email,
-                password: this.signupForm.value.password
+                password: this.signupForm.value.password,
+                username: this.signupForm.value.username
             }, (err) => {
                 if (err) {
                     this.zone.run(() => {
