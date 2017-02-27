@@ -17,14 +17,16 @@ export class SignupComponent implements OnInit {
     ngOnInit() {
         this.signupForm = this.formBuilder.group({
             email: ['', Validators.required],
-            password: ['', Validators.required]
+            password: ['', Validators.required],
+            confirmPassword: ['',Validators.required]
         });
 
         this.error = '';
     }
 
     signup() {
-        if (this.signupForm.valid) {
+        let formValue = this.signupForm.value;
+        if (this.signupForm.valid && formValue.confirmPassword == formValue.password) {
             Accounts.createUser({
                 email: this.signupForm.value.email,
                 password: this.signupForm.value.password
@@ -37,6 +39,8 @@ export class SignupComponent implements OnInit {
                     this.router.navigate(['/']);
                 }
             });
+        }else{
+            this.error = "Formulaire incorrecte vérifier que votre mot de passe corresponde à celui de confirmation";
         }
     }
 }

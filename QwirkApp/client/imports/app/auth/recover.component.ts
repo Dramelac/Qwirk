@@ -8,7 +8,7 @@ import template from './recover.component.html';
     selector: 'recover',
     template
 })
-export class RecoverComponent implements OnInit {
+export class RecoverComponent implements OnInit{
     recoverForm: FormGroup;
     error: string;
 
