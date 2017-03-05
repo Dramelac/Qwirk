@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import template from './profile.component.html';
-import User = Meteor.User;
 
 @Component({
     selector: 'profile',
@@ -13,17 +12,17 @@ import User = Meteor.User;
 export class ProfileComponent implements OnInit{
     profileForm: FormGroup;
     error: string;
-    currentUser: User;
+    currentUser = Meteor.user();
 
     constructor(private router: Router, private zone: NgZone, private formBuilder: FormBuilder) {}
 
 
     ngOnInit() {
         this.profileForm = this.formBuilder.group({
-            username: ['',this.currentUser.username],
-            email: [this.currentUser.emails],
-            newPassword:[''],
-            confirmPassword:['']
+            username: [this.currentUser.username,Validators.required],
+            email: [this.currentUser.emails[0].address,Validators.required],
+            newPassword:['',Validators.required],
+            confirmPassword:['',Validators.required]
         });
 
         this.error = '';
