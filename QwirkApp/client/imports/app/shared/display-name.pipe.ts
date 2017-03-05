@@ -1,12 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { User } from '../../../../both/models/user.model';
-
 @Pipe({
     name: 'displayName'
 })
 export class DisplayNamePipe implements PipeTransform {
-    transform(user: User): string {
+    transform(user: Meteor.User): string {
         if (!user) {
             return '';
         }

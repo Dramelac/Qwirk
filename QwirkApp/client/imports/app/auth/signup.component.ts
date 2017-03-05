@@ -2,7 +2,11 @@ import {Component, OnInit, NgZone} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { Profiles } from '../../../../both/collections/profile.collection';
+
 import template from './signup.component.html';
+import {Profile} from "../../../../both/models/profile.model";
+import {Status} from "../../../../both/models/status.enum";
 
 @Component({
     selector: 'signup',
@@ -19,7 +23,10 @@ export class SignupComponent implements OnInit {
             email: ['', Validators.required],
             username:['',Validators.required],
             password: ['', Validators.required],
-            confirmPassword: ['',Validators.required]
+            confirmPassword: ['',Validators.required],
+            firstname: [''],
+            lastname:[''],
+            birthday:['']
         });
 
         this.error = '';
@@ -38,6 +45,14 @@ export class SignupComponent implements OnInit {
                         this.error = err;
                     });
                 } else {
+                    Profiles.insert({
+                        userId: Meteor.userId(),
+                        status: Status.Online,
+                        firstname: this.signupForm.value.firstname,
+                        lastname: this.signupForm.value.lastname,
+                        birthday: this.signupForm.value.birthday,
+                        contacts: []
+                    });
                     this.router.navigate(['/']);
                 }
             });
