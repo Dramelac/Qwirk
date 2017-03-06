@@ -4,6 +4,7 @@ import template from "./app.component.html";
 import style from "./app.component.scss";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {Status} from "../../../both/models/status.enum";
+import {Profiles} from "../../../both/collections/profile.collection";
 
 @Component({
     selector: "app",
@@ -17,7 +18,7 @@ export class AppComponent {
     }
 
     logout() {
-        Meteor.users.update(Meteor.userId(), {$set: {"profile.status": Status.Offline}});
+        Profiles.update(Meteor.user().profile.id, {$set: {status: Status.Offline}});
         Meteor.logout();
     }
 }

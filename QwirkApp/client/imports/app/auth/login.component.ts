@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import template from './login.component.html';
 import {Status} from "../../../../both/models/status.enum";
+import {Profiles} from "../../../../both/collections/profile.collection";
 
 @Component({
     selector: 'login',
@@ -31,7 +32,7 @@ export class LoginComponent implements OnInit {
                     if (err) {
                         this.error = err;
                     } else {
-                        Meteor.users.update(Meteor.userId(), {$set: {"profile.status": Status.Online}});
+                        Profiles.update(Meteor.user().profile.id, {$set: {status: Status.Online}});
                         this.router.navigate(['/']);
                     }
                 });

@@ -7,4 +7,5 @@ export interface Profile extends CollectionObject {
     lastname: string;
     contacts: string[];
     status: number;
+    username: string;
 }

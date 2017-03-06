@@ -35,23 +35,32 @@ export class SignupComponent implements OnInit {
     signup() {
         let formValue = this.signupForm.value;
         if (this.signupForm.valid && formValue.confirmPassword == formValue.password) {
+            let profil: Profile = {
+                userId: "",
+                status: Status.Online,
+                firstname: this.signupForm.value.firstname,
+                lastname: this.signupForm.value.lastname,
+                birthday: this.signupForm.value.birthday,
+                contacts: [],
+                username: this.signupForm.value.username
+            };
+            Profiles.insert(profil);
+            let profilId = Profiles.findOne({username: profil.username})._id;
             Accounts.createUser({
                 email: this.signupForm.value.email,
                 password: this.signupForm.value.password,
                 username: this.signupForm.value.username,
                 profile: {
-                    status: Status.Online,
-                    firstname: this.signupForm.value.firstname,
-                    lastname: this.signupForm.value.lastname,
-                    birthday: this.signupForm.value.birthday,
-                    contacts: []
+                    id: profilId
                 }
             }, (err) => {
                 if (err) {
+                    Profiles.remove(profilId);
                     this.zone.run(() => {
                         this.error = err;
                     });
                 } else {
+                    Profiles.update(profilId, {$set: {userId: Meteor.userId()}});
                     this.router.navigate(['/']);
                 }
             });
