@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { Profiles } from '../../../../both/collections/profile.collection';
 
 import template from './signup.component.html';
-import {Profile} from "../../../../both/models/profile.model";
 import {Status} from "../../../../both/models/status.enum";
+import {Profile} from "../../../../both/models/profile.model";
 
 @Component({
     selector: 'signup',
@@ -38,21 +38,20 @@ export class SignupComponent implements OnInit {
             Accounts.createUser({
                 email: this.signupForm.value.email,
                 password: this.signupForm.value.password,
-                username: this.signupForm.value.username
+                username: this.signupForm.value.username,
+                profile: {
+                    status: Status.Online,
+                    firstname: this.signupForm.value.firstname,
+                    lastname: this.signupForm.value.lastname,
+                    birthday: this.signupForm.value.birthday,
+                    contacts: []
+                }
             }, (err) => {
                 if (err) {
                     this.zone.run(() => {
                         this.error = err;
                     });
                 } else {
-                    Profiles.insert({
-                        userId: Meteor.userId(),
-                        status: Status.Online,
-                        firstname: this.signupForm.value.firstname,
-                        lastname: this.signupForm.value.lastname,
-                        birthday: this.signupForm.value.birthday,
-                        contacts: []
-                    });
                     this.router.navigate(['/']);
                 }
             });
