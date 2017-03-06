@@ -11,6 +11,7 @@ import {MESSAGE_DECLARATIONS} from './messages';
 import { SHARED_DECLARATIONS } from './shared';
 import {AUTH_DECLARATIONS} from "./auth"
 import {USERSETUP_DECLARATIONS} from "./userSetUp";
+import {CONTACT_DECLARATIONS} from "./contact";
 
 @NgModule({
     // Components, Pipes, Directive
@@ -19,7 +20,8 @@ import {USERSETUP_DECLARATIONS} from "./userSetUp";
         ...MESSAGE_DECLARATIONS,
         ...SHARED_DECLARATIONS,
         ...AUTH_DECLARATIONS,
-        ...USERSETUP_DECLARATIONS
+        ...USERSETUP_DECLARATIONS,
+        ...CONTACT_DECLARATIONS
     ],
     // Entry Components
     entryComponents: [

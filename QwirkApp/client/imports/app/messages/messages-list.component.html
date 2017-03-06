@@ -1,6 +1,8 @@
 <div>
     <message-form></message-form>
 
+    <contact-search></contact-search>
+
     <ul>
         <li *ngFor="let msg of messages | async">
             <a [routerLink]="['/message', msg._id]">
