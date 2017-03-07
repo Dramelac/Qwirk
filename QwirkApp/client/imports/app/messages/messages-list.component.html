@@ -1,16 +1,7 @@
-<div>
-    <message-form></message-form>
-
-    <contact-search></contact-search>
-
-    <ul>
-        <li *ngFor="let msg of messages | async">
-            <a [routerLink]="['/message', msg._id]">
-                <p>{{msg.content}}</p>
-                <p>By : {{msg.user}}</p>
-            </a>
-            <button (click)="removeMessage(msg)">X</button>
-            <p>======================================</p>
-        </li>
-    </ul>
+<h5>{{chat.title}}</h5>
+<div *ngFor="let message of messages | async">
+    <div [class]="'message message-' + message.ownership">
+        <div *ngIf="message.type == 'text'">{{message.content}}</div>
+        <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+    </div>
 </div>

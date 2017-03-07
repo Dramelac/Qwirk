@@ -1,8 +1,13 @@
 import { CollectionObject } from './collection-object.model';
 
+export enum MessageType {
+    TEXT = <any>'text'
+}
+
 export interface Message extends CollectionObject {
-    content: string;
-    user: string;
-    owner?: string;
-    publicly: boolean;
+    chatId?: string;
+    content?: string;
+    createdAt?: Date;
+    ownership?: string;
+    type?: MessageType
 }

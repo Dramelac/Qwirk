@@ -49,8 +49,7 @@ export class MessageDetailsComponent implements OnInit, OnDestroy {
 
         Messages.update(this.message._id, {
             $set: {
-                content: this.message.content,
-                user: this.message.user,
+                content: this.message.content
             }
         });
     }

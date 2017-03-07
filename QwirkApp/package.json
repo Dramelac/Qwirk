@@ -33,9 +33,11 @@
     "angular2-meteor-accounts-ui": "^1.0.0",
     "angular2-meteor-polyfills": "0.1.1",
     "angular2-meteor-tests-polyfills": "0.0.2",
+    "angular2-moment": "^1.2.0",
     "babel-runtime": "^6.18.0",
     "bcrypt": "^1.0.2",
     "meteor-rxjs": "0.4.7",
+    "moment": "^2.17.1",
     "reflect-metadata": "0.1.9",
     "rxjs": "5.0.2",
     "zone.js": "0.7.4"

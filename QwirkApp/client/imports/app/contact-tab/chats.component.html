@@ -1,0 +1,12 @@
+<div>
+    <ul>
+        <li *ngFor="let chat of chats | async">
+            <a [routerLink]="['/chat', chat]">
+                <p>{{chat.title}}</p>
+                <span>{{chat.lastMessage.createdAt | amCalendar }}</span>
+            </a>
+            <button (click)="removeChat(chat)">X</button>
+            <p>======================================</p>
+        </li>
+    </ul>
+</div>

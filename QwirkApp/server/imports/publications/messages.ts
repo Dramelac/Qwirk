@@ -4,12 +4,12 @@ Meteor.publish('messages', function() {
     return Messages.find(buildQuery.call(this));
 });
 
-Meteor.publish('message', function(messageId: string) {
-    return Messages.find(buildQuery.call(this, messageId));
+Meteor.publish('message', function(chatId: string) {
+    return Messages.find(buildQuery.call(this, chatId));
 });
 
-function buildQuery(messageId?: string): Object {
-    const isAvailable = {
+function buildQuery(chatId?: string): Object {
+    /*const isAvailable = {
         $or: [{
             publicly: true
         },
@@ -22,18 +22,18 @@ function buildQuery(messageId?: string): Object {
                 }
             }]
         }]
-    };
+    };*/
 
-    if (messageId) {
+    if (chatId) {
         return {
             // only single party
-            $and: [{
-                _id: messageId
-            },
-                isAvailable
-            ]
+            $or: [{
+                chatId: chatId
+            },{
+                publicly: true
+            }]
         };
     }
 
-    return isAvailable;
+    return {publicly: true};
 }

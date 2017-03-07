@@ -7,18 +7,38 @@ import { Messages } from '../../../../both/collections/message.collection';
 import { Message } from '../../../../both/models/message.model';
 
 import template from './messages-list.component.html';
+import {ActivatedRoute} from "@angular/router";
+import {Chat} from "../../../../both/models/chat.model";
 
 @Component({
     selector: 'messages-list',
     template
 })
 export class MessagesListComponent implements OnInit, OnDestroy{
+    chat: Chat;
+    paramsSub: Subscription;
     messages: Observable<Message[]>;
     messagesSub: Subscription;
 
+    constructor(private route: ActivatedRoute){}
+
     ngOnInit() {
-        this.messages = Messages.find({}).zone();
-        this.messagesSub = MeteorObservable.subscribe('messages').subscribe();
+        this.paramsSub = this.route.params
+            .map(params => params["chat"])
+            .subscribe(chat => {
+                this.chat = chat;
+
+                if (this.messagesSub){
+                    this.messagesSub.unsubscribe();
+                }
+
+                this.messagesSub = MeteorObservable.subscribe('message', this.chat._id).subscribe();
+            });
+
+        this.messages = Messages.find(
+            {chatId: this.chat._id},
+            {sort: {createdAt: 1}}
+        );
     }
 
     removeMessage(msg: Message): void {
