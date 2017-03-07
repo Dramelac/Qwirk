@@ -28,7 +28,7 @@ function buildQuery(chatId?: string): Object {
         return {
             // only single party
             $or: [{
-                chatId: chatId
+                chatId: this.chatId
             },{
                 publicly: true
             }]

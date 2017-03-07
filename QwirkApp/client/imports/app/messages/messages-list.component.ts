@@ -9,12 +9,14 @@ import { Message } from '../../../../both/models/message.model';
 import template from './messages-list.component.html';
 import {ActivatedRoute} from "@angular/router";
 import {Chat} from "../../../../both/models/chat.model";
+import {Chats} from "../../../../both/collections/chat.collection";
 
 @Component({
     selector: 'messages-list',
     template
 })
 export class MessagesListComponent implements OnInit, OnDestroy{
+    chatId: string;
     chat: Chat;
     paramsSub: Subscription;
     messages: Observable<Message[]>;
@@ -26,17 +28,18 @@ export class MessagesListComponent implements OnInit, OnDestroy{
         this.paramsSub = this.route.params
             .map(params => params["chat"])
             .subscribe(chat => {
-                this.chat = chat;
+                this.chatId = chat;
 
                 if (this.messagesSub){
                     this.messagesSub.unsubscribe();
                 }
 
-                this.messagesSub = MeteorObservable.subscribe('message', this.chat._id).subscribe();
+                this.messagesSub = MeteorObservable.subscribe('message', this.chatId).subscribe();
             });
 
+        this.chat = Chats.findOne(this.chatId);
         this.messages = Messages.find(
-            {chatId: this.chat._id},
+            {chatId: this.chatId},
             {sort: {createdAt: 1}}
         );
     }

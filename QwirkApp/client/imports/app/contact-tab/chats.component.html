@@ -1,7 +1,7 @@
 <div>
     <ul>
         <li *ngFor="let chat of chats | async">
-            <a [routerLink]="['/chat', chat]">
+            <a [routerLink]="['/chat', chat._id]">
                 <p>{{chat.title}}</p>
                 <span>{{chat.lastMessage.createdAt | amCalendar }}</span>
             </a>
