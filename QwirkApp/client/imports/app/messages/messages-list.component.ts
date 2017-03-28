@@ -3,13 +3,12 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MeteorObservable } from 'meteor-rxjs';
 
-import { Messages } from '../../../../both/collections/message.collection';
+import { Messages, Chats } from '../../../../both/collections';
 import { Message } from '../../../../both/models/message.model';
 
 import template from './messages-list.component.html';
 import {ActivatedRoute} from "@angular/router";
 import {Chat} from "../../../../both/models/chat.model";
-import {Chats} from "../../../../both/collections/chat.collection";
 
 @Component({
     selector: 'messages-list',
@@ -34,7 +33,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                     this.messagesSub.unsubscribe();
                 }
 
-                this.messagesSub = MeteorObservable.subscribe('message', this.chatId).subscribe();
+                this.messagesSub = MeteorObservable.subscribe('messages', this.chatId).subscribe();
             });
 
         this.chat = Chats.findOne(this.chatId);

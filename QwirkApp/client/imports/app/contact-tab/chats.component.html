@@ -1,12 +1,17 @@
-<div>
-    <ul>
-        <li *ngFor="let chat of chats | async">
-            <a [routerLink]="['/chat', chat._id]">
-                <p>{{chat.title}}</p>
-                <span>{{chat.lastMessage.createdAt | amCalendar }}</span>
-            </a>
-            <button (click)="removeChat(chat)">X</button>
-            <p>======================================</p>
-        </li>
-    </ul>
+<h5>List chats : </h5>
+<div *ngFor="let chat of chats | async">
+    <button>
+        <img [src]="chat.picture">
+        <div>
+            <h2 class="chat-title">{{chat.title}}</h2>
+
+            <span *ngIf="chat.lastMessage">
+                <p *ngIf="chat.lastMessage.type == 'text'">{{chat.lastMessage.content}}</p>
+                <span class="last-message-timestamp">{{chat.lastMessage.createdAt }}</span>
+            </span>
+        </div>
+    </button>
+    <div>
+        <button (click)="removeChat(chat)">Remove</button>
+    </div>
 </div>

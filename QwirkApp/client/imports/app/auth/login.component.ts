@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import template from './login.component.html';
 import {Status} from "../../../../both/models/status.enum";
-import {Profiles} from "../../../../both/collections/profile.collection";
+import {Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'login',

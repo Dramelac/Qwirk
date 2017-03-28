@@ -5,7 +5,7 @@ import { MeteorObservable } from 'meteor-rxjs';
 
 import 'rxjs/add/operator/map';
 
-import { Messages } from '../../../../both/collections/message.collection';
+import { Messages } from '../../../../both/collections';
 import { Message } from '../../../../both/models/message.model';
 
 import template from './message-details.component.html';

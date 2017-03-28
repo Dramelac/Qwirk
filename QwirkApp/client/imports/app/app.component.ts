@@ -4,7 +4,7 @@ import template from "./app.component.html";
 import style from "./app.component.scss";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {Status} from "../../../both/models/status.enum";
-import {Profiles} from "../../../both/collections/profile.collection";
+import {Profiles} from "../../../both/collections";
 
 @Component({
     selector: "app",

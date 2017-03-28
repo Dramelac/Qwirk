@@ -2,7 +2,7 @@ import {Component, OnInit, NgZone} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { Profiles } from '../../../../both/collections/profile.collection';
+import { Profiles } from '../../../../both/collections';
 
 import template from './signup.component.html';
 import {Status} from "../../../../both/models/status.enum";

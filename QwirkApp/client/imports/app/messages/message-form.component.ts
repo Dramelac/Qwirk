@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { Messages } from '../../../../both/collections/message.collection';
+import { Messages } from '../../../../both/collections';
 
 import template from './message-form.component.html';
 
