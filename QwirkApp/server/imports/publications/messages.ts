@@ -25,15 +25,8 @@ function buildQuery(chatId?: string): Object {
     };*/
 
     if (chatId) {
-        return {
-            // only single party
-            $or: [{
-                chatId: this.chatId
-            },{
-                publicly: true
-            }]
-        };
+        return {chatId: this.chatId};
     }
 
-    return {publicly: true};
+    return {};
 }

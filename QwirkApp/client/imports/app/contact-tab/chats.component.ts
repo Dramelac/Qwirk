@@ -13,9 +13,12 @@ import {MeteorObservable} from "meteor-rxjs";
 export class ChatsComponent implements OnInit, OnDestroy {
     chats: Observable<Chat[]>;
     chatsSub: Subscription;
+    messageSub: Subscription;
 
     ngOnInit(): void {
-        /*this.chats = Chats
+        this.chatsSub = MeteorObservable.subscribe('chats').subscribe();
+        this.messageSub = MeteorObservable.subscribe('messages').subscribe();
+        this.chats = Chats
             .find({})
             .mergeMap((chats: Chat[]) =>
                 Observable.combineLatest(
@@ -29,9 +32,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
                             })
                     )
                 )
-            ).zone();*/
-        this.chatsSub = MeteorObservable.subscribe('chats').subscribe();
-        this.chats = Chats.find().zone();
+            );
     }
 
     constructor() {
@@ -43,6 +44,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        //this.chatsSub.unsubscribe();
+        this.chatsSub.unsubscribe();
+        this.messageSub.unsubscribe();
     }
 }
