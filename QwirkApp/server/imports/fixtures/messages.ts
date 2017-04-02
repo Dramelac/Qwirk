@@ -1,6 +1,6 @@
-import { Messages, Chats } from '../../../both/collections';
-import * as Moment from 'moment';
-import {MessageType} from "../../../both/models/message.model"
+import {Chats, Messages} from "../../../both/collections";
+import * as Moment from "moment";
+import {MessageType} from "../../../both/models/message.model";
 
 export function loadMessages() {
     /*if (Messages.find().cursor.count() === 0) {
@@ -28,7 +28,7 @@ export function loadMessages() {
         chatId = Chats.collection.insert({
             title: 'Ethan Gonzalez',
             picture: 'https://randomuser.me/api/portraits/thumb/men/1.jpg',
-            admin: [],
+            admin: [Meteor.userId()],
             user: [],
             publicly: true
         });
