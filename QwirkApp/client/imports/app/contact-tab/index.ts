@@ -1,7 +1,7 @@
-import { ContactSearchComponent } from './contact-search.component';
+import { ContactListComponent } from './contact-list.component';
 import { ChatsComponent } from './chats.component';
 
 export const CONTACT_DECLARATIONS = [
-    ContactSearchComponent,
+    ContactListComponent,
     ChatsComponent
 ];

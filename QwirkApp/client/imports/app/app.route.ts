@@ -7,6 +7,7 @@ import {RecoverComponent} from "./auth/recover.component";
 import {ResetPasswordComponent} from "./auth/reset-password.component";
 import {ProfileComponent} from "./userSetUp/profile.component";
 import {MainComponent} from "./main.component";
+import {ContactListComponent} from "./contact-tab/contact-list.component";
 
 export const routes: Route[] = [
     {path: '', component: MainComponent},
@@ -15,7 +16,8 @@ export const routes: Route[] = [
     {path: 'signup', component: SignupComponent},
     {path: 'recover', component: RecoverComponent},
     {path: 'reset-password/:token', component: ResetPasswordComponent},
-    {path: 'profile', component: ProfileComponent}
+    {path: 'profile', component: ProfileComponent},
+    {path:'contact-list', component : ContactListComponent}
 ];
 
 export const ROUTES_PROVIDERS = [{
