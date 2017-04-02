@@ -1,4 +1,4 @@
-import {Profiles} from '../../../both/collections/profile.collection';
+import {Profiles} from "../../../both/collections/profile.collection";
 
 Meteor.publish('profile', function (userId: string) {
     return Profiles.find(buildQuery.call(this, userId));

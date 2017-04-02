@@ -8,4 +8,9 @@
         <button type="submit">Search</button>
     </form>
 
+    <div *ngFor="let profile of profiles | async">
+        <h2>Contact List</h2>
+        <p>{{profile.username}}</p>
+    </div>
+
 </div>

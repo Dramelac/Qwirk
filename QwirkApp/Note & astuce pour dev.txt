@@ -1,0 +1,30 @@
+Truc à savoir sur mongo Db:
+
+la méthode find() correspond à un "Select *" qui peut avoir des parametres 
+
+voici un exemple : 
+
+Profiles.find($and: [{
+            userId: this.userId
+        }, {
+            userId: {
+                $exists: true
+            }
+        }]);
+});
+ce qui nous en requête "SELECT * From Profiles where userId = ?id AND id Exist"
+
+le $and est un tag de mongoDb voici une liste des différents tags existants:
+$and: correspond au AND
+$or: correspond au OR 
+$not: correspond au NOT
+$ne:correspond à la comparaison != 
+$eq:correspond à la comparaison ==
+$gt:correspond à la comparaison >
+$gte:correspond à la comparaison >=
+$lt:correspond à la comparaison <
+$lte:correspond à la comparaison <=
+$in:correspond au IN
+$nin:correspond à l'inverse de $in
+
+Voilà un petit aperçu voici un lien qui permet de regarder plus en détails les tags : https://docs.mongodb.com/manual/reference/operator/query/
