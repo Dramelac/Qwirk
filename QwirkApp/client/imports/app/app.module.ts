@@ -13,13 +13,11 @@ import { SHARED_DECLARATIONS } from './shared';
 import {AUTH_DECLARATIONS} from "./auth"
 import {USERSETUP_DECLARATIONS} from "./userSetUp";
 import {CONTACT_DECLARATIONS} from "./contact-tab";
-import {MainComponent} from "./main.component";
 
 @NgModule({
     // Components, Pipes, Directive
     declarations: [
         AppComponent,
-        MainComponent,
         ...MESSAGE_DECLARATIONS,
         ...SHARED_DECLARATIONS,
         ...AUTH_DECLARATIONS,

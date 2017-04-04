@@ -6,6 +6,7 @@ import {Chats, Messages} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 import {Message} from "../../../../both/models/message.model";
 import {Subscriber} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: 'chat-list',

@@ -3,7 +3,7 @@
     <button>
         <img [src]="chat.picture">
         <div>
-            <h2 class="chat-title">{{chat.title}}</h2>
+            <a [routerLink]="['/chat', chat._id]"><h2 class="chat-title">{{chat.title}}</h2></a>
 
             <span *ngIf="chat.lastMessage">
                 <p *ngIf="chat.lastMessage.type == 'text'">{{chat.lastMessage.content}}</p>

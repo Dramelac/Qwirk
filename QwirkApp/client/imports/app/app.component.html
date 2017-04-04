@@ -12,4 +12,15 @@
         <a md-button [routerLink]="['/contact-list']">Contact List</a>
     </div>
 </md-toolbar>
+
+<!-- App layout -->
+
+
+<div [hidden]="!user">
+    <h1>Welcome to Qwirk !</h1>
+    <chat-list></chat-list>
+    <!--<messages-list></messages-list>-->
+</div>
+
+<!-- Main page -->
 <router-outlet></router-outlet>

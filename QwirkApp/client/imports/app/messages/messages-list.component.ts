@@ -25,7 +25,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
     ngOnInit() {
         this.paramsSub = this.route.params
-            .map(params => params["chat"])
+            .map(params => params["chatId"])
             .subscribe(chat => {
                 this.chatId = chat;
 
