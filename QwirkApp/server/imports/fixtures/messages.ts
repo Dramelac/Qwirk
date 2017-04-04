@@ -28,7 +28,7 @@ export function loadMessages() {
         chatId = Chats.collection.insert({
             title: 'Ethan Gonzalez',
             picture: 'https://randomuser.me/api/portraits/thumb/men/1.jpg',
-            admin: [Meteor.userId()],
+            admin: [],
             user: [],
             publicly: true
         });

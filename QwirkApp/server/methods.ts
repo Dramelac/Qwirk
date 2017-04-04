@@ -89,7 +89,7 @@ Meteor.methods({
         return {
             messageId: Messages.collection.insert({
                 chatId: chatId,
-                ownership: this.userId,
+                ownerId: this.userId,
                 content: content,
                 createdAt: new Date(),
                 type: type
