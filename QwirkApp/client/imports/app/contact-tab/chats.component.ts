@@ -23,7 +23,7 @@ export class ChatsComponent implements OnInit {
         });
     }
 
-    constructor() {
+    constructor(private router: Router) {
 
     }
 
@@ -86,5 +86,9 @@ export class ChatsComponent implements OnInit {
                 }
             }
         });
+    }
+
+    showMessages(chat: string): void {
+        this.router.navigate(["/chat/"+chat]);
     }
 }
