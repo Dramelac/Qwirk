@@ -11,6 +11,9 @@
     <div *ngFor="let profile of profiles | async">
         <h2>Contact List</h2>
         <p>{{profile.username}}</p>
+        <p>{{profile.userId}}</p>
+        <p *ngIf="profile.contacts.length == 0">Pas d'amis !!</p>
+        <p> {{profile.contacts}}</p>
     </div>
 
 </div>
