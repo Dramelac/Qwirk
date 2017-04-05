@@ -1,50 +1,94 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import template from './chats.component.html';
+import {Component, OnInit} from "@angular/core";
+import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
-import { Subscription } from 'rxjs/Subscription';
 import {Chat} from "../../../../both/models/chat.model";
 import {Chats, Messages} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
+import {Message} from "../../../../both/models/message.model";
+import {Subscriber} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: 'chat-list',
     template
 })
-export class ChatsComponent implements OnInit, OnDestroy {
+export class ChatsComponent implements OnInit {
     chats: Observable<Chat[]>;
-    chatsSub: Subscription;
-    messageSub: Subscription;
 
     ngOnInit(): void {
-        this.chatsSub = MeteorObservable.subscribe('chats').subscribe();
-        this.messageSub = MeteorObservable.subscribe('messages').subscribe();
-        this.chats = Chats
-            .find({})
-            .mergeMap((chats: Chat[]) =>
-                Observable.combineLatest(
-                    ...chats.map((chat: Chat) =>
-                        Messages
-                            .find({chatId: chat._id})
-                            .startWith(null)
-                            .map(messages => {
-                                if (messages) chat.lastMessage = messages[0];
-                                return chat;
-                            })
-                    )
-                )
-            );
+        MeteorObservable.subscribe('chats').subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                this.chats = this.findChats();
+            });
+        });
     }
 
-    constructor() {
+    constructor(private router: Router) {
 
+    }
+
+    findChats(): Observable<Chat[]> {
+        return Chats.find().map(chats => {
+            chats.forEach(chat => {
+                if (chat.title == ""){
+                    const receiverId = chat.user.find(m => m !== Meteor.userId());
+                    const receiver = Meteor.users.findOne(receiverId);
+
+                    if (receiver) {
+                        chat.title = receiver.profile.name;
+                        chat.picture = receiver.profile.picture;
+                    }
+                }
+
+                // This will make the last message reactive
+                this.findLastChatMessage(chat._id).subscribe((message) => {
+                    chat.lastMessage = message;
+                });
+            });
+
+            return chats;
+        });
+    }
+
+    findLastChatMessage(chatId: string): Observable<Message> {
+        return Observable.create((observer: Subscriber<Message>) => {
+            const chatExists = () => !!Chats.findOne(chatId);
+
+            // Re-compute until chat is removed
+            MeteorObservable.autorun().takeWhile(chatExists).subscribe(() => {
+                Messages.find({ chatId }, {
+                    sort: { createdAt: -1 }
+                }).subscribe({
+                    next: (messages) => {
+                        // Invoke subscription with the last message found
+                        if (!messages.length) {
+                            return;
+                        }
+                        const lastMessage = messages[0];
+                        observer.next(lastMessage);
+                    },
+                    error: (e) => {
+                        observer.error(e);
+                    },
+                    complete: () => {
+                        observer.complete();
+                    }
+                });
+            });
+        });
     }
 
     removeChat(chat: Chat): void {
-        Chats.remove({_id: chat._id});
+        MeteorObservable.call('removeChat', chat._id).subscribe({
+            error: (e: Error) => {
+                if (e) {
+                    console.error(e);
+                }
+            }
+        });
     }
 
-    ngOnDestroy(): void {
-        this.chatsSub.unsubscribe();
-        this.messageSub.unsubscribe();
+    showMessages(chat: string): void {
+        this.router.navigate(["/chat/"+chat]);
     }
 }

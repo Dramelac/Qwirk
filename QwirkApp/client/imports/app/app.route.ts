@@ -6,12 +6,12 @@ import {SignupComponent} from "./auth/signup.component";
 import {RecoverComponent} from "./auth/recover.component";
 import {ResetPasswordComponent} from "./auth/reset-password.component";
 import {ProfileComponent} from "./userSetUp/profile.component";
-import {MainComponent} from "./main.component";
 import {ContactListComponent} from "./contact-tab/contact-list.component";
+import {MessagesListComponent} from "./messages/messages-list.component";
 
 export const routes: Route[] = [
-    {path: '', component: MainComponent},
     {path: 'message/:messageId', component: MessageDetailsComponent, canActivate: ['canActivateForLoggedIn']},
+    {path: 'chat/:chatId', component: MessagesListComponent, canActivate: ['canActivateForLoggedIn']},
     {path: 'login', component: LoginComponent},
     {path: 'signup', component: SignupComponent},
     {path: 'recover', component: RecoverComponent},

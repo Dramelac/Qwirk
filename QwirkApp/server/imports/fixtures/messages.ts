@@ -1,6 +1,6 @@
-import { Messages, Chats } from '../../../both/collections';
-import * as Moment from 'moment';
-import {MessageType} from "../../../both/models/message.model"
+import {Chats, Messages} from "../../../both/collections";
+import * as Moment from "moment";
+import {MessageType} from "../../../both/models/message.model";
 
 export function loadMessages() {
     /*if (Messages.find().cursor.count() === 0) {

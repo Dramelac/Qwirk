@@ -1,32 +1,14 @@
-import { Messages } from '../../../both/collections/message.collection';
+import {Messages} from "../../../both/collections/message.collection";
+import {Message} from "../../../both/models/message.model";
 
-Meteor.publish('messages', function() {
-    return Messages.find(buildQuery.call(this));
-});
-
-Meteor.publish('message', function(chatId: string) {
-    return Messages.find(buildQuery.call(this, chatId));
-});
-
-function buildQuery(chatId?: string): Object {
-    /*const isAvailable = {
-        $or: [{
-            publicly: true
-        },
-        {
-            $and: [{
-                owner: this.userId
-            }, {
-                owner: {
-                    $exists: true
-                }
-            }]
-        }]
-    };*/
-
-    if (chatId) {
-        return {chatId: this.chatId};
+Meteor.publish('messages', function(
+    chatId: string,
+    messagesBatchCounter: number): Mongo.Cursor<Message> {
+    if (!this.userId || !chatId) {
+        return;
     }
 
-    return {};
-}
+    return Messages.collection.find({
+        chatId: chatId
+    });
+});

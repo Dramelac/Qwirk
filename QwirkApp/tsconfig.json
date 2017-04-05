@@ -9,7 +9,14 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": [
+      "meteor-typings",
+      "@types/underscore",
+      "@types/meteor-accounts-phone",
+      "@types/meteor-publish-composite",
+      "@types/meteor-collection-hooks"
+    ]
   },
   "exclude": [
     "node_modules"
