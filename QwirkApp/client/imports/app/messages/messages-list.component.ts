@@ -34,13 +34,14 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                 }
 
                 this.messagesSub = MeteorObservable.subscribe('messages', this.chatId).subscribe();
+
+                this.chat = Chats.findOne(this.chatId);
+                this.messages = Messages.find(
+                    {chatId: this.chatId},
+                    {sort: {createdAt: 1}}
+                );
             });
 
-        this.chat = Chats.findOne(this.chatId);
-        this.messages = Messages.find(
-            {chatId: this.chatId},
-            {sort: {createdAt: 1}}
-        );
     }
 
     removeMessage(msg: Message): void {
