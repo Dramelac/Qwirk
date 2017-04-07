@@ -22,7 +22,7 @@ Meteor.methods({
         }
 
         const chatExists = !!Chats.collection.find({
-            memberIds: { $all: [this.userId, receiverId] }
+            user: { $all: [this.userId, receiverId] }
         }).count();
 
         if (chatExists) {

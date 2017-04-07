@@ -1,12 +1,8 @@
 <form [formGroup]="addForm" (ngSubmit)="addMessage()">
-    <label>Content</label>
+
+    <label>Message</label>
     <input type="text" formControlName="content">
+    <input type="hidden" formControlName="chatId">
 
-    <label>User</label>
-    <input type="text" formControlName="user">
-
-    <label>Public</label>
-    <input type="checkbox" formControlName="publicly">
-
-    <button type="submit">Add</button>
+    <button type="submit">Send</button>
 </form>

@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Messages } from '../../../../both/collections';
 
 import template from './message-form.component.html';
+import {MessageType} from "../../../../both/models/message.model";
 
 @Component({
     selector: 'message-form',
@@ -19,8 +20,7 @@ export class MessageFormComponent implements OnInit {
     ngOnInit() {
         this.addForm = this.formBuilder.group({
             content: ['', Validators.required],
-            user: ['', Validators.required],
-            publicly: [false]
+            chatId: ['LuMLDdPSvuobXNqNJ', Validators.required]
         });
     }
 
@@ -30,7 +30,11 @@ export class MessageFormComponent implements OnInit {
             return;
         }
         if (this.addForm.valid){
-            Messages.insert(Object.assign({}, this.addForm.value, { owner: Meteor.userId() }));
+            Meteor.call("addMessage", MessageType.TEXT, this.addForm.value.chatId, this.addForm.value.content,
+                (error, result) => {
+
+            });
+            //Messages.insert(Object.assign({}, this.addForm.value, { owner: Meteor.userId() }));
 
             this.addForm.reset();
         }
