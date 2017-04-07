@@ -19,8 +19,7 @@ export class MessageFormComponent implements OnInit {
 
     ngOnInit() {
         this.addForm = this.formBuilder.group({
-            content: ['', Validators.required],
-            chatId: ['LuMLDdPSvuobXNqNJ', Validators.required]
+            content: ['', Validators.required]
         });
     }
 
@@ -30,7 +29,7 @@ export class MessageFormComponent implements OnInit {
             return;
         }
         if (this.addForm.valid){
-            Meteor.call("addMessage", MessageType.TEXT, this.addForm.value.chatId, this.addForm.value.content,
+            Meteor.call("addMessage", MessageType.TEXT, Session.get("chatId"), this.addForm.value.content,
                 (error, result) => {
 
             });

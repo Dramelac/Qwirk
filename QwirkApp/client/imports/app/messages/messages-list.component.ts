@@ -28,6 +28,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
             .map(params => params["chatId"])
             .subscribe(chat => {
                 this.chatId = chat;
+                Session.set("chatId", this.chatId);
 
                 if (this.messagesSub){
                     this.messagesSub.unsubscribe();
