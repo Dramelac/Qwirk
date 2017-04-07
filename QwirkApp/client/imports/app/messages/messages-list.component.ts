@@ -40,7 +40,14 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                 this.messages = Messages.find(
                     {chatId: this.chatId},
                     {sort: {createdAt: 1}}
-                );
+                ).map((messages: Message[]) => {
+                    messages.forEach((message) => {
+                        message.ownership = Meteor.userId() == message.ownerId ? 'mine' : 'other';
+
+                        return message;
+                    });
+                    return messages;
+                });
             });
 
     }
