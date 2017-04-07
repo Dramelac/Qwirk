@@ -1,20 +1,17 @@
 <h5>List chats : </h5>
 <div *ngFor="let chat of chats | async">
-    <button>
+    <button (click)="showMessages(chat._id)">
         <img [src]="chat.picture">
         <div>
-            <a [routerLink]="['/chat', chat._id]"><h2 class="chat-title">{{chat.title}}</h2></a>
+            <h2 class="chat-title">{{chat.title}}</h2>
 
             <span *ngIf="chat.lastMessage">
                 <p *ngIf="chat.lastMessage.type == 'text'">{{chat.lastMessage.content}}</p>
                 <span class="last-message-timestamp">{{chat.lastMessage.createdAt }}</span>
             </span>
         </div>
+        <div>
+            <button (click)="removeChat(chat)">Remove</button>
+        </div>
     </button>
-    <div>
-        <button (click)="removeChat(chat)">Remove</button>
-    </div>
-    <div>
-        <button (click)="showMessages(chat._id)">See</button>
-    </div>
 </div>
