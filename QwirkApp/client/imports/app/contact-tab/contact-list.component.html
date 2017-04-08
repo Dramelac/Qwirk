@@ -1,19 +1,30 @@
 <div>
     <p>Search contact</p>
 
-    <form (ngSubmit)="search()">
+    <form (ngSubmit)="search(username)">
         <label>Username: </label>
-        <input type="text" [(ngModel)]="name" name="Name">
+        <input type="text" [(ngModel)]="username" name="Name">
 
         <button type="submit">Search</button>
     </form>
+    <div *ngFor="let profileFind of profilesFind | async">
+        <div *ngIf="profileFind != null">
+            <h2>Result Search</h2>
+            <p>{{profileFind.username}}</p>
+            <p>{{profileFind.userId}}</p>
+            <p>{{profileFind.Id}}</p>
+        </div>
+    </div>
+
+
 
     <div *ngFor="let profile of profiles | async">
         <h2>Contact List</h2>
+
         <p>{{profile.username}}</p>
         <p>{{profile.userId}}</p>
         <p *ngIf="profile.contacts.length == 0">Pas d'amis !!</p>
-        <p> {{profile.contacts}}</p>
+        <p> {{profile.contacts.lenght}}</p>
     </div>
 
 </div>
