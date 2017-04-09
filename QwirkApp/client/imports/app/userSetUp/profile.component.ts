@@ -33,8 +33,10 @@ export class ProfileComponent implements OnInit {
         this.profile = Profiles.findOne({userId:this.currentUser._id});
 
         this.profileForm = this.formBuilder.group({
-            username: [this.profile.username, Validators.required],
-            picture: [this.profile.picture, Validators.required],
+            username: ["", Validators.required],
+            picture: ["", Validators.required],
+            firstname: ["", Validators.required],
+            lastname: ["", Validators.required],
             email: [this.currentUser.emails[0].address, Validators.required],
             newPassword: ['', Validators.required],
             confirmPassword: ['', Validators.required]
