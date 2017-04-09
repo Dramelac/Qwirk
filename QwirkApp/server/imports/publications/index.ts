@@ -1,4 +1,3 @@
-import './profile'
-import './messages'
-import './chats'
-import './profiles'
+import "./messages";
+import "./chats";
+import "./profiles";

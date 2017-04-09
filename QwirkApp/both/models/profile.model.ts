@@ -1,4 +1,4 @@
-import { CollectionObject } from './collection-object.model';
+import {CollectionObject} from "./collection-object.model";
 
 export interface Profile extends CollectionObject {
     userId?: string;
@@ -8,4 +8,5 @@ export interface Profile extends CollectionObject {
     contacts: string[];
     status: number;
     username: string;
+    picture?: string;
 }

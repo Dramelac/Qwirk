@@ -1,4 +1,4 @@
-<h5>{{chat.title}}</h5>
+<h4>{{chat.title}}</h4>
 <div *ngFor="let message of messages | async">
     <div [class]="'message message-' + message.ownership">
         <div *ngIf="message.type == 'text'">{{message.content}}</div>

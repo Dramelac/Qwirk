@@ -10,5 +10,8 @@ Meteor.publish('messages', function(
 
     return Messages.collection.find({
         chatId: chatId
+    }, {
+        sort: { createdAt: -1 },
+        limit: 30 * messagesBatchCounter
     });
 });

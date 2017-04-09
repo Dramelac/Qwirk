@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, OnDestroy} from "@angular/core";
 import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
 import {Chat} from "../../../../both/models/chat.model";
@@ -6,13 +6,14 @@ import {Chats, Messages} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 import {Message} from "../../../../both/models/message.model";
 import {Subscriber} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
+import {Profiles} from "../../../../both/collections/profile.collection";
 
 @Component({
     selector: 'chat-list',
     template
 })
-export class ChatsComponent implements OnInit {
+export class ChatsComponent implements OnInit, OnDestroy {
     chats: Observable<Chat[]>;
 
     ngOnInit(): void {
@@ -23,6 +24,9 @@ export class ChatsComponent implements OnInit {
         });
     }
 
+    ngOnDestroy(): void {
+    }
+
     constructor(private router: Router) {
 
     }
@@ -30,14 +34,17 @@ export class ChatsComponent implements OnInit {
     findChats(): Observable<Chat[]> {
         return Chats.find().map(chats => {
             chats.forEach(chat => {
-                if (chat.title == ""){
+                if (!chat.title && chat.user.length == 2 && chat.admin.length == 0) {
                     const receiverId = chat.user.find(m => m !== Meteor.userId());
-                    const receiver = Meteor.users.findOne(receiverId);
-
-                    if (receiver) {
-                        chat.title = receiver.profile.name;
-                        chat.picture = receiver.profile.picture;
-                    }
+                    MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
+                        MeteorObservable.autorun().subscribe(() => {
+                            let profile = Profiles.findOne({userId: receiverId});
+                            if (profile) {
+                                chat.title = profile.username;
+                                chat.picture = profile.picture;
+                            }
+                        });
+                    });
                 }
 
                 // This will make the last message reactive
@@ -56,8 +63,8 @@ export class ChatsComponent implements OnInit {
 
             // Re-compute until chat is removed
             MeteorObservable.autorun().takeWhile(chatExists).subscribe(() => {
-                Messages.find({ chatId }, {
-                    sort: { createdAt: -1 }
+                Messages.find({chatId}, {
+                    sort: {createdAt: -1}
                 }).subscribe({
                     next: (messages) => {
                         // Invoke subscription with the last message found
@@ -89,6 +96,6 @@ export class ChatsComponent implements OnInit {
     }
 
     showMessages(chat: string): void {
-        this.router.navigate(["/chat/"+chat]);
+        this.router.navigate(["/chat/" + chat]);
     }
 }

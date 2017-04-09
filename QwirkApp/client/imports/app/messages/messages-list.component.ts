@@ -1,14 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { MeteorObservable } from 'meteor-rxjs';
-
-import { Messages, Chats } from '../../../../both/collections';
-import { Message } from '../../../../both/models/message.model';
-
-import template from './messages-list.component.html';
+import {Component, OnInit, OnDestroy} from "@angular/core";
+import {Observable} from "rxjs/Observable";
+import {Subscription} from "rxjs/Subscription";
+import {MeteorObservable} from "meteor-rxjs";
+import {Messages, Chats} from "../../../../both/collections";
+import {Message} from "../../../../both/models/message.model";
+import template from "./messages-list.component.html";
 import {ActivatedRoute} from "@angular/router";
 import {Chat} from "../../../../both/models/chat.model";
+import {Profiles} from "../../../../both/collections/profile.collection";
 
 @Component({
     selector: 'messages-list',
@@ -37,6 +36,19 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                 this.messagesSub = MeteorObservable.subscribe('messages', this.chatId).subscribe();
 
                 this.chat = Chats.findOne(this.chatId);
+                if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
+                    const receiverId = this.chat.user.find(m => m !== Meteor.userId());
+                    console.log(receiverId);
+                    MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
+                        let profile = Profiles.findOne({userId: receiverId});
+                        if (profile) {
+                            this.chat.title = profile.username;
+                            this.chat.picture = profile.picture;
+                            //TODO Add status user
+                        }
+                    });
+                }
+
                 this.messages = Messages.find(
                     {chatId: this.chatId},
                     {sort: {createdAt: 1}}
