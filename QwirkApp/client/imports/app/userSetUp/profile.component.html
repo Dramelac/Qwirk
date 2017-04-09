@@ -5,11 +5,14 @@
     </md-toolbar>
 
     <div layout="column" layout-fill layout-margin layout-padding>
-        <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="profile()"
+        <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
               layout="column" layout-fill layout-padding layout-margin>
 
             <md-input-container><input mdInput formControlName="email" type="email" placeholder="E-Mail"></md-input-container>
-            <md-input-container><input mdInput formControlName="username" type="text" placeholder="Username"></md-input-container>
+            <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name"></md-input-container>
+            <md-input-container><input mdInput formControlName="firstname" type="text" placeholder="First name"></md-input-container>
+            <md-input-container><input mdInput formControlName="lastname" type="text" placeholder="Last name"></md-input-container>
+            <md-input-container><input mdInput formControlName="picture" type="text" placeholder="Picture"></md-input-container>
             <md-input-container><input mdInput formControlName="newPassword" type="password" placeholder="New Password"></md-input-container>
             <md-input-container><input mdInput formControlName="confirmPassword" type="password" placeholder="Confirm Password"></md-input-container>
 
