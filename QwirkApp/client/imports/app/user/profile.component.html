@@ -1,0 +1,36 @@
+<div class="mat-content" layout="row" layout-align="center start" layout-fill layout-margin>
+<div layout="column" flex flex-md="50" flex-lg="50" flex-gt-lg="33" class="mat-whiteframe-z2" layout-fill>
+    <md-toolbar class="mat-primary" color="primary">
+        Profile
+    </md-toolbar>
+
+    <div layout="column" layout-fill layout-margin layout-padding>
+        <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
+              layout="column" layout-fill layout-padding layout-margin>
+
+            <md-input-container><input mdInput formControlName="email" type="email" placeholder="E-Mail"></md-input-container>
+            <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name"></md-input-container>
+            <md-input-container><input mdInput formControlName="firstname" type="text" placeholder="First name"></md-input-container>
+            <md-input-container><input mdInput formControlName="lastname" type="text" placeholder="Last name"></md-input-container>
+            <md-input-container><input mdInput formControlName="picture" type="text" placeholder="Picture"></md-input-container>
+            <md-input-container><input mdInput formControlName="newPassword" type="password" placeholder="New Password"></md-input-container>
+            <md-input-container><input mdInput formControlName="confirmPassword" type="password" placeholder="Confirm Password"></md-input-container>
+
+
+            <div layout="row" layout-align="space-between center">
+                <button md-raised-button class="mat-primary" type="submit" aria-label="profile">Edit Profile</button>
+            </div>
+        </form>
+
+        <div [hidden]="error == ''">
+            <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
+                <p class="mat-body-1">{{ error }}</p>
+            </md-toolbar>
+        </div>
+        <p>Debug UserId : {{ currentUser._id }}</p>
+
+        <md-divider></md-divider>
+
+    </div>
+</div>
+</div>

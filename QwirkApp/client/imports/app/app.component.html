@@ -6,7 +6,7 @@
         <a md-button [routerLink]="['/signup']">Sign up</a>
     </div>
     <div [hidden]="!user">
-        <span>{{ user | displayName }}</span>
+        <user-status></user-status>
         <button md-button (click)="logout()">Logout</button>
         <a md-button [routerLink]="['/profile']">Your Profile</a>
         <a md-button [routerLink]="['/contact-list']">Contact List</a>

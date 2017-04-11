@@ -15,3 +15,13 @@ Meteor.publish('profiles', function(
         limit: 30 * profileBatchCounter
     });
 });
+
+Meteor.publish('profile', function(): Mongo.Cursor<Profile> {
+    if (!this.userId) {
+        return;
+    }
+
+    return Profiles.collection.find({
+        userId: this.userId
+    });
+});

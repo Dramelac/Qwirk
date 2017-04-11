@@ -1,11 +1,10 @@
-import {Route} from '@angular/router';
-
-import {MessageDetailsComponent} from './messages/message-details.component'
+import {Route} from "@angular/router";
+import {MessageDetailsComponent} from "./messages/message-details.component";
 import {LoginComponent} from "./auth/login.component";
 import {SignupComponent} from "./auth/signup.component";
 import {RecoverComponent} from "./auth/recover.component";
 import {ResetPasswordComponent} from "./auth/reset-password.component";
-import {ProfileComponent} from "./userSetUp/profile.component";
+import {ProfileComponent} from "./user/profile.component";
 import {ContactListComponent} from "./contact-tab/contact-list.component";
 import {MessagesListComponent} from "./messages/messages-list.component";
 
