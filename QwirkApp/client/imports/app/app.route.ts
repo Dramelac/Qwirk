@@ -7,6 +7,7 @@ import {ResetPasswordComponent} from "./auth/reset-password.component";
 import {ProfileComponent} from "./user/profile.component";
 import {ContactListComponent} from "./contact-tab/contact-list.component";
 import {MessagesListComponent} from "./messages/messages-list.component";
+import {VerifyMailComponent} from "./auth/verify-mail.component";
 
 export const routes: Route[] = [
     {path: 'message/:messageId', component: MessageDetailsComponent, canActivate: ['canActivateForLoggedIn']},
@@ -15,6 +16,7 @@ export const routes: Route[] = [
     {path: 'signup', component: SignupComponent},
     {path: 'recover', component: RecoverComponent},
     {path: 'reset-password/:token', component: ResetPasswordComponent},
+    {path: 'verify-email/:token', component: VerifyMailComponent},
     {path: 'profile', component: ProfileComponent},
     {path:'contact-list', component : ContactListComponent}
 ];
