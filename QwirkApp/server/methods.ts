@@ -57,19 +57,17 @@ Meteor.methods({
         Chats.remove(chatId);
     },
 
-    /*updateProfile(profile: Profile): void {
+    updateEmail(mail: string, oldMail: string): void {
         if (!this.userId) throw new Meteor.Error('unauthorized',
             'User must be logged-in to create a new chat');
 
-        check(profile, {
-            username: nonEmptyString,
-            //pictureId: Match.Maybe(nonEmptyString)
-        });
+        check(mail, nonEmptyString);
+        check(oldMail, nonEmptyString);
 
-        Meteor.users.update(this.userId, {
-            $set: {profile}
-        });
-    },*/
+        Accounts.addEmail(Meteor.userId(), mail);
+        Accounts.removeEmail(Meteor.userId(), oldMail);
+        Accounts.sendVerificationEmail(Meteor.userId());
+    },
 
     addMessage(type: MessageType, chatId: string, content: string) {
         if (!this.userId) throw new Meteor.Error('unauthorized',

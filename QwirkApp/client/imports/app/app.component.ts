@@ -5,6 +5,7 @@ import style from "./app.component.scss";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {Status} from "../../../both/models/status.enum";
 import {Profiles} from "../../../both/collections";
+import {Router} from "@angular/router";
 
 @Component({
     selector: "app",
@@ -13,12 +14,13 @@ import {Profiles} from "../../../both/collections";
 })
 @InjectUser('user')
 export class AppComponent {
-    constructor() {
+    constructor(private router: Router) {
 
     }
 
     logout() {
         Profiles.update(Meteor.user().profile.id, {$set: {status: Status.Offline}});
         Meteor.logout();
+        this.router.navigate(['/']);
     }
 }

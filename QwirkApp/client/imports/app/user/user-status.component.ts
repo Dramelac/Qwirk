@@ -14,15 +14,21 @@ import {MeteorObservable} from "meteor-rxjs";
 export class UserStatusComponent implements OnInit {
     profile: Profile;
     status: string;
+    username: string;
 
     constructor() {
     }
 
     ngOnInit(): void {
         MeteorObservable.subscribe('profile').subscribe(() => {
-            this.profile = Profiles.findOne({userId: Meteor.userId()});
-            this.status = StatusToString(this.profile.status);
-            //TODO add dropdows status change
+            MeteorObservable.autorun().subscribe(() => {
+                this.profile = Profiles.findOne({userId: Meteor.userId()});
+                if (this.profile){
+                    this.status = StatusToString(this.profile.status);
+                    this.username = this.profile.username;
+                }
+                //TODO add dropdows status change
+            })
         });
 
     }

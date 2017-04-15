@@ -1,8 +1,8 @@
-import {Component, OnInit, NgZone} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Component, NgZone, OnInit} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
 
-import template from './login.component.html';
+import template from "./login.component.html";
 import {Status} from "../../../../both/models/status.enum";
 import {Profiles} from "../../../../both/collections";
 
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
             Meteor.loginWithPassword(this.loginForm.value.log, this.loginForm.value.password, (err) => {
                 this.zone.run(() => {
                     if (err) {
-                        this.error = err;
+                        this.error = err.reason;
                     } else {
                         Profiles.update(Meteor.user().profile.id, {$set: {status: Status.Online}});
                         this.router.navigate(['/']);
