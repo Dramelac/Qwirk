@@ -2,7 +2,6 @@ import {Component, OnInit} from "@angular/core";
 import template from "./user-status.component.html";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {Profile} from "../../../../both/models/profile.model";
-import {StatusToString} from "../../../../both/models/status.enum";
 import {Profiles} from "../../../../both/collections/profile.collection";
 import {MeteorObservable} from "meteor-rxjs";
 
@@ -14,6 +13,7 @@ import {MeteorObservable} from "meteor-rxjs";
 export class UserStatusComponent implements OnInit {
     profile: Profile;
     status: string;
+    selectedStatus: number;
 
     constructor() {
     }
@@ -24,7 +24,8 @@ export class UserStatusComponent implements OnInit {
             MeteorObservable.autorun().subscribe(() => {
                 this.profile = Profiles.findOne({userId: Meteor.userId()});
                 if (this.profile){
-                    this.status = StatusToString(this.profile.status);
+                    this.selectedStatus = this.profile.status;
+                    //this.status = StatusToString(this.profile.status);
                 } else {
                     this.loadingValue();
                 }
@@ -41,7 +42,7 @@ export class UserStatusComponent implements OnInit {
         this.status = "Loading"
     }
 
-    updateStatus(statusValue: number){
-        //TODO add status self update
+    updateStatus(value): void{
+        Profiles.update(Meteor.user().profile.id, {$set: {status: parseInt(value)}});
     }
 }
