@@ -12,6 +12,7 @@ import {SHARED_DECLARATIONS} from "./shared";
 import {AUTH_DECLARATIONS} from "./auth";
 import {USERS_DECLARATIONS} from "./user";
 import {CONTACT_DECLARATIONS} from "./contact-tab";
+import {MENU_DECLARATIONS} from "./menu";
 
 @NgModule({
     // Components, Pipes, Directive
@@ -21,7 +22,8 @@ import {CONTACT_DECLARATIONS} from "./contact-tab";
         ...SHARED_DECLARATIONS,
         ...AUTH_DECLARATIONS,
         ...USERS_DECLARATIONS,
-        ...CONTACT_DECLARATIONS
+        ...CONTACT_DECLARATIONS,
+        ...MENU_DECLARATIONS
     ],
     // Entry Components
     entryComponents: [
