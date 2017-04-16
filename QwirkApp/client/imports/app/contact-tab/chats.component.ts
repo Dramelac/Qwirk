@@ -1,11 +1,11 @@
-import {Component, OnInit, OnDestroy} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
 import {Chat} from "../../../../both/models/chat.model";
 import {Chats, Messages} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 import {Message} from "../../../../both/models/message.model";
-import {Subscriber} from "rxjs";
+import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {Profiles} from "../../../../both/collections/profile.collection";
 
@@ -15,9 +15,12 @@ import {Profiles} from "../../../../both/collections/profile.collection";
 })
 export class ChatsComponent implements OnInit, OnDestroy {
     chats: Observable<Chat[]>;
+    profilesSub: Subscription[];
+    chatSub: Subscription;
 
     ngOnInit(): void {
-        MeteorObservable.subscribe('chats').subscribe(() => {
+        this.profilesSub = [];
+        this.chatSub = MeteorObservable.subscribe('chats').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.chats = this.findChats();
             });
@@ -25,6 +28,10 @@ export class ChatsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.chatSub.unsubscribe();
+        this.profilesSub.forEach((sub) => {
+            sub.unsubscribe();
+        });
     }
 
     constructor(private router: Router) {
@@ -36,7 +43,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
             chats.forEach(chat => {
                 if (!chat.title && chat.user.length == 2 && chat.admin.length == 0) {
                     const receiverId = chat.user.find(m => m !== Meteor.userId());
-                    MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
+                    this.profilesSub.push(MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
                             let profile = Profiles.findOne({userId: receiverId});
                             if (profile) {
@@ -44,7 +51,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
                                 chat.picture = profile.picture;
                             }
                         });
-                    });
+                    }));
                 }
 
                 // This will make the last message reactive
