@@ -1,11 +1,11 @@
 <md-toolbar color="primary">
     <a routerLink="/" class="toolbar-title">Qwirk</a>
     <span class="fill-remaining-space"></span>
-    <div [hidden]="user">
+    <div *ngIf="!user">
         <a md-button [routerLink]="['/login']" >Login</a>
         <a md-button [routerLink]="['/signup']">Sign up</a>
     </div>
-    <div [hidden]="!user">
+    <div *ngIf="user">
         <user-status></user-status>
         <button md-button (click)="logout()">Logout</button>
         <a md-button [routerLink]="['/profile']">Your Profile</a>
@@ -16,7 +16,7 @@
 <!-- App layout -->
 
 
-<div [hidden]="!user">
+<div *ngIf="user">
     <side-menu></side-menu>
 </div>
 

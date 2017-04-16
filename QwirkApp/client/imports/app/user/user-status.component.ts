@@ -1,17 +1,19 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import template from "./user-status.component.html";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {Profile} from "../../../../both/models/profile.model";
 import {Profiles} from "../../../../both/collections/profile.collection";
 import {MeteorObservable} from "meteor-rxjs";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
     selector: "user-status",
     template
 })
 @InjectUser('user')
-export class UserStatusComponent implements OnInit {
+export class UserStatusComponent implements OnInit, OnDestroy {
     profile: Profile;
+    profilesub: Subscription;
     status: string;
     selectedStatus: number;
 
@@ -20,7 +22,7 @@ export class UserStatusComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadingValue();
-        MeteorObservable.subscribe('profile').subscribe(() => {
+        this.profilesub = MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.profile = Profiles.findOne({userId: Meteor.userId()});
                 if (this.profile){
@@ -34,6 +36,11 @@ export class UserStatusComponent implements OnInit {
         });
 
     }
+
+    ngOnDestroy(): void {
+        this.profilesub.unsubscribe();
+    }
+
 
     loadingValue(): void{
         this.profile = {
