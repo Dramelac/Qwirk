@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 
 import template from "./side-menu.component.html";
 
@@ -6,15 +6,17 @@ import template from "./side-menu.component.html";
     selector: 'side-menu',
     template
 })
-export class SideMenuComponent implements OnInit, OnDestroy {
+export class SideMenuComponent implements OnInit {
+
+    selected: number;
 
     constructor() {}
 
     ngOnInit() {
-
+        this.selected = 0;
     }
 
-    ngOnDestroy() {
-
+    button(value: number): void{
+        this.selected = value;
     }
 }

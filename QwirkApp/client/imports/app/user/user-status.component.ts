@@ -31,7 +31,6 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                 } else {
                     this.loadingValue();
                 }
-                //TODO add dropdows status change
             })
         });
 

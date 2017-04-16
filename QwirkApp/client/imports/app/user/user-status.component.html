@@ -1,4 +1,4 @@
-<span>{{ profile.username }}</span>
+<a md-button [routerLink]="['/profile']"><span>{{ profile.username }}</span></a>
 <select [(ngModel)]="selectedStatus" (ngModelChange)="updateStatus($event)">
     <option value="0">Invisible</option>
     <option value="1">Online</option>

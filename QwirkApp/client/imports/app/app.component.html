@@ -8,8 +8,6 @@
     <div *ngIf="user">
         <user-status></user-status>
         <button md-button (click)="logout()">Logout</button>
-        <a md-button [routerLink]="['/profile']">Your Profile</a>
-        <a md-button [routerLink]="['/contact-list']">Contact List</a>
     </div>
 </md-toolbar>
 
