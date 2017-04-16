@@ -3,16 +3,16 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import template from "./profile.component.html";
 import {Profile} from "../../../../both/models/profile.model";
 import {Profiles} from "../../../../both/collections/profile.collection";
+import {InjectUser} from "angular2-meteor-accounts-ui";
 
 @Component({
     selector: 'profile',
     template
 })
-
+@InjectUser('user')
 export class ProfileComponent implements OnInit {
     profileForm: FormGroup;
     error: string;
-    currentUser = Meteor.user();
     profile: Profile;
 
     constructor(private formBuilder: FormBuilder) {
@@ -22,14 +22,14 @@ export class ProfileComponent implements OnInit {
     ngOnInit() {
 
         // This is working because client is already sub to his profile in user-status
-        this.profile = Profiles.findOne({userId: this.currentUser._id});
+        this.profile = Profiles.findOne({userId: Meteor.userId()});
 
         this.profileForm = this.formBuilder.group({
             username: [this.profile.username, Validators.required],
             picture: [this.profile.picture],
             firstname: [this.profile.firstname],
             lastname: [this.profile.lastname],
-            email: [this.currentUser.emails[0].address, Validators.required],
+            email: [Meteor.user().emails[0].address, Validators.required],
             newPassword: [''],
             confirmPassword: [''],
             oldPassword: ['']
@@ -56,11 +56,11 @@ export class ProfileComponent implements OnInit {
                 picture: formValue.picture,
             };
             Profiles.update(this.profile._id, {$set: profil});
-            if (formValue.email != this.currentUser.emails[0].address) {
-                Meteor.call("updateEmail", formValue.email, this.currentUser.emails[0].address,
+            if (formValue.email != Meteor.user().emails[0].address) {
+                Meteor.call("updateEmail", formValue.email, Meteor.user().emails[0].address,
                     (error, result) => {
                         if (error){
-                            console.log(error);
+                            console.error(error);
                         }
                         if (result){
                             console.log(result);

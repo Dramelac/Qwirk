@@ -1,6 +1,9 @@
 import {Chats} from "../both/collections/chat.collection";
 import {Messages} from "../both/collections/message.collection";
 import {MessageType} from "../both/models/message.model";
+import {Profiles} from "../both/collections/profile.collection";
+import {Status} from "../both/models/status.enum";
+import {Profile} from "../both/models/profile.model";
 
 const nonEmptyString = Match.Where((str) => {
     check(str, String);
@@ -8,21 +11,42 @@ const nonEmptyString = Match.Where((str) => {
 });
 
 Meteor.methods({
+    addProfile(firstname:string,lastname:string,birthday:Date,username:string):void{
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('unauthorized',
+                'User must be logged-in to create a new profile');
+        }
+        if (Profiles.findOne({userId:Meteor.userId()})){
+            throw new Meteor.Error('unauthorized',
+                'User already have a profile');
+        }
+        let profil: Profile = {
+            userId: Meteor.userId(),
+            status: Status.Online,
+            firstname: firstname,
+            lastname: lastname,
+            birthday: birthday,
+            contacts: [],
+            username: username
+        };
+        let profileId = Profiles.collection.insert(profil);
+        Meteor.users.update(Meteor.userId(),{$set:{"profile.id":profileId}});
+    },
     addChat(receiverId: string): void {
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('unauthorized',
                 'User must be logged-in to create a new chat');
         }
 
         check(receiverId, nonEmptyString);
 
-        if (receiverId === this.userId) {
+        if (receiverId === Meteor.userId()) {
             throw new Meteor.Error('illegal-receiver',
                 'Receiver must be different than the current logged in user');
         }
 
         const chatExists = !!Chats.collection.find({
-            user: { $all: [this.userId, receiverId] }
+            user: { $all: [Meteor.userId(), receiverId] }
         }).count();
 
         if (chatExists) {
@@ -31,7 +55,7 @@ Meteor.methods({
         }
 
         const chat = {
-            user: [this.userId, receiverId],
+            user: [Meteor.userId(), receiverId],
             admin: [],
             publicly: false
         };
@@ -40,7 +64,7 @@ Meteor.methods({
     },
 
     removeChat(chatId: string): void {
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('unauthorized',
                 'User must be logged-in to remove chat');
         }
@@ -58,7 +82,7 @@ Meteor.methods({
     },
 
     updateEmail(mail: string, oldMail: string): void {
-        if (!this.userId) throw new Meteor.Error('unauthorized',
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized',
             'User must be logged-in to create a new chat');
 
         check(mail, nonEmptyString);
@@ -70,7 +94,7 @@ Meteor.methods({
     },
 
     addMessage(type: MessageType, chatId: string, content: string) {
-        if (!this.userId) throw new Meteor.Error('unauthorized',
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized',
             'User must be logged-in to create a new chat');
 
         check(type, Match.OneOf(String, [ MessageType.TEXT ]));
@@ -87,7 +111,7 @@ Meteor.methods({
         return {
             messageId: Messages.collection.insert({
                 chatId: chatId,
-                ownerId: this.userId,
+                ownerId: Meteor.userId(),
                 content: content,
                 createdAt: new Date(),
                 type: type

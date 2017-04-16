@@ -1,12 +1,8 @@
-import {Component, OnInit, NgZone} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Component, NgZone, OnInit} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
 
-import { Profiles } from '../../../../both/collections';
-
-import template from './signup.component.html';
-import {Status} from "../../../../both/models/status.enum";
-import {Profile} from "../../../../both/models/profile.model";
+import template from "./signup.component.html";
 
 @Component({
     selector: 'signup',
@@ -35,32 +31,21 @@ export class SignupComponent implements OnInit {
     signup() {
         let formValue = this.signupForm.value;
         if (this.signupForm.valid && formValue.confirmPassword == formValue.password) {
-            let profil: Profile = {
-                userId: "",
-                status: Status.Online,
-                firstname: this.signupForm.value.firstname,
-                lastname: this.signupForm.value.lastname,
-                birthday: this.signupForm.value.birthday,
-                contacts: [],
-                username: this.signupForm.value.username
-            };
-            Profiles.insert(profil);
-            let profilId = Profiles.findOne({username: profil.username})._id;
             Accounts.createUser({
                 email: this.signupForm.value.email,
                 password: this.signupForm.value.password,
-                username: this.signupForm.value.username,
-                profile: {
-                    id: profilId
-                }
+                username: this.signupForm.value.username
             }, (err) => {
                 if (err) {
-                    Profiles.remove(profilId);
                     this.zone.run(() => {
                         this.error = err;
                     });
                 } else {
-                    Profiles.update(profilId, {$set: {userId: Meteor.userId()}});
+                    Meteor.call("addProfile",
+                        this.signupForm.value.firstname,
+                        this.signupForm.value.lastname,
+                        this.signupForm.value.birthday,
+                        this.signupForm.value.username);
                     this.router.navigate(['/']);
                 }
             });
