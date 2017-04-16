@@ -1,10 +1,10 @@
 import {MessageType} from "../both/models/message.model";
 import {Status} from "../both/models/status.enum";
-import {Profiles, Messages, Chats} from "../both/collections";
+import {Chats, Messages, Profiles} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
 
 const nonEmptyString = Match.Where((str) => {
-    if (str != null){
+    if (str != null) {
         check(str, String);
         return str.length > 0;
     }
@@ -12,12 +12,12 @@ const nonEmptyString = Match.Where((str) => {
 });
 
 Meteor.methods({
-    addProfile(firstname:string,lastname:string,birthday:Date,username:string):void{
+    addProfile(firstname: string, lastname: string, birthday: Date, username: string): void{
         if (!Meteor.userId()) {
             throw new Meteor.Error('unauthorized',
                 'User must be logged-in to create a new profile');
         }
-        if (Profiles.findOne({userId:Meteor.userId()})){
+        if (Profiles.findOne({userId: Meteor.userId()})) {
             throw new Meteor.Error('unauthorized',
                 'User already have a profile');
         }
@@ -31,7 +31,7 @@ Meteor.methods({
             username: username
         };
         let profileId = Profiles.collection.insert(profil);
-        Meteor.users.update(Meteor.userId(),{$set:{"profile.id":profileId}});
+        Meteor.users.update(Meteor.userId(), {$set: {"profile.id": profileId}});
     },
     addChat(receiverId: string): void {
         if (!Meteor.userId()) {
@@ -47,7 +47,7 @@ Meteor.methods({
         }
 
         const chatExists = !!Chats.collection.find({
-            user: { $all: [Meteor.userId(), receiverId] }
+            user: {$all: [Meteor.userId(), receiverId]}
         }).count();
 
         if (chatExists) {
@@ -98,7 +98,7 @@ Meteor.methods({
         if (!Meteor.userId()) throw new Meteor.Error('unauthorized',
             'User must be logged-in to create a new chat');
 
-        check(type, Match.OneOf(String, [ MessageType.TEXT ]));
+        check(type, Match.OneOf(String, [MessageType.TEXT]));
         check(chatId, nonEmptyString);
         check(content, nonEmptyString);
 
@@ -123,10 +123,8 @@ Meteor.methods({
         return Messages.collection.find().count();
     },
     searchUser(username: string){
-
-        username = "/"+username+"/";
         check(username, nonEmptyString);
-        console.log(Profiles.find({ username : username}).fetch())
-        return Profiles.find({ username : username}).fetch();
+        let result = Profiles.find({username: {$regex: ".*" + username + ".*"}});
+        return result.fetch();
     }
 });
