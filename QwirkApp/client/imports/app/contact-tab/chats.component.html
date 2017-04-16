@@ -5,10 +5,13 @@
         <div>
             <h2 class="chat-title">{{chat.title}}</h2>
 
-            <span *ngIf="chat.lastMessage">
-                <p *ngIf="chat.lastMessage.type == 'text'">{{chat.lastMessage.content | slice:0:32}}</p>
+            <div *ngIf="chat.lastMessage">
+                <p *ngIf="chat.lastMessage.type == 'text'">
+                    {{chat.lastMessage.content | slice:0:32}}
+                    <span *ngIf="chat.lastMessage.content.length > 32">...</span>
+                </p>
                 <span class="last-message-timestamp">{{chat.lastMessage.createdAt }}</span>
-            </span>
+            </div>
         </div>
         <div>
             <button (click)="removeChat(chat)">Remove</button>
