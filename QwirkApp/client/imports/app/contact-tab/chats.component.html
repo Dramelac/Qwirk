@@ -6,7 +6,7 @@
             <h2 class="chat-title">{{chat.title}}</h2>
 
             <span *ngIf="chat.lastMessage">
-                <p *ngIf="chat.lastMessage.type == 'text'">{{chat.lastMessage.content}}</p>
+                <p *ngIf="chat.lastMessage.type == 'text'">{{chat.lastMessage.content | slice:0:32}}</p>
                 <span class="last-message-timestamp">{{chat.lastMessage.createdAt }}</span>
             </span>
         </div>
