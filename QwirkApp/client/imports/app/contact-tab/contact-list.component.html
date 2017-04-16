@@ -1,15 +1,15 @@
 <div>
     <p>Search contact</p>
 
-    <form (ngSubmit)="search(username)">
+    <form (ngSubmit)="search()">
         <label>Username: </label>
-        <input type="text" [(ngModel)]="username" name="Name">
+        <input type="text" [(ngModel)]="query" name="Name">
 
         <button type="submit">Search</button>
     </form>
-    <div *ngFor="let profileFind of profilesFind | async">
-        <div *ngIf="profileFind != null">
-            <h2>Result Search</h2>
+    <div *ngIf="profilesFind">
+        <h2>Result Search</h2>
+        <div *ngFor="let profileFind of profilesFind">
             <p>{{profileFind.username}}</p>
             <p>{{profileFind.userId}}</p>
             <p>{{profileFind.Id}}</p>
@@ -18,13 +18,15 @@
 
 
 
-    <div *ngFor="let profile of profiles | async">
-        <h2>Contact List</h2>
+    <div *ngIf="profiles">
+        <h2>Contact</h2>
+        <div *ngFor="let profile of (profiles | async)">
 
-        <p>{{profile.username}}</p>
-        <p>{{profile.userId}}</p>
-        <p *ngIf="profile.contacts.length == 0">Pas d'amis !!</p>
-        <p> {{profile.contacts.lenght}}</p>
+            <p>{{profile.username}}</p>
+            <p>{{profile.userId}}</p>
+            <p *ngIf="profile.contacts.length == 0">Pas d'amis !!</p>
+            <p> {{profile.contacts.lenght}}</p>
+        </div>
     </div>
 
 </div>

@@ -14,23 +14,21 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     profiles: Observable<Profile[]>;
     test : Profile;
-    profilesFind: Observable<Profile[]>;
+    profilesFind:Profile[];
     profilesSub: Subscription;
-    currentUser = Meteor.user();
-
+    query: string;
 
     ngOnInit(): void {
-        let _id = this.currentUser._id;
+        let _id = Meteor.userId();
         this.profilesSub = MeteorObservable.subscribe('profiles').subscribe();
         this.profiles = Profiles
-            .find({});
-        this.test = Profiles.findOne(_id);
+            .find({username : {$ne : _id}});
 
     }
 
-    search(username: string): void {
-        if (username != null){
-            Meteor.call("searchUser",username,(error, result) => {
+    search(): void {
+        if (this.query){
+            Meteor.call("searchUser",this.query,(error, result) => {
                 if (error){
                     console.log("erreur dans search")
                 }
