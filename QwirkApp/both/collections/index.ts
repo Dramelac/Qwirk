@@ -1,3 +1,5 @@
 export * from './chat.collection'
 export * from './message.collection'
 export * from './profile.collection'
+export * from './contact.collection'
+export * from './friend-request.collection'

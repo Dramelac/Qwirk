@@ -1,11 +1,13 @@
 import {CollectionObject} from "./collection-object.model";
+//noinspection TypeScriptCheckImport
+import {Contact} from "./contact.model"
 
 export interface Profile extends CollectionObject {
     userId?: string;
     birthday?: Date;
     firstname?: string;
     lastname?: string;
-    contacts?: string[];
+    contacts?: Contact[];
     status?: number;
     username?: string;
     picture?: string;

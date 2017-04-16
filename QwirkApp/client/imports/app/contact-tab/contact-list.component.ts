@@ -29,10 +29,17 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     search(username: string): void {
+        if (username != null){
+            Meteor.call("searchUser",username,(error, result) => {
+                if (error){
+                 console.log("erreur dans search")
+                }
+                if (result){
+                    this.profilesFind = result;
+                }
 
-        this.profilesFind = Profiles.find({username});
-
-
+            });
+        }
     }
 
     ngOnDestroy(): void {

@@ -1,13 +1,14 @@
-import {Chats} from "../both/collections/chat.collection";
-import {Messages} from "../both/collections/message.collection";
 import {MessageType} from "../both/models/message.model";
-import {Profiles} from "../both/collections/profile.collection";
 import {Status} from "../both/models/status.enum";
+import {Profiles, Messages, Chats} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
 
 const nonEmptyString = Match.Where((str) => {
-    check(str, String);
-    return str.length > 0;
+    if (str != null){
+        check(str, String);
+        return str.length > 0;
+    }
+    return false;
 });
 
 Meteor.methods({
@@ -120,5 +121,12 @@ Meteor.methods({
     },
     countMessages(): number {
         return Messages.collection.find().count();
+    },
+    searchUser(username: string){
+
+        username = "/"+username+"/";
+        check(username, nonEmptyString);
+        console.log(Profiles.find({ username : username}).fetch())
+        return Profiles.find({ username : username}).fetch();
     }
 });
