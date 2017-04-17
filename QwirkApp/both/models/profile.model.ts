@@ -1,5 +1,4 @@
 import {CollectionObject} from "./collection-object.model";
-//noinspection TypeScriptCheckImport
 import {Contact} from "./contact.model"
 
 export interface Profile extends CollectionObject {

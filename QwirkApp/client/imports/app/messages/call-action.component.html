@@ -1,0 +1,10 @@
+<button (click)="call(false)">Vocal</button>
+<button (click)="call(true)">Video</button>
+<div *ngIf="peerId">
+
+    Your friend: <video [src]="distantVideo" class="theirVideo" autoplay></video>
+    <video [src]="myVideo" muted="true" class="myVideo" autoplay></video>: You
+
+    <button>Stop call</button>
+</div>
+<span>Debug peerId : {{ peerId }}</span>
