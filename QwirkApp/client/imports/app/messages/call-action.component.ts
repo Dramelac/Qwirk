@@ -1,6 +1,7 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, NgZone, OnInit} from "@angular/core";
 import template from "./call-action.component.html";
 import "../../../lib/peer.js";
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 
 @Component({
     selector: 'call-action',
@@ -8,15 +9,22 @@ import "../../../lib/peer.js";
 })
 export class CallActionComponent implements OnInit {
 
-    myVideo: string;
-    distantVideo: string;
+    myVideo: SafeUrl;
+    distantVideo: SafeUrl;
     peerId: string;
+    peer: PeerJs.Peer;
+    localStream: MediaStream;
+    currentCall: PeerJs.MediaConnection;
+    remoteStream: MediaStream;
 
-    constructor() {
+    isCallActive: boolean;
+
+    constructor(private zone: NgZone, private sanitizer: DomSanitizer) {
     }
 
     ngOnInit(): void {
         this.peerId = "";
+        this.isCallActive = false;
     }
 
     call(video: boolean): void {
@@ -24,42 +32,36 @@ export class CallActionComponent implements OnInit {
             console.error("undefined user media");
         }
         // get audio/video
-        navigator.getUserMedia({audio: true, video: video}, function (stream) {
+        navigator.getUserMedia({audio: true, video: video}, (stream) => {
                 //display video
-                //$('#myVideo').prop('src', URL.createObjectURL(stream));
-                let url = URL.createObjectURL(stream);
-                console.log(url);
-                this.myVideo = url;
-                this.window.localStream = stream;
+                this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
+                this.localStream = stream;
+                console.log(this.myVideo);
             }, function (error) {
                 console.log(error);
             }
         );
 
-        window.peer = new Peer({
+        this.peer = new Peer({
             key: 'u6sftzbkz3wka9k9',  // change this key
-            debug: 3,
-            config: {
-                'iceServers': [
-                    {url: 'stun:stun.l.google.com:19302'},
-                    {url: 'stun:stun1.l.google.com:19302'},
-                ]
-            }
+            debug: 3
         });
 
-        peer.on('open', function () {
-            this.peerId = peer.id;
-            console.log("id:", peer.id);
+        this.peer.on('open', () => {
+            this.peerId = this.peer.id;
         });
 
         // This event: remote peer receives a call
-        peer.on('call', function (incomingCall) {
-            this.window.currentCall = incomingCall;
-            incomingCall.answer(this.window.localStream);
-            incomingCall.on('stream', function (remoteStream) {
-                this.window.remoteStream = remoteStream;
-                //$('#theirVideo').prop('src', URL.createObjectURL(remoteStream));
-                this.distantVideo = URL.createObjectURL(remoteStream);
+        this.peer.on('call', (incomingCall) => {
+            console.log("call received");
+
+            this.currentCall = incomingCall;
+            this.currentCall.answer(this.localStream);
+
+            this.currentCall.on('stream', (remoteStream) => {
+                this.remoteStream = remoteStream;
+                this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.remoteStream));
+                this.isCallActive = true;
             });
         });
 
