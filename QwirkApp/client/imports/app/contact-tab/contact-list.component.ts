@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit, NgZone} from "@angular/core";
 import template from "./contact-list.component.html";
 import {Observable} from "rxjs";
 import {Profile} from "../../../../both/models/profile.model";
@@ -13,17 +13,18 @@ import {Subscription} from "rxjs/Subscription";
 export class ContactListComponent implements OnInit, OnDestroy {
 
     profiles: Observable<Profile[]>;
-    test : Profile;
     profilesFind:Profile[];
     profilesSub: Subscription;
     query: string;
+
+    constructor(private zone: NgZone){
+    }
 
     ngOnInit(): void {
         let _id = Meteor.userId();
         this.profilesSub = MeteorObservable.subscribe('profiles').subscribe();
         this.profiles = Profiles
             .find({username : {$ne : _id}});
-
     }
 
     search(): void {
@@ -33,9 +34,10 @@ export class ContactListComponent implements OnInit, OnDestroy {
                     console.log("erreur dans search")
                 }
                 if (result){
-                    this.profilesFind = result;
+                    this.zone.run(() => {
+                        this.profilesFind = result;
+                    });
                 }
-
             });
         }
     }
