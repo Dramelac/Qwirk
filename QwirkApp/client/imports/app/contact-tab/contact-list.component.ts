@@ -22,9 +22,9 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         let _id = Meteor.userId();
-        this.profilesSub = MeteorObservable.subscribe('profiles').subscribe();
+        this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe();
         this.profiles = Profiles
-            .find({username : {$ne : _id}});
+            .find({});
     }
 
     search(): void {
