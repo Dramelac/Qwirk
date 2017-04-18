@@ -19,6 +19,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     paramsSub: Subscription;
     messages: Observable<Message[]>;
     messagesSub: Subscription;
+    distantUserId: string;
 
     constructor(private route: ActivatedRoute){}
 
@@ -37,9 +38,9 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
                 this.chat = Chats.findOne(this.chatId);
                 if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
-                    const receiverId = this.chat.user.find(m => m !== Meteor.userId());
-                    MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
-                        let profile = Profiles.findOne({userId: receiverId});
+                    this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
+                    MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
+                        let profile = Profiles.findOne({userId: this.distantUserId});
                         if (profile) {
                             this.chat.title = profile.username;
                             this.chat.picture = profile.picture;

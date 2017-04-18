@@ -9,7 +9,7 @@
 
     <div *ngIf="isCallActive">
         Your friend: <video [src]="distantVideo" class="theirVideo" autoplay></video>
-        <button>Stop call</button>
     </div>
+    <button (click)="stopCall()">Stop call</button>
 </div>
 <span>Debug peerId : {{ peerId }}</span>

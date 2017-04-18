@@ -1,4 +1,4 @@
-import {Component, NgZone, OnInit} from "@angular/core";
+import {Component, NgZone, OnInit, Input, OnDestroy} from "@angular/core";
 import template from "./call-action.component.html";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
@@ -7,7 +7,7 @@ import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
     selector: 'call-action',
     template
 })
-export class CallActionComponent implements OnInit {
+export class CallActionComponent implements OnInit, OnDestroy {
 
     myVideo: SafeUrl;
     distantVideo: SafeUrl;
@@ -19,6 +19,8 @@ export class CallActionComponent implements OnInit {
 
     isCallActive: boolean;
 
+    @Input("userCallingId") userCallingId: string;
+
     constructor(private zone: NgZone, private sanitizer: DomSanitizer) {
     }
 
@@ -27,16 +29,21 @@ export class CallActionComponent implements OnInit {
         this.isCallActive = false;
     }
 
+    ngOnDestroy(): void {
+        //console.log("Destroy call");
+        this.stopCall();
+    }
+
     call(video: boolean): void {
         if (!navigator.getUserMedia) {
             console.error("undefined user media");
         }
+        console.log("Calling : ", this.userCallingId);
         // get audio/video
         navigator.getUserMedia({audio: true, video: video}, (stream) => {
                 //display video
                 this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
                 this.localStream = stream;
-                console.log(this.myVideo);
             }, function (error) {
                 console.log(error);
             }
@@ -65,6 +72,18 @@ export class CallActionComponent implements OnInit {
             });
         });
 
+    }
+
+    stopCall(){
+        if (this.isCallActive){
+            this.peer.disconnect();
+        }
+        this.peer.destroy();
+        this.localStream.getTracks().forEach((track)=>{
+            track.stop();
+        });
+        this.myVideo = "";
+        this.peerId = "";
     }
 
 }
