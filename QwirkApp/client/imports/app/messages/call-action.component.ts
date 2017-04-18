@@ -19,12 +19,15 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
     isCallActive: boolean;
 
+    formId: string;
+
     @Input("userCallingId") userCallingId: string;
 
     constructor(private zone: NgZone, private sanitizer: DomSanitizer) {
     }
 
     ngOnInit(): void {
+        this.formId = "";
         this.peerId = "";
         this.isCallActive = false;
     }
@@ -63,29 +66,55 @@ export class CallActionComponent implements OnInit, OnDestroy {
         // This event: remote peer receives a call
         this.peer.on('call', (incomingCall) => {
             console.log("call received");
+            this.isCallActive = true;
 
             this.currentCall = incomingCall;
             this.currentCall.answer(this.localStream);
 
             this.currentCall.on('stream', (remoteStream) => {
                 this.remoteStream = remoteStream;
-                this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.remoteStream));
-                this.isCallActive = true;
+                this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.remoteStream))
             });
+        });
+
+        this.peer.on('error', (err)=> {
+            console.log("Peer custom error : ", err);
+        });
+
+        this.peer.on('disconnected', () => {
+            console.log("disconnect received");
+            this.stopCall();
         });
 
     }
 
     stopCall(){
         if (this.isCallActive){
-            this.peer.disconnect();
+            this.currentCall.close();
         }
+        this.peer.disconnect();
         this.peer.destroy();
         this.localStream.getTracks().forEach((track)=>{
             track.stop();
         });
-        this.myVideo = "";
-        this.peerId = "";
+        this.zone.run(()=>{
+            this.myVideo = "";
+            this.distantVideo = "";
+            this.peerId = "";
+        });
+    }
+
+    acceptCall(){
+        console.log("call : ", this.formId);
+        if (this.formId){
+            this.isCallActive = true;
+
+            this.currentCall = this.peer.call(this.formId, this.localStream);
+            this.currentCall.on('stream', (remoteStream) => {
+                this.remoteStream = remoteStream;
+                this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream));
+            });
+        }
     }
 
 }
