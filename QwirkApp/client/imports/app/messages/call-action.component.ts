@@ -50,7 +50,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
         );
 
         this.peer = new Peer({
-            key: 'u6sftzbkz3wka9k9',  // change this key
+            host: "qwirk-peerjs.herokuapp.com",
+            port: 443,
+            secure: true,
             debug: 3
         });
 
