@@ -28,7 +28,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
             .find({userId: {$ne: _id}});
     }
 
-    search(): void {
+    search(query : string): void {
+        this.query = query;
         this.profiles = Profiles.find({$and: [{username: {$regex: ".*" + this.query + ".*"}}, {userId: {$ne: Meteor.userId()}}]})
         this.moreSearch = true;
     }
