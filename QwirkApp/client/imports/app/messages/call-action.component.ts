@@ -43,6 +43,10 @@ export class CallActionComponent implements OnInit, OnDestroy {
         }
         console.log("Calling : ", this.userCallingId);
         // get audio/video
+        navigator.getUserMedia = ( navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia );
         navigator.getUserMedia({audio: true, video: video}, (stream) => {
                 //display video
                 this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
@@ -77,7 +81,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
             });
         });
 
-        this.peer.on('error', (err)=> {
+        this.peer.on('error', (err) => {
             console.log("Peer custom error : ", err);
         });
 
@@ -88,25 +92,24 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
     }
 
-    stopCall(){
-        if (this.isCallActive){
+    stopCall() {
+        if (this.isCallActive) {
             this.currentCall.close();
         }
-        this.peer.disconnect();
         this.peer.destroy();
-        this.localStream.getTracks().forEach((track)=>{
+        this.localStream.getTracks().forEach((track) => {
             track.stop();
         });
-        this.zone.run(()=>{
+        this.zone.run(() => {
             this.myVideo = "";
             this.distantVideo = "";
             this.peerId = "";
         });
     }
 
-    acceptCall(){
+    acceptCall() {
         console.log("call : ", this.formId);
-        if (this.formId){
+        if (this.formId) {
             this.isCallActive = true;
 
             this.currentCall = this.peer.call(this.formId, this.localStream);
