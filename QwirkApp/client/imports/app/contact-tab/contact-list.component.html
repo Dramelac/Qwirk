@@ -2,31 +2,22 @@
     <p>Search contact</p>
 
     <form (ngSubmit)="search()">
-        <label>Username: </label>
         <input type="text" [(ngModel)]="query" name="Name">
 
         <button type="submit">Search</button>
     </form>
-    <div *ngIf="profilesFind">
-        <h2>Result Search</h2>
-        <div *ngFor="let profileFind of profilesFind">
-            <p>{{profileFind.username}}</p>
-            <p>{{profileFind.userId}}</p>
-            <p>{{profileFind.Id}}</p>
-        </div>
+
+    <h2>Contacts</h2>
+    <div *ngIf="profiles.isEmpty">
+        Aucun Contact :/
     </div>
-
-
-
     <div *ngIf="profiles">
-        <h2>Contact</h2>
         <div *ngFor="let profile of (profiles | async)">
-
             <p>{{profile.username}}</p>
             <p>{{profile.userId}}</p>
-            <p *ngIf="profile.contacts.length == 0">Pas d'amis !!</p>
-            <p> {{profile.contacts.lenght}}</p>
         </div>
+        <form *ngIf="moreSearch" (ngSubmit)="searchInQwirk()">
+            <button type="submit">Search In Qwirk</button>
+        </form>
     </div>
-
 </div>

@@ -13,27 +13,33 @@ import {Subscription} from "rxjs/Subscription";
 export class ContactListComponent implements OnInit, OnDestroy {
 
     profiles: Observable<Profile[]>;
-    profilesFind:Profile[];
+    profilesFind: Profile[];
     profilesSub: Subscription;
     query: string;
+    moreSearch: boolean = false;
 
-    constructor(private zone: NgZone){
+    constructor(private zone: NgZone) {
     }
 
     ngOnInit(): void {
         let _id = Meteor.userId();
         this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe();
         this.profiles = Profiles
-            .find({});
+            .find({userId: {$ne: _id}});
     }
 
     search(): void {
-        if (this.query){
-            Meteor.call("searchUser",this.query,(error, result) => {
-                if (error){
+        this.profiles = Profiles.find({$and: [{username: {$regex: ".*" + this.query + ".*"}}, {userId: {$ne: Meteor.userId()}}]})
+        this.moreSearch = true;
+    }
+
+    searchInQwirk(): void {
+        if (this.query) {
+            Meteor.call("searchUser", this.query, (error, result) => {
+                if (error) {
                     console.log("erreur dans search")
                 }
-                if (result){
+                if (result) {
                     this.zone.run(() => {
                         this.profilesFind = result;
                     });
