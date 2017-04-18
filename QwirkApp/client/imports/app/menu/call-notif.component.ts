@@ -44,6 +44,9 @@ export class CallNotifComponent implements OnInit, OnDestroy {
     }
 
     acceptCall(request: CallRequest){
+        Session.set("activeCall", request.chatId);
+        Session.set("callPeerId", request.peerId);
+        Session.set("callVideo", request.video);
         this.removeRequest(request._id);
         this.router.navigate(['/chat/'+request.chatId]);
     }

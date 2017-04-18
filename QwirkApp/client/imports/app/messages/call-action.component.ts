@@ -29,6 +29,13 @@ export class CallActionComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.peerId = "";
         this.isCallActive = false;
+
+        if (Session.equals("activeCall", this.chatId)) {
+            console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callPeerId"));
+            this.initPeer(Session.get("callVideo"), () => {
+                this.acceptCall(Session.get("callPeerId"))
+            });
+        }
     }
 
     ngOnDestroy(): void {
@@ -36,19 +43,23 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.stopCall();
     }
 
-    initPeer(video: boolean){
+    initPeer(video: boolean, callback=null) {
         if (!navigator.getUserMedia) {
             console.error("undefined user media");
         }
         // get audio/video
         navigator.getUserMedia = ( navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia );
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia );
         navigator.getUserMedia({audio: true, video: video}, (stream) => {
                 //display video
                 this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
                 this.localStream = stream;
+                if (callback){
+                    console.log("exec callback");
+                    callback();
+                }
             }, function (error) {
                 console.log(error);
             }
@@ -92,24 +103,27 @@ export class CallActionComponent implements OnInit, OnDestroy {
     call(video: boolean): void {
         this.initPeer(video);
 
-        console.log("Calling : ", this.userCallingId, this.chatId);
-        CallRequests.insert({
-            targetUserId: this.userCallingId,
-            ownerUserId: Meteor.userId(),
-            peerId: this.peerId,
-            chatId: this.chatId,
-            video: video});
+        this.peer.on('open', () => {
+            CallRequests.insert({
+                targetUserId: this.userCallingId,
+                ownerUserId: Meteor.userId(),
+                peerId: this.peerId,
+                chatId: this.chatId,
+                video: video
+            });
+        });
 
     }
 
     stopCall() {
         if (this.isCallActive) {
             this.currentCall.close();
+            this.isCallActive = false;
         }
-        if (this.peer){
+        if (this.peer) {
             this.peer.destroy();
         }
-        if (this.localStream){
+        if (this.localStream) {
             this.localStream.getTracks().forEach((track) => {
                 track.stop();
             });
@@ -122,7 +136,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
     }
 
     acceptCall(callId: string) {
-        console.log("call : ", callId);
+        console.log("accept call : ", callId, this.localStream);
         if (callId) {
             this.isCallActive = true;
 
