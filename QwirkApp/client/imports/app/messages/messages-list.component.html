@@ -1,5 +1,5 @@
-<h4>{{chat.title}}</h4>
-<call-action *ngIf="distantUserId" [userCallingId]="distantUserId"></call-action>
+<h4 *ngIf="chat">{{chat.title}}</h4>
+<call-action *ngIf="distantUserId" [userCallingId]="distantUserId" [chatId]="chatId"></call-action>
 <div *ngFor="let message of messages | async">
     <div [class]="'message message-' + message.ownership">
         <div *ngIf="message.type == 'text'">{{message.content}}</div>

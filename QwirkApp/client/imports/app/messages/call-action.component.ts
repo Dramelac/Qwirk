@@ -92,7 +92,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
     call(video: boolean): void {
         this.initPeer(video);
 
-        console.log("Calling : ", this.userCallingId);
+        console.log("Calling : ", this.userCallingId, this.chatId);
         CallRequests.insert({
             targetUserId: this.userCallingId,
             ownerUserId: Meteor.userId(),
