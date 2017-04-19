@@ -17,7 +17,7 @@
         </form>
     </div>
     <div *ngIf="profilesFind">
-        <div *ngFor="let profile of (profilesFind | async)">
+        <div *ngFor="let profile of profilesFind">
             <p>{{profile.username}}</p>
             <p>{{profile.userId}}</p>
         </div>
