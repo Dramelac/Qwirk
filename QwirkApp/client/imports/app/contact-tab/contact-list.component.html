@@ -1,25 +1,25 @@
 <div>
     <p>Search contact</p>
     <div>
-        <input class="search-bar" placeholder="Search" (keyup)="search(input.value)" #input>
-        <button data-bind="visible: input().length" type="button">X</button>
+        <input class="search-bar" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
+        <div *ngIf="query">
+            <button (click)="query = null ">X</button>
+        </div>
     </div>
-
-
-   <!-- <form (ngSubmit)="search()">
-        <input type="text" [(ngModel)]="query" name="Name">
-
-        <button type="submit">Search</button>
-    </form>-->
-
     <h2>Contacts</h2>
-    <div *ngIf="profiles">
+    <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let profile of (profiles | async)">
             <p>{{profile.username}}</p>
             <p>{{profile.userId}}</p>
         </div>
-        <form *ngIf="moreSearch" (ngSubmit)="searchInQwirk()">
+        <form *ngIf="inQwirk" (click)="moreSearch = true" (ngSubmit)="search()">
             <button type="submit">Search In Qwirk</button>
         </form>
+    </div>
+    <div *ngIf="profilesFind">
+        <div *ngFor="let profile of (profilesFind | async)">
+            <p>{{profile.username}}</p>
+            <p>{{profile.userId}}</p>
+        </div>
     </div>
 </div>

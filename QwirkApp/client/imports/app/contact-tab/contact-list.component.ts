@@ -15,8 +15,9 @@ export class ContactListComponent implements OnInit, OnDestroy {
     profiles: Observable<Profile[]>;
     profilesFind: Profile[];
     profilesSub: Subscription;
-    query: string;
+    query: string = null;
     moreSearch: boolean = false;
+    inQwirk: boolean = false;
 
     constructor(private zone: NgZone) {
     }
@@ -28,25 +29,28 @@ export class ContactListComponent implements OnInit, OnDestroy {
             .find({userId: {$ne: _id}});
     }
 
-    search(query : string): void {
-        this.query = query;
-        this.profiles = Profiles.find({$and: [{username: {$regex: ".*" + this.query + ".*"}}, {userId: {$ne: Meteor.userId()}}]})
-        this.moreSearch = true;
+    search(): void {
+        if (this.query) {
+            if (this.moreSearch) {
+                this.searchInQwirk();
+            } else {
+                this.profiles = Profiles.find({$and: [{username: {$regex: ".*" + this.query + ".*"}}, {userId: {$ne: Meteor.userId()}}]});
+                this.inQwirk = true;
+            }
+        }
     }
 
     searchInQwirk(): void {
-        if (this.query) {
-            Meteor.call("searchUser", this.query, (error, result) => {
-                if (error) {
-                    console.log("erreur dans search")
-                }
-                if (result) {
-                    this.zone.run(() => {
-                        this.profilesFind = result;
-                    });
-                }
-            });
-        }
+        Meteor.call("searchUser", this.query, (error, result) => {
+            if (error) {
+                console.log("erreur dans search")
+            }
+            if (result) {
+                this.zone.run(() => {
+                   this.profilesFind = result;
+                });
+            }
+        });
     }
 
     ngOnDestroy(): void {
