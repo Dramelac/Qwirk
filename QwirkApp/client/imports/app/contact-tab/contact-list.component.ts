@@ -52,6 +52,11 @@ export class ContactListComponent implements OnInit, OnDestroy {
             }
         });
     }
+    clearRequest() : void {
+        this.query = null;
+        this.profilesFind = null;
+        this.profiles = Profiles.find({userId: {$ne: Meteor.userId()}});
+    }
 
     ngOnDestroy(): void {
         this.profilesSub.unsubscribe();

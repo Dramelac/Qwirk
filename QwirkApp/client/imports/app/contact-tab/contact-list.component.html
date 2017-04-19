@@ -3,7 +3,7 @@
     <div>
         <input class="search-bar" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
         <div *ngIf="query">
-            <button (click)="query = null ">X</button>
+            <button (click)="clearRequest()">X</button>
         </div>
     </div>
     <h2>Contacts</h2>
