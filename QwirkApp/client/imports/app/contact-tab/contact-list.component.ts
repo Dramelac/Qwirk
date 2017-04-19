@@ -17,16 +17,17 @@ export class ContactListComponent implements OnInit, OnDestroy {
     profilesSub: Subscription;
     query: string = null;
     moreSearch: boolean = false;
-    inQwirk: boolean = false;
+    inApp: boolean = false;
+    currentUserId: string;
 
     constructor(private zone: NgZone) {
     }
 
     ngOnInit(): void {
-        let _id = Meteor.userId();
+        this.currentUserId = Meteor.userId();
         this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe();
         this.profiles = Profiles
-            .find({userId: {$ne: _id}});
+            .find({userId: {$ne: this.currentUserId}});
     }
 
     search(): void {
@@ -34,28 +35,33 @@ export class ContactListComponent implements OnInit, OnDestroy {
             if (this.moreSearch) {
                 this.searchInQwirk();
             } else {
-                this.profiles = Profiles.find({$and: [{username: {$regex: ".*" + this.query + ".*"}}, {userId: {$ne: Meteor.userId()}}]});
-                this.inQwirk = true;
+                this.profiles = Profiles.find({$and: [{username: {$regex: ".*" + this.query + ".*"}}, {userId: {$ne: this.currentUserId}}]});
+                this.inApp = true;
             }
+        }
+        if (this.query == "") {
+            this.clearRequest();
+
         }
     }
 
     searchInQwirk(): void {
-        Meteor.call("searchUser", this.query, (error, result) => {
+        Meteor.call("searchUser", this.query, this.currentUserId, (error, result) => {
             if (error) {
                 console.log("erreur dans search")
             }
             if (result) {
                 this.zone.run(() => {
-                   this.profilesFind = result;
+                    this.profilesFind = result;
                 });
             }
         });
     }
-    clearRequest() : void {
+
+    clearRequest(): void {
         this.query = null;
         this.profilesFind = null;
-        this.profiles = Profiles.find({userId: {$ne: Meteor.userId()}});
+        this.profiles = Profiles.find({userId: {$ne: this.currentUserId}});
     }
 
     ngOnDestroy(): void {

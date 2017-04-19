@@ -12,7 +12,7 @@
             <p>{{profile.username}}</p>
             <p>{{profile.userId}}</p>
         </div>
-        <form *ngIf="inQwirk" (click)="moreSearch = true" (ngSubmit)="search()">
+        <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
             <button type="submit">Search In Qwirk</button>
         </form>
     </div>
