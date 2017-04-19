@@ -43,20 +43,26 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.stopCall();
     }
 
-    initPeer(video: boolean, callback=null) {
+    initPeer(video: boolean, callback = null) {
+        // get audio/video
+        navigator.getUserMedia = ( navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia );
+
         if (!navigator.getUserMedia) {
             console.error("undefined user media");
         }
-        // get audio/video
-        navigator.getUserMedia = ( navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia ||
-            navigator.msGetUserMedia );
+
         navigator.getUserMedia({audio: true, video: video}, (stream) => {
                 //display video
-                this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
+
+                this.zone.run(() => {
+                    this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
+                });
                 this.localStream = stream;
-                if (callback){
+                console.log("Test callback : ", callback);
+                if (callback) {
                     console.log("exec callback");
                     callback();
                 }
@@ -86,7 +92,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
             this.currentCall.on('stream', (remoteStream) => {
                 this.remoteStream = remoteStream;
-                this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.remoteStream))
+                this.zone.run(() => {
+                    this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.remoteStream));
+                });
             });
         });
 
@@ -133,6 +141,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
             this.distantVideo = "";
             this.peerId = "";
         });
+        Session.set("activeCall", null);
+        Session.set("callPeerId", null);
+        Session.set("callVideo", null);
     }
 
     acceptCall(callId: string) {
