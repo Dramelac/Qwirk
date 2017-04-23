@@ -1,4 +1,4 @@
-import {Component, NgZone, OnInit, Input, OnDestroy} from "@angular/core";
+import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-action.component.html";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
@@ -30,6 +30,16 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.peerId = "";
         this.isCallActive = false;
 
+        Tracker.autorun(() => {
+            let callId = Session.get("activeCall");
+            console.log("detect change ! , ", callId);
+            this.checkInputCall();
+        });
+
+    }
+
+    checkInputCall(){
+        console.log("checking call");
         if (Session.equals("activeCall", this.chatId)) {
             console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callPeerId"));
             this.initPeer(Session.get("callVideo"), () => {
@@ -79,7 +89,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
         });
 
         this.peer.on('open', () => {
-            this.peerId = this.peer.id;
+            this.zone.run(()=>{
+                this.peerId = this.peer.id;
+            });
         });
 
         // This event: remote peer receives a call
@@ -154,7 +166,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
             this.currentCall = this.peer.call(callId, this.localStream);
             this.currentCall.on('stream', (remoteStream) => {
                 this.remoteStream = remoteStream;
-                this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream));
+                this.zone.run(()=>{
+                    this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream));
+                });
             });
         }
     }
