@@ -1,18 +1,5 @@
 <div>
     <p>Search contact</p>
-    <friendRequest-list></friendRequest-list>
-    <form (ngSubmit)="search()">
-        <label>Username: </label>
-        <input type="text" [(ngModel)]="query" name="Name">
-
-        <button type="submit">Search</button>
-    </form>
-    <div *ngIf="profilesFind">
-        <h2>Result Search</h2>
-        <div *ngFor="let profileFind of profilesFind">
-            <p>{{profileFind.username}}</p>
-            <p>{{profileFind.userId}}</p>
-            <p>{{profileFind.Id}}</p>
     <div>
         <input class="search-bar" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
         <div *ngIf="query">
@@ -43,9 +30,6 @@
                     <p>{{profile.userId}}</p>
                 </div>
             </button>
-        </div>
-    </div>
-            <div/>
         </div>
     </div>
 </div>
