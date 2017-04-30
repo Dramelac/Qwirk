@@ -13,20 +13,29 @@
             <p>{{profileFind.username}}</p>
             <p>{{profileFind.userId}}</p>
             <p>{{profileFind.Id}}</p>
+    <div>
+        <input class="search-bar" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
+        <div *ngIf="query">
+            <button (click)="clearRequest()">X</button>
         </div>
     </div>
-
-
-
-    <div *ngIf="profiles">
-        <h2>Contact</h2>
+    <h2>Contacts</h2>
+    <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let profile of (profiles | async)">
-
             <p>{{profile.username}}</p>
             <p>{{profile.userId}}</p>
-            <p *ngIf="profile.contacts.length == 0">Pas d'amis !!</p>
-            <p> {{profile.contacts.lenght}}</p>
+        </div>
+        <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
+            <button type="submit">Search In Qwirk</button>
+        </form>
+    </div>
+    <div *ngIf="profilesFind">
+        <div *ngFor="let profile of profilesFind">
+            <p>{{profile.username}}</p>
+            <p>{{profile.userId}}</p>
         </div>
     </div>
-
+            <div/>
+        </div>
+    </div>
 </div>

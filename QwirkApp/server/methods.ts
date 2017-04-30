@@ -122,9 +122,10 @@ Meteor.methods({
     countMessages(): number {
         return Messages.collection.find().count();
     },
-    searchUser(username: string){
+    searchUser(username: string, currentUserId :string){
+        check(currentUserId, nonEmptyString);
         check(username, nonEmptyString);
-        let result = Profiles.find({username: {$regex: ".*" + username + ".*"}});
+        let result = Profiles.find({$and: [{username: {$regex: ".*" + username + ".*"}}, {userId: {$ne: currentUserId}}]});
         return result.fetch();
     }
 });
