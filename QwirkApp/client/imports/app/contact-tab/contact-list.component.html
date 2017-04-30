@@ -9,8 +9,13 @@
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let profile of (profiles | async)">
-            <p>{{profile.username}}</p>
-            <p>{{profile.userId}}</p>
+            <button>
+                <img [src]="profile.picture" class="picture">
+                <div>
+                    <p>{{profile.username}}</p>
+                    <p>{{profile.userId}}</p>
+                </div>
+            </button>
         </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
             <button type="submit">Search In Qwirk</button>
@@ -18,8 +23,13 @@
     </div>
     <div *ngIf="profilesFind">
         <div *ngFor="let profile of profilesFind">
-            <p>{{profile.username}}</p>
-            <p>{{profile.userId}}</p>
+            <button>
+                <img [src]="profile.picture" class="picture">
+                <div>
+                    <p>{{profile.username}}</p>
+                    <p>{{profile.userId}}</p>
+                </div>
+            </button>
         </div>
     </div>
 </div>

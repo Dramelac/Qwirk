@@ -62,6 +62,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
         this.query = null;
         this.profilesFind = null;
         this.profiles = Profiles.find({userId: {$ne: this.currentUserId}});
+        this.moreSearch = false;
+        this.inApp = false;
     }
 
     ngOnDestroy(): void {
