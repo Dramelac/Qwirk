@@ -2,7 +2,6 @@ import {MessageType} from "../both/models/message.model";
 import {Status} from "../both/models/status.enum";
 import {Chats, Messages, Profiles} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
-import {check} from "angular2-meteor/dist/utils";
 import {FriendsRequest} from "../both/collections/friend-request.collection";
 
 const nonEmptyString = Match.Where((str) => {
@@ -124,7 +123,7 @@ Meteor.methods({
     countMessages(): number {
         return Messages.collection.find().count();
     },
-    searchUser(username: string, currentUserId: string){
+    searchUser(username: string, currentUserId :string){
         check(currentUserId, nonEmptyString);
         check(username, nonEmptyString);
         let result = Profiles.find({$and: [{username: {$regex: ".*" + username + ".*"}}, {userId: {$ne: currentUserId}}]});
