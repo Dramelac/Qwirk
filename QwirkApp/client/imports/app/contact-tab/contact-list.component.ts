@@ -58,6 +58,12 @@ export class ContactListComponent implements OnInit, OnDestroy {
         });
     }
 
+    sendFriendRequest(): void{
+        /*Meteor.call("addFriendRequest", friendId,(error, result) =>{
+
+        });*/
+    }
+
     clearRequest(): void {
         this.query = null;
         this.profilesFind = null;
