@@ -16,7 +16,8 @@
       "@types/meteor-accounts-phone",
       "@types/meteor-publish-composite",
       "@types/meteor-collection-hooks",
-      "hammerjs"
+      "hammerjs",
+      "@types/peerjs"
     ]
   },
   "exclude": [
