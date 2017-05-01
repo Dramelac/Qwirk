@@ -58,8 +58,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
         });
     }
 
-    sendFriendRequest(): void{
-        Meteor.call("addFriendRequest", "0",(error, result) =>{
+    sendFriendRequest(friendId : string): void{
+        Meteor.call("addFriendRequest", friendId,(error, result) =>{
 
         });
     }
