@@ -60,6 +60,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                         ).map((messages: Message[]) => {
                             messages.forEach((message) => {
                                 message.ownership = Meteor.userId() == message.ownerId ? 'mine' : 'other';
+                                message.content = MessagesListComponent.processMessage(message.content);
 
                                 return message;
                             });
@@ -72,6 +73,19 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
             });
 
+    }
+
+    static processMessage(msg: string): string{
+        // italic
+        msg = msg.replace(/\/([^/]*)\//g,"<i>$1</i>");
+        // bold
+        msg = msg.replace(/\*([^*]*)\*/g,"<b>$1</b>");
+        // underline
+        msg = msg.replace(/_([^_]*)_/g,"<u>$1</u>");
+        // strike
+        msg = msg.replace(/~([^~]*)~/g,"<del>$1</del>");
+
+        return msg;
     }
 
     removeMessage(msg: Message): void {
