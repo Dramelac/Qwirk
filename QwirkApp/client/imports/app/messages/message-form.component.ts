@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 import template from "./message-form.component.html";
@@ -10,6 +10,7 @@ import {MessageType} from "../../../../both/models/message.model";
 })
 export class MessageFormComponent implements OnInit {
     addForm: FormGroup;
+    @Input('chatId') chatId: string;
 
     constructor(
         private formBuilder: FormBuilder
@@ -28,7 +29,7 @@ export class MessageFormComponent implements OnInit {
         }
         if (this.addForm.valid){
             let msg = this.processMessage(this.addForm.value.content);
-            Meteor.call("addMessage", MessageType.TEXT, Session.get("chatId"), msg,
+            Meteor.call("addMessage", MessageType.TEXT,this.chatId, msg,
                 (error, result) => {
 
             });
