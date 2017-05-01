@@ -61,7 +61,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                         ).map((messages: Message[]) => {
                             messages.forEach((message) => {
                                 message.ownership = Meteor.userId() == message.ownerId ? 'mine' : 'other';
-                                message.content = this.processMessage(message.content);
+                                message.content = MessagesListComponent.processMessage(message.content);
 
                                 return message;
                             });
@@ -76,7 +76,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
     }
 
-    processMessage(msg: string): string{
+    static processMessage(msg: string): string{
         //console.log("before :", msg);
 
         // italic
