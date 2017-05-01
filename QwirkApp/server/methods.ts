@@ -150,5 +150,19 @@ Meteor.methods({
                 message : 'Friend Request a send'
             })
         };
+    },
+    requestExist(friendId: string){
+
+        if(!Meteor.userId()) throw new Meteor.Error('unauthorized','User must be logged-in to send firendRequest');
+        check(friendId, nonEmptyString);
+        const requestExist = !!FriendsRequest.collection.find({
+            $and : [
+                {initiator : Meteor.userId()},
+                {destinator: friendId}
+            ]
+        }).count();
+        return requestExist;
+
+
     }
 });

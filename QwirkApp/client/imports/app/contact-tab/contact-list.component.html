@@ -6,6 +6,9 @@
             <button (click)="clearRequest()">X</button>
         </div>
     </div>
+    <div *ngIf="(friendRequests|async)?.length > 0">
+        <friendRequest-list></friendRequest-list>
+    </div>
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let profile of (profiles | async)">
@@ -28,7 +31,12 @@
                 <div>
                     <p>{{profile.username}}</p>
                     <p>{{profile.userId}}</p>
-                    <button (click)="sendFriendRequest(profile.userId)">Add</button>
+                    <div *ngIf="!requestSent(profile.userId)">
+                        <button (click)="sendFriendRequest(profile.userId)">Add</button>
+                    </div>
+                    <div *ngIf="requestSent(profile.userId)">
+                        <p>Envoyée</p>
+                    </div>
                 </div>
             </button>
         </div>

@@ -5,6 +5,8 @@ import {Profile} from "../../../../both/models/profile.model";
 import {MeteorObservable} from "meteor-rxjs";
 import {Profiles} from "../../../../both/collections/profile.collection";
 import {Subscription} from "rxjs/Subscription";
+import {FriendRequest} from "../../../../both/models/friend-request.model";
+import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
 
 @Component({
     selector: 'contact-list',
@@ -12,22 +14,35 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class ContactListComponent implements OnInit, OnDestroy {
 
+    friendRequests: Observable<FriendRequest[]>;
+    friendRequestsSub: Subscription;
+    numberRequest: number;
+
     profiles: Observable<Profile[]>;
     profilesFind: Profile[];
+
     profilesSub: Subscription;
     query: string = null;
     moreSearch: boolean = false;
     inApp: boolean = false;
     currentUserId: string;
+    private exist: boolean = false;
 
     constructor(private zone: NgZone) {
     }
 
     ngOnInit(): void {
         this.currentUserId = Meteor.userId();
+        this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe();
         this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe();
         this.profiles = Profiles
             .find({userId: {$ne: this.currentUserId}});
+
+        this.friendRequests = FriendsRequest
+            .find({destinator: Meteor.userId()});
+        if(this.friendRequests){
+            this.friendRequests.subscribe(result => this.numberRequest = result.length);
+        }
     }
 
     search(): void {
@@ -58,9 +73,18 @@ export class ContactListComponent implements OnInit, OnDestroy {
         });
     }
 
-    sendFriendRequest(friendId : string): void{
-        Meteor.call("addFriendRequest", friendId,(error, result) =>{
+    sendFriendRequest(friendId: string): void {
+        Meteor.call("addFriendRequest", friendId, (error, result) => {
 
+        });
+    }
+
+    requestSent(friendId: string){
+        Meteor.call("requestExist", friendId, (error, result) => {
+            if(error){
+                console.log("erreur requestSent");
+            }
+            if(result) return result;
         });
     }
 
@@ -74,5 +98,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.profilesSub.unsubscribe();
+        this.friendRequestsSub.unsubscribe();
     }
 }

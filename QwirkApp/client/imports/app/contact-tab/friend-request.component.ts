@@ -19,6 +19,6 @@ export class FriendRequestComponent implements OnInit,OnDestroy {
     }
 
     ngOnDestroy():void{
-        this.friendRequestSub.unsubscribe();
+        //this.friendRequestSub.unsubscribe();
     }
 }
