@@ -91,6 +91,9 @@ export class MessagesListComponent implements OnInit, OnDestroy{
         // url
         msg = Autolinker.link(msg);
 
+        // line
+        msg = msg.replace(/\n\r?/g, '<br/>');
+
         //console.log("after :", msg);
         return msg;
     }
