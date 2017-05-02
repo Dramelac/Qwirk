@@ -1,3 +1,6 @@
+
+<!---->
+
 <md-toolbar color="primary">
     <a routerLink="/" class="toolbar-title">Qwirk</a>
     <span class="fill-remaining-space"></span>
@@ -11,12 +14,102 @@
     </div>
 </md-toolbar>
 
+<md-sidenav-container class="sidenav-container" style="height: 1000px;width: 64px">
+    <md-sidenav #start (open)="myinput.focus()" mode="side" style="background-color:#303030 ">
+        <button md-button (click)="start.close()" style="width: 50px;">
+            <img class="button-test" src="asset/img/home.png" >
+        </button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button md-button (click)="end.open()" >
+            <img class="button-test" src="asset/img/users.png" >
+        </button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button md-button (click)="end.open()" >
+            <img class="button-test" src="asset/img/address_book.png" >
+        </button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button md-button (click)="end.open()" >
+            <img class="button-test" src="asset/img/comments.png" >
+        </button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button md-button (click)="end.open()" >
+            <img class="button-test" src="asset/img/phone.png" >
+        </button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button md-button (click)="end.open()" >
+            <img class="button-test" src="asset/img/process.png" >
+        </button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <input #myinput type="HIDDEN" >
+    </md-sidenav>
+
+    <md-sidenav #end align="end">
+        End Side Drawer
+        <br>
+        <button md-button (click)="end.close()">Close</button>
+    </md-sidenav>
+
+
+</md-sidenav-container>
+
+
+<div class="button-toggle" style="float:left">
+
+    <div>
+        <button md-button (click)="start.toggle()">Toggle Start Side Drawer</button>
+        <button md-button (click)="end.toggle()">Toggle End Side Drawer</button>
+    </div>
+
+
+</div>
+
+
+
+<!--<div layout="row" ng-controller="MyController">
+    <md-sidenav md-component-id="left" class="md-sidenav-left">
+        Left Nav!
+    </md-sidenav>
+
+    <md-content>
+        Center Content
+        <md-button ng-click="openLeftMenu()">
+            Open Left Menu
+        </md-button>
+    </md-content>
+
+    <md-sidenav md-component-id="right" md-is-locked-open="$mdMedia('min-width: 333px')" class="md-sidenav-right">
+        <form>
+            <md-input-container>
+                <label for="testInput">Test input</label>
+                <input id="testInput" ng-model="data" md-autofocus type="text">
+            </md-input-container>
+        </form>
+    </md-sidenav>
+</div>-->
 <!-- App layout -->
 
 
-<div *ngIf="user">
+<!-- <div *ngIf="user">
     <side-menu></side-menu>
-</div>
+</div>-->
 
 <!-- Main page -->
-<router-outlet></router-outlet>
+<!--<router-outlet></router-outlet> -->

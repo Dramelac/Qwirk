@@ -7,6 +7,7 @@ import {Status} from "../../../both/models/status.enum";
 import {Profiles} from "../../../both/collections";
 import {Router} from "@angular/router";
 
+
 @Component({
     selector: "app",
     template,
@@ -23,4 +24,6 @@ export class AppComponent {
         Meteor.logout();
         this.router.navigate(['/']);
     }
+
 }
+
