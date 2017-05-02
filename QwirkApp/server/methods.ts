@@ -1,6 +1,6 @@
 import {MessageType} from "../both/models/message.model";
 import {Status} from "../both/models/status.enum";
-import {Chats, Messages, Profiles} from "../both/collections";
+import {Chats, Messages, Profiles, Contacts} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
 import {FriendsRequest} from "../both/collections/friend-request.collection";
 
@@ -123,46 +123,82 @@ Meteor.methods({
     countMessages(): number {
         return Messages.collection.find().count();
     },
-    searchUser(username: string, currentUserId :string){
+    searchUser(username: string, currentUserId: string){
         check(currentUserId, nonEmptyString);
         check(username, nonEmptyString);
         let result = Profiles.find({$and: [{username: {$regex: ".*" + username + ".*"}}, {userId: {$ne: currentUserId}}]});
         return result.fetch();
     },
     addFriendRequest(friendId: string){
-        if(!Meteor.userId()) throw new Meteor.Error('unauthorized','User must be logged-in to send firendRequest');
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to send firendRequest');
         check(friendId, nonEmptyString);
 
         const requestExist = !!FriendsRequest.collection.find({
-            $and : [
-                {initiator : Meteor.userId()},
+            $and: [
+                {initiator: Meteor.userId()},
                 {destinator: friendId}
             ]
         }).count();
 
-        if(requestExist){
-            throw new Meteor.Error('friend-request-exist','Friend Request already exist');
+        if (requestExist) {
+            throw new Meteor.Error('friend-request-exist', 'Friend Request already exist');
         }
-        return{
+        return {
             friendRequestId: FriendsRequest.collection.insert({
                 initiator: Meteor.userId(),
                 destinator: friendId,
-                message : 'Friend Request a send'
+                message: 'Friend Request a send'
             })
         };
     },
     requestExist(friendId: string){
 
-        if(!Meteor.userId()) throw new Meteor.Error('unauthorized','User must be logged-in to send firendRequest');
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to send firendRequest');
         check(friendId, nonEmptyString);
         const requestExist = !!FriendsRequest.collection.find({
-            $and : [
-                {initiator : Meteor.userId()},
+            $and: [
+                {initiator: Meteor.userId()},
                 {destinator: friendId}
             ]
         }).count();
         return requestExist;
 
 
+    },
+    removeFriendRequest(initiator: string){
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to remove firendRequest');
+        check(initiator, nonEmptyString);
+
+        FriendsRequest.remove({
+            $and: [
+                {initiator: initiator},
+                {destinator: Meteor.userId()}
+            ]
+        })
+    },
+    newContact(initiator: string): void{
+        //On crée un chat pour les nouveux contacts
+        const chat = {
+            user: [Meteor.userId(), initiator],
+            admin: [],
+            publicly: false
+        };
+
+        let chatId = Chats.collection.insert(chat);
+        //On crée pour chacun un contact
+        const contactUser = {
+            ownerId: Meteor.userId(),
+            friendId: initiator,
+            chatId: chatId
+        };
+        const contactInitiator = {
+            ownerId: initiator,
+            friendId: Meteor.userId(),
+            chatId: chatId
+        };
+
+        Contacts.insert(contactUser);
+        Contacts.insert(contactInitiator);
+        Meteor.call("removeFriendRequest",initiator);
     }
 });

@@ -6,9 +6,7 @@
             <button (click)="clearRequest()">X</button>
         </div>
     </div>
-    <div *ngIf="(friendRequests|async)?.length > 0">
-        <friendRequest-list></friendRequest-list>
-    </div>
+    <friendRequest-list></friendRequest-list>
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let profile of (profiles | async)">

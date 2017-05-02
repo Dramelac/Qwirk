@@ -79,13 +79,17 @@ export class ContactListComponent implements OnInit, OnDestroy {
         });
     }
 
-    requestSent(friendId: string){
+    requestSent(friendId: string):boolean{
         Meteor.call("requestExist", friendId, (error, result) => {
             if(error){
                 console.log("erreur requestSent");
+                return;
             }
-            if(result) return result;
+            console.log("exist",result);
+            Session.set('exist',result);
         });
+        return Session.get('exist');
+
     }
 
     clearRequest(): void {
