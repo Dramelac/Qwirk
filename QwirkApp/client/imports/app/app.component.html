@@ -1,6 +1,6 @@
 
-<!---->
 
+<!--
 <md-toolbar color="primary">
     <a routerLink="/" class="toolbar-title">Qwirk</a>
     <span class="fill-remaining-space"></span>
@@ -14,73 +14,150 @@
     </div>
 </md-toolbar>
 
-<md-sidenav-container class="sidenav-container" style="height: 1000px;width: 64px">
-    <md-sidenav #start (open)="myinput.focus()" mode="side" style="background-color:#303030 ">
-        <button md-button (click)="start.close()" style="width: 50px;">
-            <img class="button-test" src="asset/img/home.png" >
-        </button>
-        <br>
-        <br>
-        <br>
-        <br>
-        <button md-button (click)="end.open()" >
-            <img class="button-test" src="asset/img/users.png" >
-        </button>
-        <br>
-        <br>
-        <br>
-        <br>
-        <button md-button (click)="end.open()" >
-            <img class="button-test" src="asset/img/address_book.png" >
-        </button>
-        <br>
-        <br>
-        <br>
-        <br>
-        <button md-button (click)="end.open()" >
-            <img class="button-test" src="asset/img/comments.png" >
-        </button>
-        <br>
-        <br>
-        <br>
-        <br>
-        <button md-button (click)="end.open()" >
-            <img class="button-test" src="asset/img/phone.png" >
-        </button>
-        <br>
-        <br>
-        <br>
-        <br>
-        <button md-button (click)="end.open()" >
-            <img class="button-test" src="asset/img/process.png" >
-        </button>
-        <br>
-        <br>
-        <br>
-        <br>
-        <input #myinput type="HIDDEN" >
-    </md-sidenav>
+-->
 
-    <md-sidenav #end align="end">
-        End Side Drawer
-        <br>
-        <button md-button (click)="end.close()">Close</button>
-    </md-sidenav>
+<!--Page principal-->
+<div style="height: 100%;width: 100%;position: absolute;background-color: red">
+
+    <!-- Menu tout à gauche-->
+    <div style="height: 100%;width: 64px;position: absolute;background-color:#303030;">
+        <md-sidenav-container class="sidenav-container" style="height: 100%;width: 64px;background-color:#303030; ">
+            <button md-button >
+                <img class="button-test" src="asset/img/home.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button  >
+                <img class="button-test" src="asset/img/phone.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button  >
+                <img class="button-test" src="asset/img/comments.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button (click)="start.toggle()">
+                <img class="button-test" src="asset/img/users.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button  >
+                <img class="button-test" src="asset/img/television.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button >
+                <img class="button-test" src="asset/img/process.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
 
 
-</md-sidenav-container>
 
 
-<div class="button-toggle" style="float:left">
+        </md-sidenav-container>
 
-    <div>
-        <button md-button (click)="start.toggle()">Toggle Start Side Drawer</button>
-        <button md-button (click)="end.toggle()">Toggle End Side Drawer</button>
     </div>
 
+    <!--logo Qwirk-->
+    <div style="left:64px;height: 200px;width: 200px;position: absolute;background-color: blue">
+        <img class="logo" src="favicon.png" >
+    </div>
 
-</div>
+    <!--nom utilisateur-->
+    <div style="left:64px;top:200px;height: 40px;width: 200px;position: absolute;background-color: cyan">
 
+    </div>
+
+    <!--liste utilisateur/groupe/channel-->
+    <div style="left:64px;top:240px;height: calc(100% - 240px);width: 200px;position: absolute;background-color: magenta">
+
+    </div>
+    <!--
+
+    </div>
+    -->
+    <!--
+    <md-sidenav-container class="sidenav-container" style="height: 1000px;width: 64px">
+        <md-sidenav #start (open)="myinput.focus()" mode="side" style="background-color:#8bc34a ">
+            <button md-button (click)="start.close()" style="width: 50px;">
+                <img class="button-test" src="asset/img/home.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button (click)="end.open()" >
+                <img class="button-test" src="asset/img/phone.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button (click)="end.open()" >
+                <img class="button-test" src="asset/img/comments.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button (click)="end.open()" >
+                <img class="button-test" src="asset/img/users.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button (click)="end.open()" >
+                <img class="button-test" src="asset/img/television.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button md-button (click)="end.open()" >
+                <img class="button-test" src="asset/img/process.png" >
+            </button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <input #myinput type="HIDDEN" >
+        </md-sidenav>
+
+        <md-sidenav #end align="end">
+            End Side Drawer
+            <br>
+            <button md-button (click)="end.close()">Close</button>
+        </md-sidenav>
+
+
+    </md-sidenav-container>
+
+
+    <div class="button-toggle" style="float:left">
+
+        <div>
+            <button md-button (click)="start.toggle()">Toggle Start Side Drawer</button>
+            <button md-button (click)="end.toggle()">Toggle End Side Drawer</button>
+        </div>
+
+
+    </div>
+    -->
 
 
 <!--<div layout="row" ng-controller="MyController">
