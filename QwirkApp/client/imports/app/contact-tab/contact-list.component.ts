@@ -7,9 +7,11 @@ import {Profiles} from "../../../../both/collections/profile.collection";
 import {Subscription} from "rxjs/Subscription";
 import {FriendRequest} from "../../../../both/models/friend-request.model";
 import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
+import {StatusComponent} from "./status.component";
 
 @Component({
     selector: 'contact-list',
+    directives: [StatusComponent],
     template
 })
 export class ContactListComponent implements OnInit, OnDestroy {
@@ -20,6 +22,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     profiles: Observable<Profile[]>;
     profilesFind: Profile[];
+    friendList: string[] = [];
 
     profilesSub: Subscription;
     query: string = null;
@@ -38,9 +41,17 @@ export class ContactListComponent implements OnInit, OnDestroy {
         this.profiles = Profiles
             .find({userId: {$ne: this.currentUserId}});
 
+        if (this.profiles) {
+            this.profiles.subscribe((result: Profile[]) => {
+                for (var profile of result) {
+                    this.friendList.push(profile._id);
+                }
+            });
+        }
+
         this.friendRequests = FriendsRequest
             .find({destinator: Meteor.userId()});
-        if(this.friendRequests){
+        if (this.friendRequests) {
             this.friendRequests.subscribe(result => this.numberRequest = result.length);
         }
     }
@@ -61,7 +72,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     searchInQwirk(): void {
-        Meteor.call("searchUser", this.query, this.currentUserId, (error, result) => {
+        Meteor.call("searchUser", this.query, this.friendList, (error, result) => {
             if (error) {
                 console.log("erreur dans search")
             }
@@ -79,14 +90,14 @@ export class ContactListComponent implements OnInit, OnDestroy {
         });
     }
 
-    requestSent(friendId: string):boolean{
+    requestSent(friendId: string): boolean {
         Meteor.call("requestExist", friendId, (error, result) => {
-            if(error){
+            if (error) {
                 console.log("erreur requestSent");
                 return;
             }
-            console.log("exist",result);
-            Session.set('exist',result);
+            console.log("exist", result);
+            Session.set('exist', result);
         });
         return Session.get('exist');
 

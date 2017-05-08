@@ -123,10 +123,11 @@ Meteor.methods({
     countMessages(): number {
         return Messages.collection.find().count();
     },
-    searchUser(username: string, currentUserId: string){
-        check(currentUserId, nonEmptyString);
+    searchUser(username: string,friendList: string[]){
+        check(Meteor.userId(), nonEmptyString);
         check(username, nonEmptyString);
-        let result = Profiles.find({$and: [{username: {$regex: ".*" + username + ".*"}}, {userId: {$ne: currentUserId}}]});
+        friendList.push(Meteor.userId());
+        let result = Profiles.find({$and: [{username: {$regex: ".*" + username + ".*"}}, {_id: {$nin: friendList}}, {userId : {$ne :Meteor.userId()}}]});
         return result.fetch();
     },
     addFriendRequest(friendId: string){
@@ -177,7 +178,7 @@ Meteor.methods({
         })
     },
     newContact(initiator: string): void{
-        //On crée un chat pour les nouveux contacts
+        //On crée un chat pour les nouveux friendList
         const chat = {
             user: [Meteor.userId(), initiator],
             admin: [],
@@ -196,9 +197,8 @@ Meteor.methods({
             friendId: Meteor.userId(),
             chatId: chatId
         };
-
-        Contacts.insert(contactUser);
-        Contacts.insert(contactInitiator);
+        Profiles.update({userId : Meteor.userId()},{$push : {contacts: Contacts.collection.insert(contactUser)}});
+        Profiles.update({userId : initiator},{$push : {contacts : Contacts.collection.insert(contactInitiator)}});
         Meteor.call("removeFriendRequest",initiator);
     }
 });
