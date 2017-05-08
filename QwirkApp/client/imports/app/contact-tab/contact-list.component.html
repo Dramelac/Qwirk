@@ -10,11 +10,12 @@
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let profile of (profiles | async)">
-            <button>
+            <button (click)="showMessages(profile.userId)">
                 <img [src]="profile.picture" class="picture">
                 <div>
                     <p>{{profile.username}}</p>
-                   <status [status}="profile.status"></status>
+                   <status [numberStatus]="profile.status"></status>
+                    <button (click)="deleteContact(profile.userId)">X</button>
                 </div>
             </button>
         </div>

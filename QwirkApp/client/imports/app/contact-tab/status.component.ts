@@ -1,20 +1,20 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, Input, OnDestroy, OnInit} from "@angular/core";
 import template from "./status.component.html";
-import model from "./contact-list.component.html"
-
+import {StatusToString} from "../../../../both/models/status.enum";
 @Component({
     selector: 'status',
-    inputs:[model],
     template
 })
 
 export class StatusComponent implements OnDestroy, OnInit {
+    @Input("numberStatus") statusNumber: number;
     status : string;
     ngOnDestroy(): void {
-        status = this.status
+
     }
 
     ngOnInit(): void {
+        this.status = StatusToString(this.statusNumber)
     }
 
 }

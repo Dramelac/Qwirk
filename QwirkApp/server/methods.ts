@@ -3,6 +3,7 @@ import {Status} from "../both/models/status.enum";
 import {Chats, Messages, Profiles, Contacts} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
 import {FriendsRequest} from "../both/collections/friend-request.collection";
+import {Contact} from "../both/models/contact.model";
 
 const nonEmptyString = Match.Where((str) => {
     if (str != null) {
@@ -200,5 +201,19 @@ Meteor.methods({
         Profiles.update({userId : Meteor.userId()},{$push : {contacts: Contacts.collection.insert(contactUser)}});
         Profiles.update({userId : initiator},{$push : {contacts : Contacts.collection.insert(contactInitiator)}});
         Meteor.call("removeFriendRequest",initiator);
+    },
+    removeContact(friendId: string){
+        var contacts = Contacts.collection.findOne({$and : [{ownerId : Meteor.userId()}, {friendId: friendId}]});
+        var contactUser = Contacts.collection.findOne({$and : [{ownerId : friendId}, {friendId: Meteor.userId()}]});
+        Meteor.call("removeChat",contacts.chatId);
+        Contacts.remove({chatId : contacts.chatId});
+        Profiles.update({userId : friendId},{$unset : {contacts : contacts._id}});
+        Profiles.update({userId : Meteor.userId()},{$unset : {contacts : contactUser}});
+    },
+    findContact(friendId:string) : string{
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to search in contact');
+        if(friendId){
+            return Contacts.collection.findOne({$and : [{ownerId : Meteor.userId()},{friendId: friendId}]}).chatId;
+        }
     }
 });

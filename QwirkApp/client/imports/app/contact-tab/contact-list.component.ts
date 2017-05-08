@@ -7,11 +7,11 @@ import {Profiles} from "../../../../both/collections/profile.collection";
 import {Subscription} from "rxjs/Subscription";
 import {FriendRequest} from "../../../../both/models/friend-request.model";
 import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
-import {StatusComponent} from "./status.component";
+import {Router} from "@angular/router";
+import {Contacts} from "../../../../both/collections/contact.collection";
 
 @Component({
     selector: 'contact-list',
-    directives: [StatusComponent],
     template
 })
 export class ContactListComponent implements OnInit, OnDestroy {
@@ -31,7 +31,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
     currentUserId: string;
     private exist: boolean = false;
 
-    constructor(private zone: NgZone) {
+    constructor(private zone: NgZone, private router: Router) {
     }
 
     ngOnInit(): void {
@@ -109,6 +109,21 @@ export class ContactListComponent implements OnInit, OnDestroy {
         this.profiles = Profiles.find({userId: {$ne: this.currentUserId}});
         this.moreSearch = false;
         this.inApp = false;
+    }
+
+    showMessages(friendId: string): void {
+       Meteor.call("findContact",friendId,(error, result)=>{
+           if(error){
+               console.log("erreur showMessage");
+           }
+          else{
+               this.router.navigate(["/chat/" + result]);
+           }
+       });
+    }
+
+    deleteContact(friendId: string){
+        Meteor.call("removeContact", friendId);
     }
 
     ngOnDestroy(): void {
