@@ -22,14 +22,14 @@
     <!-- Menu tout à gauche-->
     <div style="height: 100%;width: 64px;position: absolute;background-color:#303030;">
         <md-sidenav-container class="sidenav-container" style="height: 100%;width: 64px;background-color:#303030; ">
-            <button md-button >
+            <button md-button (click)="message.close()" >
                 <img class="button-test" src="asset/img/home.png" >
             </button>
             <br>
             <br>
             <br>
             <br>
-            <button md-button  >
+            <button md-button (click)="message.open()"  >
                 <img class="button-test" src="asset/img/comments.png" >
             </button>
             <br>
@@ -94,6 +94,7 @@
 
     </div>
 
+    <!--Bar titre -->
     <div style="left:267px;top:0px;height: 180px;width: calc(100% - 267px);position: absolute;background-color: #e6e6e6;" >
         <div style="width: 400px;height: 120px ;margin: 30px auto">
             <p style="float: left;padding-right: 20px">
@@ -107,6 +108,31 @@
 
         </div>
 
+    </div>
+    <!--Div central-->
+    <div>
+        <div style="left:267px;top:180px;height: calc(100% - 180px);width: calc(100% - 267px);position:absolute">
+
+
+            <md-sidenav-container class="sidenav-container" style="height: 100%;width: 100%;background-color: #efefef">
+                <!--Message User-->
+                <md-sidenav #message (open)="messageinput.focus()" mode="side" style="height: 100%;width: 100%;background-color: #efefef"" >
+                <a>
+                    User messagedsfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfg
+                </a>
+                <input #messageinput type="HIDDEN" >
+                </md-sidenav>
+
+                <!--home-->
+                <a>
+
+                    homertzeqtqrgdsfgsdfgsdfgsdfgsdfsdfgsdfgsdfg
+                </a>
+
+            </md-sidenav-container>
+
+
+        </div>
     </div>
 
 </div>
