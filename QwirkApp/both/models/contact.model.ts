@@ -1,6 +1,7 @@
 import { CollectionObject } from './collection-object.model';
 export interface Contact extends CollectionObject {
-    userId: string,
+    ownerId: string,
+    friendId: string,
     displayName?: string;
     chatId: string;
 }

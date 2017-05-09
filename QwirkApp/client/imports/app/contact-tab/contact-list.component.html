@@ -1,32 +1,45 @@
 <div>
     <p>Search contact</p>
-
-    <form (ngSubmit)="search()">
-        <label>Username: </label>
-        <input type="text" [(ngModel)]="query" name="Name">
-
-        <button type="submit">Search</button>
-    </form>
-    <div *ngIf="profilesFind">
-        <h2>Result Search</h2>
-        <div *ngFor="let profileFind of profilesFind">
-            <p>{{profileFind.username}}</p>
-            <p>{{profileFind.userId}}</p>
-            <p>{{profileFind.Id}}</p>
+    <div>
+        <input class="search-bar" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
+        <div *ngIf="query">
+            <button (click)="clearRequest()">X</button>
         </div>
     </div>
-
-
-
-    <div *ngIf="profiles">
-        <h2>Contact</h2>
+    <friendRequest-list></friendRequest-list>
+    <h2>Contacts</h2>
+    <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let profile of (profiles | async)">
-
-            <p>{{profile.username}}</p>
-            <p>{{profile.userId}}</p>
-            <p *ngIf="profile.contacts.length == 0">Pas d'amis !!</p>
-            <p> {{profile.contacts.lenght}}</p>
+            <button (click)="showMessages(profile.userId)">
+                <img [src]="profile.picture" class="picture">
+                <div>
+                    <p>{{profile.username}}</p>
+                   <status [numberStatus]="profile.status"></status>
+                    <div>
+                        <button (click)="deleteContact(profile.userId)">X</button>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
+            <button type="submit">Search In Qwirk</button>
+        </form>
+    </div>
+    <div *ngIf="profilesFind">
+        <div *ngFor="let profile of profilesFind">
+            <button>
+                <img [src]="profile.picture" class="picture">
+                <div>
+                    <p>{{profile.username}}</p>
+                    <p>{{profile.userId}}</p>
+                    <div *ngIf="!requestSent(profile.userId)">
+                        <button (click)="sendFriendRequest(profile.userId)">Add</button>
+                    </div>
+                    <div *ngIf="requestSent(profile.userId)">
+                        <p>Envoyée</p>
+                    </div>
+                </div>
+            </button>
         </div>
     </div>
-
 </div>

@@ -8,6 +8,7 @@ import {Message} from "../../../../both/models/message.model";
 import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {Profiles} from "../../../../both/collections/profile.collection";
+import {MessagesListComponent} from "../messages/messages-list.component";
 
 @Component({
     selector: 'chat-list',
@@ -56,6 +57,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
 
                 // This will make the last message reactive
                 this.findLastChatMessage(chat._id).subscribe((message) => {
+                    message.content = MessagesListComponent.processMessage(message.content);
                     chat.lastMessage = message;
                 });
             });
