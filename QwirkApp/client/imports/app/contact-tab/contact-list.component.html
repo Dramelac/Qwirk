@@ -9,14 +9,14 @@
     <friendRequest-list></friendRequest-list>
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
-        <div *ngFor="let profile of (profiles | async)">
-            <button (click)="showMessages(profile.userId)">
-                <img [src]="profile.picture" class="picture">
+        <div *ngFor="let contact of (contacts | async)">
+            <button (click)="showMessages(contact.chatId)">
+                <img [src]="contact.profile.picture" class="picture">
                 <div>
-                    <p>{{profile.username}}</p>
-                   <status [numberStatus]="profile.status"></status>
+                    <p>{{contact.profile.username}}</p>
+                   <status [numberStatus]="contact.profile.status"></status>
                     <div>
-                        <button (click)="deleteContact(profile.userId)">X</button>
+                        <button (click)="deleteContact(contact.profile.userId)">X</button>
                     </div>
                 </div>
             </button>

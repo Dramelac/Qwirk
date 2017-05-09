@@ -8,6 +8,8 @@ import {Subscription} from "rxjs/Subscription";
 import {FriendRequest} from "../../../../both/models/friend-request.model";
 import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
 import {Router} from "@angular/router";
+import {Contacts} from "../../../../both/collections/contact.collection";
+import {Contact} from "../../../../both/models/contact.model";
 
 @Component({
     selector: 'contact-list',
@@ -19,11 +21,13 @@ export class ContactListComponent implements OnInit, OnDestroy {
     friendRequestsSub: Subscription;
     numberRequest: number;
 
+    contacts : Observable<Contact[]>;
     profiles: Observable<Profile[]>;
     profilesFind: Profile[];
     friendList: string[] = [];
 
     profilesSub: Subscription;
+    contactsSub: Subscription;
     query: string = null;
     moreSearch: boolean = false;
     inApp: boolean = false;
@@ -37,8 +41,18 @@ export class ContactListComponent implements OnInit, OnDestroy {
         this.currentUserId = Meteor.userId();
         this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe();
         this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe();
+        this.contactsSub = MeteorObservable.subscribe('myContacts').subscribe();
         this.profiles = Profiles
             .find({userId: {$ne: this.currentUserId}});
+
+        this.contacts = Contacts.find();
+        if(this.contacts){
+            this.contacts.subscribe((result : Contact[]) => {
+                for(var contact of result){
+                    contact.profile = Profiles.collection.findOne({userId : contact.friendId});
+                }
+                    });
+        }
 
         if (this.profiles) {
             this.profiles.subscribe((result: Profile[]) => {
@@ -110,15 +124,9 @@ export class ContactListComponent implements OnInit, OnDestroy {
         this.inApp = false;
     }
 
-    showMessages(friendId: string): void {
-       Meteor.call("findContact",friendId,(error, result)=>{
-           if(error){
-               console.log("erreur showMessage");
-           }
-          else{
-               this.router.navigate(["/chat/" + result]);
-           }
-       });
+    showMessages(chatId: string): void {
+        this.router.navigate(["/chat/" + chatId]);
+
     }
 
     deleteContact(friendId: string){
@@ -130,5 +138,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.profilesSub.unsubscribe();
         this.friendRequestsSub.unsubscribe();
+        this.contactsSub.unsubscribe();
     }
 }
