@@ -6,14 +6,18 @@
             <button (click)="clearRequest()">X</button>
         </div>
     </div>
+    <friendRequest-list></friendRequest-list>
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let profile of (profiles | async)">
-            <button>
+            <button (click)="showMessages(profile.userId)">
                 <img [src]="profile.picture" class="picture">
                 <div>
                     <p>{{profile.username}}</p>
-                    <p>{{profile.userId}}</p>
+                   <status [numberStatus]="profile.status"></status>
+                    <div>
+                        <button (click)="deleteContact(profile.userId)">X</button>
+                    </div>
                 </div>
             </button>
         </div>
@@ -28,7 +32,12 @@
                 <div>
                     <p>{{profile.username}}</p>
                     <p>{{profile.userId}}</p>
-                    <button (click)="sendFriendRequest()">Add</button>
+                    <div *ngIf="!requestSent(profile.userId)">
+                        <button (click)="sendFriendRequest(profile.userId)">Add</button>
+                    </div>
+                    <div *ngIf="requestSent(profile.userId)">
+                        <p>Envoyée</p>
+                    </div>
                 </div>
             </button>
         </div>

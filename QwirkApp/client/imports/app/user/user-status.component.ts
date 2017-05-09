@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./user-status.component.html";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {Profile} from "../../../../both/models/profile.model";
@@ -14,41 +14,43 @@ import {Subscription} from "rxjs/Subscription";
 export class UserStatusComponent implements OnInit, OnDestroy {
     profile: Profile;
     profilesub: Subscription;
-    status: string;
     selectedStatus: number;
 
-    constructor() {
+    constructor(private zone: NgZone) {
     }
 
     ngOnInit(): void {
         this.loadingValue();
+        console.log("sub to profile :", Meteor.userId());
         this.profilesub = MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
-                this.profile = Profiles.findOne({userId: Meteor.userId()});
-                if (this.profile){
-                    this.selectedStatus = this.profile.status;
-                    //this.status = StatusToString(this.profile.status);
-                } else {
-                    this.loadingValue();
-                }
+                this.zone.run(() => {
+                    this.profile = Profiles.findOne({userId: Meteor.userId()});
+                    if (this.profile) {
+                        this.selectedStatus = this.profile.status;
+                        //this.status = StatusToString(this.profile.status);
+                    } else {
+                        this.loadingValue();
+                    }
+                });
             })
         });
 
     }
 
     ngOnDestroy(): void {
+        console.log("destroy user profile sub");
         this.profilesub.unsubscribe();
     }
 
 
-    loadingValue(): void{
+    loadingValue(): void {
         this.profile = {
-            username: ""
+            username: "Loading"
         };
-        this.status = "Loading"
     }
 
-    updateStatus(value): void{
+    updateStatus(value): void {
         Profiles.update(Meteor.user().profile.id, {$set: {status: parseInt(value)}});
     }
 }
