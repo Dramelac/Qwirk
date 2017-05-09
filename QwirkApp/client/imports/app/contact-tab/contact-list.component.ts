@@ -8,7 +8,6 @@ import {Subscription} from "rxjs/Subscription";
 import {FriendRequest} from "../../../../both/models/friend-request.model";
 import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
 import {Router} from "@angular/router";
-import {Contacts} from "../../../../both/collections/contact.collection";
 
 @Component({
     selector: 'contact-list',
@@ -123,7 +122,9 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     deleteContact(friendId: string){
-        Meteor.call("removeContact", friendId);
+        Meteor.call("removeContact", friendId, (error,result) => {
+
+        });
     }
 
     ngOnDestroy(): void {

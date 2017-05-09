@@ -15,7 +15,9 @@
                 <div>
                     <p>{{profile.username}}</p>
                    <status [numberStatus]="profile.status"></status>
-                    <button (click)="deleteContact(profile.userId)">X</button>
+                    <div>
+                        <button (click)="deleteContact(profile.userId)">X</button>
+                    </div>
                 </div>
             </button>
         </div>
