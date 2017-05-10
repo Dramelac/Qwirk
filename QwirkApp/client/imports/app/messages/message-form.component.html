@@ -1,7 +1,8 @@
 <form [formGroup]="addForm" (ngSubmit)="addMessage()">
 
-    <label>Message</label>
-    <input type="text" formControlName="content">
+    <label>Message
+        <textarea formControlName="content" (keydown.enter)="addMessage();false"></textarea>
+    </label>
 
     <button type="submit">Send</button>
 </form>

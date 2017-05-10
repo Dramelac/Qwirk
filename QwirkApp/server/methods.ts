@@ -1,7 +1,9 @@
 import {MessageType} from "../both/models/message.model";
 import {Status} from "../both/models/status.enum";
-import {Chats, Messages, Profiles} from "../both/collections";
+import {Chats, Messages, Profiles, Contacts} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
+import {FriendsRequest} from "../both/collections/friend-request.collection";
+import {Contact} from "../both/models/contact.model";
 
 const nonEmptyString = Match.Where((str) => {
     if (str != null) {
@@ -122,9 +124,104 @@ Meteor.methods({
     countMessages(): number {
         return Messages.collection.find().count();
     },
-    searchUser(username: string){
+    searchUser(username: string,friendList: string[]){
+        check(Meteor.userId(), nonEmptyString);
         check(username, nonEmptyString);
-        let result = Profiles.find({username: {$regex: ".*" + username + ".*"}});
+        friendList.push(Meteor.userId());
+        let result = Profiles.find({$and: [{username: {$regex: ".*" + username + ".*"}}, {_id: {$nin: friendList}}, {userId : {$ne :Meteor.userId()}}]});
         return result.fetch();
+    },
+    addFriendRequest(friendId: string){
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to send firendRequest');
+        check(friendId, nonEmptyString);
+
+        const requestExist = !!FriendsRequest.collection.find({
+            $and: [
+                {initiator: Meteor.userId()},
+                {destinator: friendId}
+            ]
+        }).count();
+
+        if (requestExist) {
+            throw new Meteor.Error('friend-request-exist', 'Friend Request already exist');
+        }
+        return {
+            friendRequestId: FriendsRequest.collection.insert({
+                initiator: Meteor.userId(),
+                destinator: friendId,
+                message: 'Friend Request a send'
+            })
+        };
+    },
+    requestExist(friendId: string){
+
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to send firendRequest');
+        check(friendId, nonEmptyString);
+        const requestExist = !!FriendsRequest.collection.find({
+            $and: [
+                {initiator: Meteor.userId()},
+                {destinator: friendId}
+            ]
+        }).count();
+        return requestExist;
+
+
+    },
+    removeFriendRequest(initiator: string){
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to remove firendRequest');
+        check(initiator, nonEmptyString);
+
+        FriendsRequest.remove({
+            $and: [
+                {initiator: initiator},
+                {destinator: Meteor.userId()}
+            ]
+        })
+    },
+    newContact(initiator: string): void{
+        //On crée un chat pour les nouveux friendList
+        const chat = {
+            user: [Meteor.userId(), initiator],
+            admin: [],
+            publicly: false
+        };
+
+        let chatId = Chats.collection.insert(chat);
+        //On crée pour chacun un contact
+        const contactUser = {
+            ownerId: Meteor.userId(),
+            friendId: initiator,
+            chatId: chatId
+        };
+        const contactInitiator = {
+            ownerId: initiator,
+            friendId: Meteor.userId(),
+            chatId: chatId
+        };
+        Profiles.update({userId : Meteor.userId()},{$push : {contacts: Contacts.collection.insert(contactUser)}});
+        Profiles.update({userId : initiator},{$push : {contacts : Contacts.collection.insert(contactInitiator)}});
+        Meteor.call("removeFriendRequest",initiator);
+    },
+    removeContact(friendId: string){
+        //On recupère le contact rattaché a user actuel
+        var contacts = Contacts.collection.findOne({$and : [{ownerId : Meteor.userId()}, {friendId: friendId}]});
+        //On fait pareil mais pour l'ami à supprimé
+        var contactUser = Contacts.collection.findOne({$and : [{ownerId : friendId}, {friendId: Meteor.userId()}]});
+
+        var profileUser = Profiles.collection.findOne({userId : Meteor.userId()});
+        var profileFriend = Profiles.collection.findOne({userId : friendId});
+        profileUser.contacts.splice(profileUser.contacts.indexOf(contacts._id),1);
+        profileFriend.contacts.slice(profileUser.contacts.indexOf(contactUser._id, 1));
+
+        Meteor.call("removeChat",contacts.chatId);
+        Contacts.remove({chatId : contacts.chatId});
+        Profiles.update({userId : friendId},{$push : {contacts : contacts._id}});
+        Profiles.update({userId : Meteor.userId()},{$push : {contacts : contactUser}});
+    },
+    findContact(friendId:string) : string{
+        if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to search in contact');
+        if(friendId){
+            return Contacts.collection.findOne({$and : [{ownerId : Meteor.userId()},{friendId: friendId}]}).chatId;
+        }
     }
 });

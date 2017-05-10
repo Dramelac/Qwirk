@@ -1,0 +1,7 @@
+<div *ngFor="let notif of callRequest | async">
+    <div>
+        <p>{{ notif.ownerName }} is calling you</p>
+        <button (click)="acceptCall(notif)">Accept</button>
+        <button (click)="refuseCall(notif)">Refuse</button>
+    </div>
+</div>
