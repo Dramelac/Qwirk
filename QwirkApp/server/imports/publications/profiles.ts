@@ -26,6 +26,13 @@ Meteor.publish('profile', function (): Mongo.Cursor<Profile> {
     });
 });
 
+Meteor.publish('profileFriend', function (friendList: string[]): Mongo.Cursor<Profile> {
+    if (!this.userId) {
+        return;
+    }
+    return Profiles.collection.find({_id : {$in : friendList}});
+});
+
 Meteor.publish('profileContact', function (): Mongo.Cursor<Profile> {
     if (!this.userId) {
         return;
