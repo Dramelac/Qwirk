@@ -58,5 +58,14 @@ export const ImagesStore = new UploadFS.store.GridFS({
             // allow anyone to update public files, but only owners to update their files
             return !file.userId || userId === file.userId;
         }
-    })
+    }),
+    onRead(fileId, file, request, response) {
+        //TODO check chatId permission
+        if (file.chatId) {
+            return true;
+        } else {
+            response.writeHead(403);
+            return false;
+        }
+    }
 });
