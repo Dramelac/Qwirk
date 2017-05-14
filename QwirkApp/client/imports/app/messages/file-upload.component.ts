@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 
 import template from "./file-upload.component.html";
 import {ImagesStore} from "../../../../both/collections/images.collection";
@@ -20,6 +20,7 @@ export class FileUploadComponent {
     remaining: string;
 
     @Input('chatId') chatId: string;
+    @Output() onFile: EventEmitter<string> = new EventEmitter<string>();
 
     constructor() {}
 
@@ -31,8 +32,9 @@ export class FileUploadComponent {
         this.uploading = true;
 
         this.upload(file)
-            .then(() => {
+            .then((result) => {
                 this.uploading = false;
+                this.onFile.emit(result._id);
                 console.log("uploading");
             })
             .catch((error) => {

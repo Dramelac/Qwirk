@@ -30,11 +30,24 @@ export class MessageFormComponent implements OnInit {
         if (this.addForm.valid){
             Meteor.call("addMessage", MessageType.TEXT,this.chatId, this.addForm.value.content,
                 (error, result) => {
-
+                    if (error){
+                        console.error("Error:", error);
+                    }
             });
             //Messages.insert(Object.assign({}, this.addForm.value, { owner: Meteor.userId() }));
 
             this.addForm.reset();
         }
     }
+
+    onFileUploaded(fileId: string){
+        console.log("field received:",fileId);
+        Meteor.call("addMessage", MessageType.PICTURE,this.chatId, fileId,
+            (error, result) => {
+                if (error){
+                    console.error("Error:", error);
+                }
+            });
+    }
+
 }

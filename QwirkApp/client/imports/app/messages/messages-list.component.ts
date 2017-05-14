@@ -30,6 +30,8 @@ export class MessagesListComponent implements OnInit, OnDestroy{
             .subscribe(chat => {
                 this.chatId = chat;
 
+                Meteor.subscribe("images");
+
                 if (this.messagesSub){
                     this.messagesSub.unsubscribe();
                 }

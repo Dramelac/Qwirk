@@ -1,4 +1,4 @@
-<file-upload #upload [chatId]="chatId"></file-upload>
+<file-upload #upload [chatId]="chatId" (onFile)="onFileUploaded($event)"></file-upload>
 <form [formGroup]="addForm" (ngSubmit)="addMessage()">
 
     <label>Message
