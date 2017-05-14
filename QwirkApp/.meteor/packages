@@ -24,3 +24,5 @@ accounts-password@1.3.5
 check@1.2.5
 reywood:publish-composite
 session@1.1.7
+jalik:ufs
+jalik:ufs-gridfs

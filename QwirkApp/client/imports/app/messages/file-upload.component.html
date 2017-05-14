@@ -1,0 +1,15 @@
+<div>
+    <div fileDrop
+         [ngClass]="{'file-is-over': fileIsOver, 'file-uploading': uploading}"
+         (fileOver)="fileOver($event)"
+         (onFileDrop)="onFileDrop($event)">
+        <div>Drop an image to here</div>
+    </div>
+</div>
+<div *ngIf="uploading">
+    <h3>Uploading {{name}}</h3>
+    <span>Progress {{progress}}%</span>
+    <span>Speed {{speed}}%</span>
+    <span>Time elapsed {{elapsed}}%</span>
+    <span>Time remaining {{remaining}}%</span>
+</div>
