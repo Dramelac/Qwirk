@@ -3,7 +3,7 @@
 <div *ngFor="let message of messages | async">
     <div [class]="'message message-' + message.ownership">
         <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
-        <div *ngIf="message.type == 'picture'"><img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs"></div>
+        <div *ngIf="message.type == 'picture'"><a target="_blank" href="{{message.content | displayMainImage}}"><img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs"></a></div>
         <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
     </div>
 </div>

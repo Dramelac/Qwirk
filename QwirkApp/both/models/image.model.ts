@@ -15,8 +15,3 @@ export interface Image {
     userId?: string;
     chatId?: string;
 }
-
-export interface Thumb extends Image  {
-    originalStore?: string;
-    originalId?: string;
-}
