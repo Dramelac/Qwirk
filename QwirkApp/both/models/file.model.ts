@@ -1,5 +1,5 @@
 
-export interface Image {
+export interface File {
     _id?: string;
     complete: boolean;
     extension: string;

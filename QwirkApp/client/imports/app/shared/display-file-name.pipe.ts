@@ -2,24 +2,24 @@ import {Pipe, PipeTransform} from "@angular/core";
 import {Files} from "../../../../both/collections";
 
 @Pipe({
-    name: 'displayMainImage'
+    name: 'displayFileName'
 })
-export class DisplayMainImagePipe implements PipeTransform {
+export class DisplayFileNamePipe implements PipeTransform {
     transform(imageId: string) {
         if (!imageId) {
             return;
         }
 
-        let imageUrl: string;
+        let imageName: string;
 
         const found = Files.findOne(imageId);
 
         if (found) {
-            imageUrl = found.url;
+            imageName = found.name;
         } else {
             //TODO default image
         }
 
-        return imageUrl;
+        return imageName;
     }
 }

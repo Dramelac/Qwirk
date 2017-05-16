@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-
 import template from "./message-form.component.html";
 import {MessageType} from "../../../../both/models/message.model";
+import {File} from "../../../../both/models";
 
 @Component({
     selector: 'message-form',
@@ -40,9 +40,9 @@ export class MessageFormComponent implements OnInit {
         }
     }
 
-    onFileUploaded(fileId: string){
-        console.log("field received:",fileId);
-        Meteor.call("addMessage", MessageType.PICTURE,this.chatId, fileId,
+    onFileUploaded(file: File){
+        let type = /image\/.*/g.test(file.type) ? MessageType.PICTURE : MessageType.FILE;
+        Meteor.call("addMessage", type, this.chatId, file._id,
             (error, result) => {
                 if (error){
                     console.error("Error:", error);

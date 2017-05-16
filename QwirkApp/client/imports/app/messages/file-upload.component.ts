@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
-
 import template from "./file-upload.component.html";
-import {ImagesStore} from "../../../../both/collections/images.collection";
+import {FilesStore} from "../../../../both/collections";
 import {UploadFS} from "meteor/jalik:ufs";
 
 @Component({
@@ -20,7 +19,7 @@ export class FileUploadComponent {
     remaining: string;
 
     @Input('chatId') chatId: string;
-    @Output() onFile: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onFile: EventEmitter<File> = new EventEmitter<File>();
 
     constructor() {}
 
@@ -34,7 +33,7 @@ export class FileUploadComponent {
         this.upload(file)
             .then((result) => {
                 this.uploading = false;
-                this.onFile.emit(result._id);
+                this.onFile.emit(result);
                 console.log("uploading");
             })
             .catch((error) => {
@@ -63,7 +62,7 @@ export class FileUploadComponent {
                 maxChunkSize: ONE_MB * 10,
                 data: data,
                 file: file,
-                store: ImagesStore,
+                store: FilesStore,
                 onError: reject,
                 onComplete: resolve
             });

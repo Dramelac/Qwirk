@@ -1,15 +1,12 @@
 import {MongoObservable} from "meteor-rxjs";
-import {Image} from "../models";
+import {File} from "../models";
 import {UploadFS} from "meteor/jalik:ufs";
 
-export const Images = new MongoObservable.Collection<Image>('images');
+export const Files = new MongoObservable.Collection<File>('files');
 
-export const ImagesStore = new UploadFS.store.GridFS({
-    collection: Images.collection,
-    name: 'images',
-    filter: new UploadFS.Filter({
-        contentTypes: ['image/*']
-    }),
+export const FilesStore = new UploadFS.store.GridFS({
+    collection: Files.collection,
+    name: 'files',
     permissions: new UploadFS.StorePermissions({
         insert(userId, file) {
             // allow anyone to upload a file, but check that uploaded file is attached to the user that uploads the file
