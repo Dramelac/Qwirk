@@ -14,7 +14,7 @@
                 <img *ngIf="contact.profile" [src]="contact.profile.picture" class="picture">
                 <div>
                     <p>{{contact.displayName}}</p>
-                   <status *ngIf="contact.profile" [numberStatus]="contact.profile.status"></status>
+                   <status *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
                     <div>
                         <button (click)="deleteContact(contact.profile.userId)">X</button>
                     </div>

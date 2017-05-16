@@ -3,7 +3,6 @@ import {Status} from "../both/models/status.enum";
 import {Chats, Messages, Profiles, Contacts} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
 import {FriendsRequest} from "../both/collections/friend-request.collection";
-import {Contact} from "../both/models/contact.model";
 
 const nonEmptyString = Match.Where((str) => {
     if (str != null) {
@@ -29,7 +28,6 @@ Meteor.methods({
             firstname: firstname,
             lastname: lastname,
             birthday: birthday,
-            contacts: [],
             username: username
         };
         let profileId = Profiles.collection.insert(profil);
@@ -192,16 +190,18 @@ Meteor.methods({
             ownerId: Meteor.userId(),
             friendId: initiator,
             chatId: chatId,
+            profileId: Profiles.findOne({userId : initiator})._id,
             displayName: Meteor.users.findOne({_id : initiator}).username
         };
         const contactInitiator = {
             ownerId: initiator,
             friendId: Meteor.userId(),
             chatId: chatId,
+            profileId: Profiles.findOne({userId : Meteor.userId()})._id,
             displayName: Meteor.user().username
         };
-        Profiles.update({userId : Meteor.userId()},{$push : {contacts: Contacts.collection.insert(contactUser)}});
-        Profiles.update({userId : initiator},{$push : {contacts : Contacts.collection.insert(contactInitiator)}});
+        Contacts.collection.insert(contactUser);
+        Contacts.collection.insert(contactInitiator);
         Meteor.call("removeFriendRequest",initiator);
     },
     removeContact(friendId: string){
@@ -210,15 +210,8 @@ Meteor.methods({
         //On fait pareil mais pour l'ami à supprimé
         var contactUser = Contacts.collection.findOne({$and : [{ownerId : friendId}, {friendId: Meteor.userId()}]});
 
-        var profileUser = Profiles.collection.findOne({userId : Meteor.userId()});
-        var profileFriend = Profiles.collection.findOne({userId : friendId});
-        profileUser.contacts.splice(profileUser.contacts.indexOf(contacts._id),1);
-        profileFriend.contacts.splice(profileUser.contacts.indexOf(contactUser._id), 1);
-
         Meteor.call("removeChat",contacts.chatId);
         Contacts.remove({chatId : contacts.chatId});
-        Profiles.update({userId : friendId},{$set : {contacts : profileFriend.contacts}});
-        Profiles.update({userId : Meteor.userId()},{$set : {contacts : profileUser.contacts}});
     },
     findContact(friendId:string) : string{
         if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to search in contact');

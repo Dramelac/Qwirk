@@ -19,7 +19,6 @@ export class FriendRequestComponent implements OnInit, OnDestroy {
     profileSub :Subscription;
     profiles: Observable<Profile[]>;
     numberRequest: number;
-    @Input("friend-list") friendList: string[];
 
     ngOnInit(): void {
         this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe( () => {
@@ -64,6 +63,8 @@ export class FriendRequestComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.friendRequestsSub.unsubscribe();
-        this.profileSub.unsubscribe();
+        if(this.profileSub){
+            this.profileSub.unsubscribe();
+        }
     }
 }

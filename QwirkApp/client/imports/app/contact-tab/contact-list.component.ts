@@ -64,21 +64,23 @@ export class ContactListComponent implements OnInit, OnDestroy {
                     console.log('no profile found.');
                 }
                 this.contactsSub = MeteorObservable.subscribe('myContacts').subscribe(() => {
-                    MeteorObservable.autorun().subscribe(() => {
-                        console.log("refresh contact");
-                        this.contacts = Contacts.find();
-                        if (this.contacts) {
-                            this.contacts.subscribe((result: Contact[]) => {
-                                MeteorObservable.autorun().subscribe(() => {
-                                    console.log("refresh Contact/Profile");
-                                    for (var contact of result) {
-                                        contact.profile = Profiles.collection.findOne({userId: contact.friendId});
-                                        console.log("detail:", contact.profile);
-                                    }
-                                });
+                    console.log("refresh contact");
+                    this.contacts = Contacts.find();
+                    if (this.contacts) {
+                        this.contacts.subscribe((result: Contact[]) => {
+                            MeteorObservable.autorun().subscribe(() => {
+                                if(result){
+                                    this.zone.run(() => {
+                                        for(let contact of result){
+                                            contact.profile = Profiles.findOne({_id : contact.profileId});
+                                            console.log(contact.profile);
+                                        }
+                                    });
+                                }
+                                console.log("refresh Contact/Profile");
                             });
-                        }
-                    });
+                        });
+                    }
                 });
             });
         });
@@ -94,7 +96,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
             if (this.moreSearch) {
                 this.searchInQwirk();
             } else {
-                this.profiles = Profiles.find({$and: [{username: {$regex: ".*" + this.query + ".*"}}, {userId: {$ne: this.currentUserId}}]});
+                this.contacts= Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}});
                 this.inApp = true;
             }
         }
@@ -110,7 +112,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
                 this.friendList = []
             }
             for(let contact of contactList){
-                this.friendList.push(contact.profile._id);
+                this.friendList.push(contact.profileId);
             }
         });
         console.log("nb elem:",this.friendList.length);
@@ -128,7 +130,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     sendFriendRequest(friendId: string): void {
         Meteor.call("addFriendRequest", friendId, (error, result) => {
-
         });
     }
 
@@ -160,13 +161,9 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     deleteContact(friendId: string) {
-        let friendToDelete = this.friendList.indexOf(friendId);
         Meteor.call("removeContact", friendId, (error, result) => {
 
         });
-        console.log("avant :", this.friendList.length);
-        this.friendList.splice(friendToDelete,1);
-        console.log("après :", this.friendList.length);
     }
 
     ngOnDestroy(): void {

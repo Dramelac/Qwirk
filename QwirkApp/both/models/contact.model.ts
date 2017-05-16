@@ -3,7 +3,8 @@ import {Profile} from "./profile.model";
 export interface Contact extends CollectionObject {
     ownerId: string,
     friendId: string,
-    profile?:Profile,
+    profileId:string,
+    profile: Profile,
     displayName?: string;
     chatId: string;
 }

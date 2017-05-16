@@ -30,23 +30,24 @@ Meteor.publish('profileFriend', function (friendList: string[]): Mongo.Cursor<Pr
     if (!this.userId) {
         return;
     }
-    return Profiles.collection.find({_id : {$in : friendList}});
+    return Profiles.collection.find({_id: {$in: friendList}});
 });
 
-Meteor.publish('profileContact', function (): Mongo.Cursor<Profile> {
+Meteor.publish('profileContact', function (profileId? : string): Mongo.Cursor<Profile> {
     if (!this.userId) {
         return;
     }
-    let contacts = Profiles.collection.findOne({
-        userId: this.userId
-    }).contacts;
     let list: string[] = [];
-    let contactsResult = Contacts.collection.find({_id: {$in: contacts}});
+    let contactsResult = Contacts.collection.find({ownerId : this.userId});
     if (contactsResult) {
         contactsResult.forEach(contact => {
-            list.push(contact.friendId)
+            list.push(contact.profileId)
         });
-        return Profiles.collection.find({userId: {$in: list}});
+        if(profileId){
+            return Profiles.collection.find({$and : [{_id : {$in: list}},{_id : profileId}]});
+        }else{
+            return Profiles.collection.find({_id : {$in: list}});
+        }
     }
     return null;
 });
