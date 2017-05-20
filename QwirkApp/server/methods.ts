@@ -29,11 +29,13 @@ Meteor.methods({
             lastname: lastname,
             birthday: birthday,
             contacts: [],
-            username: username
+            username: username,
+            picture: "/asset/user.png"
         };
         let profileId = Profiles.collection.insert(profil);
         Meteor.users.update(Meteor.userId(), {$set: {"profile.id": profileId}});
     },
+
     addChat(receiverId: string): void {
         if (!Meteor.userId()) {
             throw new Meteor.Error('unauthorized',
