@@ -68,7 +68,6 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                                 message.ownership = Meteor.userId() === message.ownerId ? 'mine' : 'other';
                                 message.content = MessagesListComponent.processMessage(message.content);
                                 if (message.type==MessageType.WIZZ &&
-                                    Meteor.userId() != message.ownerId &&
                                     Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))){
                                     this.wizz();
                                 }
@@ -89,6 +88,8 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
     wizz(){
         $("body").effect("shake", {times:4,distance:25, direction:"left"});
+        let audio = new Audio("/asset/wizz.wav");
+        audio.play();
     }
 
     static processMessage(msg: string): string{
