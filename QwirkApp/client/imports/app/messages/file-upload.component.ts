@@ -1,13 +1,14 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component, EventEmitter, Input, NgZone, OnInit, Output} from "@angular/core";
 import template from "./file-upload.component.html";
 import {FilesStore} from "../../../../both/collections";
 import {UploadFS} from "meteor/jalik:ufs";
+import "jquery";
 
 @Component({
     selector: 'file-upload',
     template
 })
-export class FileUploadComponent {
+export class FileUploadComponent implements OnInit {
     fileIsOver: boolean = false;
     uploading: boolean = false;
 
@@ -21,7 +22,19 @@ export class FileUploadComponent {
     @Input('chatId') chatId: string;
     @Output() onFile: EventEmitter<File> = new EventEmitter<File>();
 
-    constructor() {}
+    constructor(private zone: NgZone) {
+    }
+
+    ngOnInit(): void {
+        $(document).ready(function () {
+            $("body").bind('dragover', function () {
+                $(".modal-file-drop").addClass('modal-file-drop-dragover');
+            });
+            $(".file-drop").bind('dragleave', function () {
+                $(".modal-file-drop").removeClass('modal-file-drop-dragover');
+            });
+        });
+    }
 
     fileOver(fileIsOver: boolean): void {
         this.fileIsOver = fileIsOver;
@@ -29,12 +42,12 @@ export class FileUploadComponent {
 
     onFileDrop(file: File): void {
         this.uploading = true;
+        $(".modal-file-drop").removeClass('modal-file-drop-dragover');
 
         this.upload(file)
             .then((result) => {
                 this.uploading = false;
                 this.onFile.emit(result);
-                console.log("uploading");
             })
             .catch((error) => {
                 this.uploading = false;
@@ -45,7 +58,7 @@ export class FileUploadComponent {
     upload(data: File): Promise<any> {
         return new Promise((resolve, reject) => {
             const ONE_MB = 1024 * 1000;
-            let self=this;
+            let self = this;
             this.name = data.name;
 
             // pick from an object only: name, type and size
@@ -67,20 +80,22 @@ export class FileUploadComponent {
                 onComplete: resolve
             });
             upload.onAbort = function (file) {
-                console.info(`${file.name} upload aborted`);
+                console.info(file.name, "upload aborted");
             };
             upload.onProgress = function (file, progress) {
-                self.progress = (progress * 100).toFixed(2);
-                self.speed = (this.getSpeed() / 1024).toFixed(2);
-                self.elapsed = (this.getElapsedTime() / 1000).toFixed(2);
-                self.remaining = (this.getRemainingTime() / 1000).toFixed(2);
+                self.zone.run(() => {
+                    self.progress = (progress * 100).toFixed(2);
+                    self.speed = (this.getSpeed() / 1024).toFixed(2);
+                    self.elapsed = (this.getElapsedTime() / 1000).toFixed(2);
+                    self.remaining = (this.getRemainingTime() / 1000).toFixed(2);
+                });
 
-                console.info(file.name + ' :'
-                    + "\n" + self.progress + '%'
-                    + "\n" + self.speed + 'KB/s'
-                    + "\n" + 'elapsed: ' + self.elapsed + 's'
-                    + "\n" + 'remaining: ' + self.remaining + 's'
-                );
+                /*console.info(file.name + ' :'
+                 + "\n" + self.progress + '%'
+                 + "\n" + self.speed + 'KB/s'
+                 + "\n" + 'elapsed: ' + self.elapsed + 's'
+                 + "\n" + 'remaining: ' + self.remaining + 's'
+                 );*/
             };
 
             upload.start();
