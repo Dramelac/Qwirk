@@ -15,6 +15,9 @@
                 <span>{{message.content | displayFileName}}</span>
             </a>
         </div>
+        <div *ngIf="message.type == 'wizz'" class="wizz-message">
+            WIZZZZZZ
+        </div>
         <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
     </div>
 </div>

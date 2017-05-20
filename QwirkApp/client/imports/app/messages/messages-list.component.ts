@@ -3,12 +3,15 @@ import {Observable} from "rxjs/Observable";
 import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
 import {Chats, Messages} from "../../../../both/collections";
-import {Message} from "../../../../both/models/message.model";
+import {Message, MessageType} from "../../../../both/models/message.model";
 import template from "./messages-list.component.html";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Chat} from "../../../../both/models/chat.model";
 import {Profiles} from "../../../../both/collections/profile.collection";
+import * as Moment from "moment";
 import * as Autolinker from "autolinker";
+import "jquery";
+import "jquery-ui";
 
 @Component({
     selector: 'messages-list',
@@ -62,8 +65,13 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                             {sort: {createdAt: 1}}
                         ).map((messages: Message[]) => {
                             messages.forEach((message) => {
-                                message.ownership = Meteor.userId() == message.ownerId ? 'mine' : 'other';
+                                message.ownership = Meteor.userId() === message.ownerId ? 'mine' : 'other';
                                 message.content = MessagesListComponent.processMessage(message.content);
+                                if (message.type==MessageType.WIZZ &&
+                                    Meteor.userId() != message.ownerId &&
+                                    Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))){
+                                    this.wizz();
+                                }
 
                                 return message;
                             });
@@ -71,11 +79,16 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                         });
 
                     });
+
                 });
 
 
             });
 
+    }
+
+    wizz(){
+        $("body").effect("shake", {times:4,distance:25, direction:"left"});
     }
 
     static processMessage(msg: string): string{
