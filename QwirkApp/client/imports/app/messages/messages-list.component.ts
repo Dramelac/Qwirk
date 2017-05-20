@@ -127,7 +127,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
         // ;( ;-( :'-(
         msg = msg.replace(/(;|:')-?\(/g,"<img src='/emoticon/sad-3.png' class='emoticon' alt='cry'>");
         // :/ :-/
-        msg = msg.replace(/:-?\//g,"<img src='/emoticon/sceptic-4.png' class='emoticon' alt='sceptic'>");
+        msg = msg.replace(/:-?\/(?!\/)/g,"<img src='/emoticon/sceptic-4.png' class='emoticon' alt='sceptic'>");
         // -_-
         msg = msg.replace(/-_-/g,"<img src='/emoticon/sceptic-5.png' class='emoticon' alt='sceptic'>");
         // :X :x
