@@ -40,6 +40,22 @@ export class FileUploadComponent implements OnInit {
         this.fileIsOver = fileIsOver;
     }
 
+    onFileSelectChange(){
+        let file:File = $(".file-input").prop("files")[0];
+
+        this.upload(file)
+            .then((result) => {
+                this.uploading = false;
+                this.onFile.emit(result);
+                $(".file-input").val("");
+            })
+            .catch((error) => {
+                this.uploading = false;
+                console.log(`Something went wrong!`, error);
+            });
+
+    }
+
     onFileDrop(file: File): void {
         this.uploading = true;
         $(".modal-file-drop").removeClass('modal-file-drop-dragover');
@@ -56,6 +72,7 @@ export class FileUploadComponent implements OnInit {
     }
 
     upload(data: File): Promise<any> {
+        console.log(data);
         return new Promise((resolve, reject) => {
             const ONE_MB = 1024 * 1000;
             let self = this;
