@@ -14,6 +14,7 @@ import {AUTH_DECLARATIONS} from "./auth";
 import {USERS_DECLARATIONS} from "./user";
 import {CONTACT_DECLARATIONS} from "./contact-tab";
 import {MENU_DECLARATIONS} from "./menu";
+import {ContextMenuModule} from 'angular2-contextmenu';
 
 @NgModule({
     // Components, Pipes, Directive
@@ -42,7 +43,8 @@ import {MENU_DECLARATIONS} from "./menu";
         RouterModule.forRoot(routes),
         AccountsModule,
         MaterialModule,
-        MomentModule
+        MomentModule,
+        ContextMenuModule
     ],
     // Main Component
     bootstrap: [AppComponent]

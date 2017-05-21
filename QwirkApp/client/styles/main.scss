@@ -41,3 +41,33 @@ body {
   max-width: 48px;
   max-height: 48px;
 }
+
+//test
+.angular2-contextmenu .dropdown-menu {
+  border: solid 1px black;
+  background-color: white;
+  padding: 0;
+}
+.angular2-contextmenu li {
+  display: block;
+  border-top: solid 1px black;
+  text-transform: uppercase;
+  text-align: center;
+}
+.angular2-contextmenu li:first-child {
+  border-top:none;
+}
+.angular2-contextmenu a {
+  color:black;
+  display: block;
+  padding: 0.5em 1em;
+  text-decoration: none;
+}
+.angular2-contextmenu a:hover {
+  color:black;
+  background-color:white;
+}
+.angular2-contextmenu button{
+  border: none;
+  background: none;
+}

@@ -10,7 +10,7 @@
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let contact of (contacts | async)">
-            <button (click)="showMessages(contact.chatId)">
+            <button (click)="showMessages(contact.chatId)" [contextMenu]="basicMenu" [contextMenuSubject]="contact">
                 <img *ngIf="contact.profile" [src]="contact.profile.picture" class="picture">
                 <div>
                     <p>{{contact.displayName}}</p>
@@ -42,4 +42,13 @@
             </button>
         </div>
     </div>
+    <context-menu class="angular2-contextmenu">
+        <template contextMenuItem let-item>
+            <button (click)="showProfile(item?.profileId)">Edit Profile</button>
+        </template>
+        <button contextMenuItem>
+            Bloquer
+        </button>
+    </context-menu>
+
 </div>

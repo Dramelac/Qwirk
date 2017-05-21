@@ -1,4 +1,4 @@
-import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
+import {Component, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./contact-list.component.html";
 import {Observable} from "rxjs";
 import {Profile} from "../../../../both/models/profile.model";
@@ -10,6 +10,7 @@ import {FriendsRequest} from "../../../../both/collections/friend-request.collec
 import {Router} from "@angular/router";
 import {Contacts} from "../../../../both/collections/contact.collection";
 import {Contact} from "../../../../both/models/contact.model";
+import {ContextMenuComponent} from "angular2-contextmenu";
 
 @Component({
     selector: 'contact-list',
@@ -33,6 +34,12 @@ export class ContactListComponent implements OnInit, OnDestroy {
     inApp: boolean = false;
     currentUserId: string;
     private exist: boolean = false;
+
+    public items = [
+        { name: 'John', otherProperty: 'Foo' },
+        { name: 'Joe', otherProperty: 'Bar' }
+    ];
+    @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
     constructor(private zone: NgZone, private router: Router) {
     }
@@ -164,6 +171,10 @@ export class ContactListComponent implements OnInit, OnDestroy {
         Meteor.call("removeContact", friendId, (error, result) => {
 
         });
+    }
+
+    showProfile(friendId: string):void{
+        console.log("test edit",friendId);
     }
 
     ngOnDestroy(): void {
