@@ -175,6 +175,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     showProfile(friendId: string):void{
         console.log("test edit",friendId);
+        this.router.navigate(["/profile/" + friendId]);
     }
 
     ngOnDestroy(): void {

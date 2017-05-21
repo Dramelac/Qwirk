@@ -43,12 +43,11 @@
         </div>
     </div>
     <context-menu class="angular2-contextmenu">
-        <template contextMenuItem let-item>
-            <button (click)="showProfile(item?.profileId)">Edit Profile</button>
+        <template contextMenuItem let-item [enabled]="false">
+            <span><button (click)="showProfile(item?.profileId)">Edit Profile</button></span>
         </template>
-        <button contextMenuItem>
-            Bloquer
-        </button>
+        <template contextMenuItem let-item [enabled]="false">
+            <button (click)="showProfile(item?.profileId)">Bloquer</button>
+        </template>
     </context-menu>
-
 </div>
