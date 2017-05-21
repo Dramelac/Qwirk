@@ -32,14 +32,14 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
         Tracker.autorun(() => {
             let callId = Session.get("activeCall");
-            console.log("detect change ! , ", callId);
+            //console.log("detect change ! , ", callId);
             this.checkInputCall();
         });
 
     }
 
     checkInputCall(){
-        console.log("checking call");
+        //console.log("checking call");
         if (Session.equals("activeCall", this.chatId)) {
             console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callPeerId"));
             this.initPeer(Session.get("callVideo"), () => {

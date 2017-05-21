@@ -17,7 +17,9 @@
       "@types/meteor-publish-composite",
       "@types/meteor-collection-hooks",
       "hammerjs",
-      "@types/peerjs"
+      "@types/peerjs",
+      "@types/jquery",
+      "@types/jqueryui"
     ]
   },
   "exclude": [
