@@ -46,3 +46,39 @@ body {
   max-width: 30px;
   max-height: 30px;
 }
+
+.picture-thumbs {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.modal-file-drop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  align-items: center;
+}
+
+.modal-file-drop-dragover {
+  visibility: visible;
+}
+
+.file-drop{
+  width: 100%;
+  height: 100%;
+  float: left;
+}
+
+.upload-modal {
+  background-color: gray;
+  border-radius: 20px;
+  vertical-align: middle;
+}
+
+.modal-popup {
+  width: 100%;
+  height: 100%;
+}

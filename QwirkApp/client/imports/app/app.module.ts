@@ -5,6 +5,7 @@ import {RouterModule} from "@angular/router";
 import {AccountsModule} from "angular2-meteor-accounts-ui";
 import {MaterialModule} from "@angular/material";
 import {MomentModule} from "angular2-moment";
+import {FileDropModule} from "angular2-file-drop";
 import "hammerjs";
 import {AppComponent} from "./app.component";
 import {routes, ROUTES_PROVIDERS} from "./app.route";
@@ -42,7 +43,8 @@ import {MENU_DECLARATIONS} from "./menu";
         RouterModule.forRoot(routes),
         AccountsModule,
         MaterialModule,
-        MomentModule
+        MomentModule,
+        FileDropModule
     ],
     // Main Component
     bootstrap: [AppComponent]
