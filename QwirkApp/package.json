@@ -38,6 +38,8 @@
     "@angular/router": "3.4.1",
     "@types/jquery": "^2.0.45",
     "angular2-file-drop": "^0.2.0",
+    "@types/meteor-publish-composite": "0.0.32",
+    "angular2-contextmenu": "^0.8.2",
     "angular2-meteor": "0.7.1",
     "angular2-meteor-accounts-ui": "^1.0.0",
     "angular2-meteor-polyfills": "0.1.1",
