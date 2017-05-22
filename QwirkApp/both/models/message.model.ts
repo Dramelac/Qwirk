@@ -1,7 +1,10 @@
-import { CollectionObject } from './collection-object.model';
+import {CollectionObject} from "./collection-object.model";
 
 export enum MessageType {
-    TEXT = <any>'text'
+    TEXT = <any>'text',
+    PICTURE = <any>'picture',
+    FILE = <any>'file',
+    WIZZ = <any>'wizz'
 }
 
 export interface Message extends CollectionObject {

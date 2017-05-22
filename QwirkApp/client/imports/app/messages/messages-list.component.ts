@@ -3,11 +3,15 @@ import {Observable} from "rxjs/Observable";
 import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
 import {Chats, Messages} from "../../../../both/collections";
-import {Message} from "../../../../both/models/message.model";
+import {Message, MessageType} from "../../../../both/models/message.model";
 import template from "./messages-list.component.html";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Chat} from "../../../../both/models/chat.model";
 import {Profiles} from "../../../../both/collections/profile.collection";
+import * as Moment from "moment";
+import * as Autolinker from "autolinker";
+import "jquery";
+import "jquery-ui";
 
 @Component({
     selector: 'messages-list',
@@ -28,6 +32,8 @@ export class MessagesListComponent implements OnInit, OnDestroy{
             .map(params => params["chatId"])
             .subscribe(chat => {
                 this.chatId = chat;
+
+                Meteor.subscribe("files", this.chatId);
 
                 if (this.messagesSub){
                     this.messagesSub.unsubscribe();
@@ -59,7 +65,12 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                             {sort: {createdAt: 1}}
                         ).map((messages: Message[]) => {
                             messages.forEach((message) => {
-                                message.ownership = Meteor.userId() == message.ownerId ? 'mine' : 'other';
+                                message.ownership = Meteor.userId() === message.ownerId ? 'mine' : 'other';
+                                message.content = MessagesListComponent.processMessage(message.content);
+                                if (message.type==MessageType.WIZZ &&
+                                    Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))){
+                                    this.wizz();
+                                }
 
                                 return message;
                             });
@@ -67,11 +78,89 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                         });
 
                     });
+
                 });
 
 
             });
 
+    }
+
+    wizz(){
+        $("body").effect("shake", {times:4,distance:25, direction:"left"});
+        let audio = new Audio("/asset/wizz.wav");
+        audio.play();
+    }
+
+    static processMessage(msg: string): string{
+        //console.log("before :", msg);
+        msg = MessagesListComponent.processEmoji(msg);
+
+        // italic
+        msg = msg.replace(/\\([^\\]+)\\/g,"<i>$1</i>");
+        // bold
+        msg = msg.replace(/\*([^*]+)\*/g,"<b>$1</b>");
+        // underline
+        msg = msg.replace(/_([^_]+)_/g,"<u>$1</u>");
+        // strike
+        msg = msg.replace(/~([^~]+)~/g,"<del>$1</del>");
+
+        // url
+        msg = Autolinker.link(msg);
+
+        // line
+        msg = msg.replace(/\n\r?/g, '<br/>');
+
+        //console.log("after :", msg);
+        return msg;
+    }
+
+    static processEmoji(msg: string): string {
+        //console.log("before :", msg);
+
+        //Angel - ():)
+        msg = msg.replace(/\(\):\)/g,"<img src='/emoticon/angel.png' class='emoticon' alt='angel'>");
+        //Angry - è_é
+        msg = msg.replace(/\(angry\)/g,"<img src='/emoticon/angry-2.png' class='emoticon' alt='angry'>");
+        //Confused - :S / :s
+        msg = msg.replace(/:-?[Ss]/g,"<img src='/emoticon/confused-3.png' class='emoticon' alt='confused'>");
+        // :P / :P
+        msg = msg.replace(/:-?[Pp]/g,"<img src='/emoticon/happy-6.png' class='emoticon' alt='happy'>");
+        // :) / :-)
+        msg = msg.replace(/:-?\)/g,"<img src='/emoticon/smile.png' class='emoticon' alt='smile'>");
+        // :D / :d
+        msg = msg.replace(/:-?[Dd]/g,"<img src='/emoticon/happy-8.png' class='emoticon' alt='very happy'>");
+        // ^^ ^_^
+        msg = msg.replace(/\^_?\^/g,"<img src='/emoticon/happy-9.png' class='emoticon' alt='very happy'>");
+        // :* :-*
+        msg = msg.replace(/:-?\*/g,"<img src='/emoticon/kiss-1.png' class='emoticon' alt='kiss'>");
+        // xD XD xd
+        msg = msg.replace(/[xX]-?[dD]/g,"<img src='/emoticon/laughing-1.png' class='emoticon' alt='laughing'>");
+        // :( :-(
+        msg = msg.replace(/:-?\(/g,"<img src='/emoticon/sad-1.png' class='emoticon' alt='sad'>");
+        // ;( ;-( :'-(
+        msg = msg.replace(/(;|:')-?\(/g,"<img src='/emoticon/sad-3.png' class='emoticon' alt='cry'>");
+        // :/ :-/
+        msg = msg.replace(/:-?\/(?!\/)/g,"<img src='/emoticon/sceptic-4.png' class='emoticon' alt='sceptic'>");
+        // -_-
+        msg = msg.replace(/-_-/g,"<img src='/emoticon/sceptic-5.png' class='emoticon' alt='sceptic'>");
+        // :X :x
+        msg = msg.replace(/:-?[Xx]/g,"<img src='/emoticon/secret.png' class='emoticon' alt='secret'>");
+        // :O :o
+        msg = msg.replace(/:-?[Oo]/g,"<img src='/emoticon/shocked-2.png' class='emoticon' alt='shocked'>");
+        // XO Xo xo xO
+        msg = msg.replace(/[Xx][Oo]/g,"<img src='/emoticon/shocked-3.png' class='emoticon' alt='shocked'>");
+        // XS xs
+        msg = msg.replace(/[Xx][Ss]/g,"<img src='/emoticon/sick-2.png' class='emoticon' alt='sick'>");
+        // ;) / ;-)
+        msg = msg.replace(/;-?\)/g,"<img src='/emoticon/winking.png' class='emoticon' alt='winking'>");
+        // ;p / ;-P
+        msg = msg.replace(/;-?[Pp]/g,"<img src='/emoticon/wink-1.png' class='emoticon' alt='wink'>");
+        // (rich) $_$
+        msg = msg.replace(/(\(rich\)|\$_\$)/g,"<img src='/emoticon/rich.png' class='emoticon' alt='rich'>");
+
+        //console.log("after :", msg);
+        return msg;
     }
 
     removeMessage(msg: Message): void {

@@ -1,0 +1,14 @@
+<div *ngIf="numberRequest!=null && numberRequest !=0">
+    <h2>Friend Requests ({{numberRequest}})</h2>
+    <div *ngFor="let request of (friendsRequests | async)">
+        <button [disabled]="true">
+            <p>{{request.initiator}}</p>
+            <p>{{request.message}}</p>
+            <span>
+                <button (click)="addNexContact(request.initiator)">Accept</button>
+                <button (click)="deleteRequest(request.initiator)">Refuse</button>
+            </span>
+
+        </button>
+    </div>
+</div>

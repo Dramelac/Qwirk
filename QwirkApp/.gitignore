@@ -1,7 +1,7 @@
 node_modules/
 .meteor/local
 npm-debug.log
-typings
+#typings
 build
 dist
 .idea/workspace.xml

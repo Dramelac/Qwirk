@@ -1,7 +1,8 @@
-import {Component, OnInit, Input} from "@angular/core";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {Component, Input, OnInit} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import template from "./message-form.component.html";
 import {MessageType} from "../../../../both/models/message.model";
+import {File} from "../../../../both/models";
 
 @Component({
     selector: 'message-form',
@@ -27,13 +28,35 @@ export class MessageFormComponent implements OnInit {
             return;
         }
         if (this.addForm.valid){
-            Meteor.call("addMessage", MessageType.TEXT, this.chatId, this.addForm.value.content,
+            Meteor.call("addMessage", MessageType.TEXT,this.chatId, this.addForm.value.content,
                 (error, result) => {
-
+                    if (error){
+                        console.error("Error:", error);
+                    }
             });
             //Messages.insert(Object.assign({}, this.addForm.value, { owner: Meteor.userId() }));
 
             this.addForm.reset();
         }
     }
+
+    onFileUploaded(file: File){
+        let type = /image\/.*/g.test(file.type) ? MessageType.PICTURE : MessageType.FILE;
+        Meteor.call("addMessage", type, this.chatId, file._id,
+            (error, result) => {
+                if (error){
+                    console.error("Error:", error);
+                }
+            });
+    }
+
+    sendWizz(){
+        Meteor.call("addMessage", MessageType.WIZZ, this.chatId, "wizz",
+            (error, result) => {
+                if (error){
+                    console.error("Error:", error);
+                }
+            });
+    }
+
 }
