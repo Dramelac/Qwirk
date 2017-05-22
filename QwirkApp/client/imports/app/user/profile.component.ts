@@ -6,6 +6,7 @@ import {Profiles} from "../../../../both/collections/profile.collection";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Contacts} from "../../../../both/collections/contact.collection";
+import {Contact} from "../../../../both/models/contact.model";
 
 @Component({
     selector: 'profile',
@@ -13,8 +14,10 @@ import {Contacts} from "../../../../both/collections/contact.collection";
 })
 @InjectUser('user')
 export class ProfileComponent implements OnInit {
+
     profileForm: FormGroup;
     profileId : string;
+    contact: Contact;
     error: string;
     profile: Profile;
     myProfile: boolean = true;
@@ -26,9 +29,10 @@ export class ProfileComponent implements OnInit {
         this.route.params.map(params => params["profileID"]).subscribe(profile => {
             if(profile){
                 this.profileId = profile;
-                this.profile = Profiles.findOne({_id: this.profileId});
+                this.contact= Contacts.findOne({$and : [{ownerId : Meteor.userId()},{profileId : this.profileId}]});
+                console.log(this.contact);
                 this.profileForm = this.formBuilder.group({
-                    username: [this.profile.username, Validators.required]
+                    username: [this.contact.displayName, Validators.required]
                 });
                 this.myProfile = false;
             } else{
@@ -47,27 +51,25 @@ export class ProfileComponent implements OnInit {
                     oldPassword: ['']
                 });
             }
-
         });
-
-        this.error = '';
+        this.error = "";
     }
 
     save() {
         this.error = '';
         let formValue = this.profileForm.value;
-        if(this.profileForm.valid && !this.myProfile){
+        if(!this.myProfile && this.profileForm.valid){
             let username = formValue.username;
-            Contacts.update({ownerId: Meteor.userId()},{$set : {displayName : username}});
+            Contacts.update({_id : this.contact._id},{$set : {displayName : username}});
         }
-        if (this.profileForm.valid && formValue.confirmPassword == formValue.newPassword && formValue.oldPassword != "") {
+        if (this.myProfile && this.profileForm.valid && formValue.confirmPassword == formValue.newPassword && formValue.oldPassword != "") {
             Accounts.changePassword(formValue.oldPassword, formValue.newPassword, (err) => {
                 if (err){
                     this.error = err.reason;
                 }
             });
         }
-        if (this.profileForm.valid){
+        if (this.myProfile && this.profileForm.valid){
             let profil = {
                 firstname: formValue.firstname,
                 lastname: formValue.lastname,
@@ -89,6 +91,5 @@ export class ProfileComponent implements OnInit {
         }
         //TODO add success message box
     }
-
 
 }
