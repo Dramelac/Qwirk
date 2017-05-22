@@ -47,15 +47,11 @@ export class CallNotifComponent implements OnInit, OnDestroy {
         Session.set("activeCall", request.chatId);
         Session.set("callPeerId", request.peerId);
         Session.set("callVideo", request.video);
-        this.removeRequest(request._id);
+        CallRequests.remove(request._id);
         this.router.navigate(['/chat/'+request.chatId]);
     }
 
     refuseCall(request: CallRequest){
-        this.removeRequest(request._id);
-    }
-
-    removeRequest(id: string){
-        CallRequests.remove(id);
+        CallRequests.update(request._id, {$set:{isReject:true}});
     }
 }

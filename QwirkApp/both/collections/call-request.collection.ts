@@ -8,6 +8,9 @@ CallRequests.allow({
         //TODO check contact list doc.targetUserId
         return doc.ownerUserId === userId;
     },
+    update: function (userId, doc) {
+        return doc.targetUserId === userId || doc.ownerUserId === userId;
+    },
     remove: function (userId, doc) {
         return doc.targetUserId === userId || doc.ownerUserId === userId;
     },

@@ -3,6 +3,7 @@ import template from "./call-action.component.html";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CallRequests} from "../../../../both/collections/call-request.collection";
+import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
     selector: 'call-action',
@@ -18,6 +19,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
     currentCall: PeerJs.MediaConnection;
     remoteStream: MediaStream;
 
+    requestId: string;
     isCallActive: boolean;
 
     micButton: string;
@@ -136,15 +138,28 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.initPeer(video);
 
         this.peer.on('open', () => {
-            CallRequests.insert({
+            this.requestId = CallRequests.collection.insert({
                 targetUserId: this.userCallingId,
                 ownerUserId: Meteor.userId(),
                 peerId: this.peerId,
                 chatId: this.chatId,
-                video: video
+                video: video,
+                isReject: false
+            });
+            MeteorObservable.subscribe('myCallRequest', this.requestId).subscribe(()=>{
+                MeteorObservable.autorun().subscribe(() => {
+                    let request = CallRequests.findOne({_id:this.requestId});
+                    if (request.isReject){
+                        this.detectReject();
+                    }
+                })
             });
         });
+    }
 
+    detectReject(){
+        this.stopCall();
+        CallRequests.remove({_id:this.requestId});
     }
 
     stopCall() {
