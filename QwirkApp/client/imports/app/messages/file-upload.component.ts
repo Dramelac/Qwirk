@@ -72,7 +72,6 @@ export class FileUploadComponent implements OnInit {
     }
 
     upload(data: File): Promise<any> {
-        console.log(data);
         return new Promise((resolve, reject) => {
             const ONE_MB = 1024 * 1000;
             let self = this;
