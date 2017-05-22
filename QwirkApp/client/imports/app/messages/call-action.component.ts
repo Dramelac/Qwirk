@@ -20,6 +20,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
     isCallActive: boolean;
 
+    micButton: string;
+    camButton: string;
+
     @Input("chatId") chatId: string;
     @Input("userCallingId") userCallingId: string;
 
@@ -29,6 +32,8 @@ export class CallActionComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.peerId = "";
         this.isCallActive = false;
+        this.micButton = "Mute";
+        this.camButton = "Video";
 
         Tracker.autorun(() => {
             let callId = Session.get("activeCall");
@@ -38,7 +43,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
     }
 
-    checkInputCall(){
+    checkInputCall() {
         //console.log("checking call");
         if (Session.equals("activeCall", this.chatId)) {
             console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callPeerId"));
@@ -64,22 +69,29 @@ export class CallActionComponent implements OnInit, OnDestroy {
             console.error("undefined user media");
         }
 
-        navigator.getUserMedia({audio: true, video: video}, (stream) => {
+        navigator.getUserMedia({audio: true, video: true}, (stream) => {
                 //display video
 
                 this.zone.run(() => {
                     this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
                 });
                 this.localStream = stream;
-                console.log("Test callback : ", callback);
+
+                if (!video) {
+                    this.video();
+                } else {
+                    this.camButton = "Hide video"
+                }
+                //console.log("Test callback : ", callback);
                 if (callback) {
-                    console.log("exec callback");
+                    //console.log("exec callback");
                     callback();
                 }
             }, function (error) {
                 console.log(error);
             }
         );
+        this.micButton = "Mute";
 
         this.peer = new Peer({
             host: "qwirk-peerjs.herokuapp.com",
@@ -89,7 +101,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
         });
 
         this.peer.on('open', () => {
-            this.zone.run(()=>{
+            this.zone.run(() => {
                 this.peerId = this.peer.id;
             });
         });
@@ -166,11 +178,37 @@ export class CallActionComponent implements OnInit, OnDestroy {
             this.currentCall = this.peer.call(callId, this.localStream);
             this.currentCall.on('stream', (remoteStream) => {
                 this.remoteStream = remoteStream;
-                this.zone.run(()=>{
+                this.zone.run(() => {
                     this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream));
                 });
             });
         }
+    }
+
+    mute() {
+        this.localStream.getAudioTracks().forEach((track) => {
+            track.enabled = !track.enabled;
+
+            //TODO change to icon
+            if (track.enabled) {
+                this.micButton = "Mute";
+            } else {
+                this.micButton = "Unmute";
+            }
+        });
+    }
+
+    video() {
+        this.localStream.getVideoTracks().forEach((track) => {
+            track.enabled = !track.enabled;
+
+            //TODO change to icon
+            if (track.enabled) {
+                this.camButton = "Hide video";
+            } else {
+                this.camButton = "Video";
+            }
+        });
     }
 
 }
