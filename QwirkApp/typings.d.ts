@@ -5,6 +5,8 @@
 /// <reference types="@types/mocha" />
 /// <reference types="@types/peerjs" />
 /// <reference types="@types/node" />
+/// <reference types="@types/jquery" />
+/// <reference types="@types/jqueryui" />
 
 declare module "*.html" {
   const template: string;

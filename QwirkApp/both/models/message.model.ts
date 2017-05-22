@@ -3,7 +3,8 @@ import {CollectionObject} from "./collection-object.model";
 export enum MessageType {
     TEXT = <any>'text',
     PICTURE = <any>'picture',
-    FILE = <any>'file'
+    FILE = <any>'file',
+    WIZZ = <any>'wizz'
 }
 
 export interface Message extends CollectionObject {

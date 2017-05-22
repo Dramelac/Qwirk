@@ -26,3 +26,5 @@ reywood:publish-composite
 session@1.1.7
 jalik:ufs
 jalik:ufs-gridfs
+jquery
+mrt:jquery-ui

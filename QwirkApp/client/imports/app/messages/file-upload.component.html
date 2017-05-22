@@ -1,15 +1,20 @@
-<div>
+<div id="azerty" class="modal-file-drop">
     <div fileDrop
          [ngClass]="{'file-is-over': fileIsOver, 'file-uploading': uploading}"
          (fileOver)="fileOver($event)"
-         (onFileDrop)="onFileDrop($event)">
-        <div>Drop an image to here</div>
+         (onFileDrop)="onFileDrop($event)"
+         class="file-drop">
     </div>
 </div>
-<div *ngIf="uploading">
-    <h3>Uploading {{name}}</h3>
-    <span>Progress {{progress}}%</span>
-    <span>Speed {{speed}}%</span>
-    <span>Time elapsed {{elapsed}}%</span>
-    <span>Time remaining {{remaining}}%</span>
+
+<div *ngIf="uploading" class="upload-modal">
+    <div class="modal-popup">
+        <h3>Uploading {{name}}</h3>
+        <span>Progress {{progress}}%</span><br>
+        <span>Speed {{speed}} KB/s</span><br>
+        <span>Time elapsed {{elapsed}} s</span><br>
+        <span>Time remaining {{remaining}} s</span><br>
+    </div>
 </div>
+
+<input type="file" class="file-input" (change)="onFileSelectChange()"/>

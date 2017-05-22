@@ -17,7 +17,7 @@ export class DisplayFileNamePipe implements PipeTransform {
         if (found) {
             imageName = found.name;
         } else {
-            //TODO default image
+            imageName = "Error file not found"
         }
 
         return imageName;

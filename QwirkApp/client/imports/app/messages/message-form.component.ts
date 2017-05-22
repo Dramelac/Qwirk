@@ -50,4 +50,13 @@ export class MessageFormComponent implements OnInit {
             });
     }
 
+    sendWizz(){
+        Meteor.call("addMessage", MessageType.WIZZ, this.chatId, "wizz",
+            (error, result) => {
+                if (error){
+                    console.error("Error:", error);
+                }
+            });
+    }
+
 }

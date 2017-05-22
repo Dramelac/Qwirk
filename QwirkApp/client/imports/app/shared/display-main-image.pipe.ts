@@ -17,7 +17,7 @@ export class DisplayMainImagePipe implements PipeTransform {
         if (found) {
             imageUrl = found.url;
         } else {
-            //TODO default image
+            imageUrl = "/asset/picture_not_found.png";
         }
 
         return imageUrl;
