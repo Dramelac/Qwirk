@@ -1,3 +1,4 @@
+<file-upload #upload [chatId]="chatId" (onFile)="onFileUploaded($event)"></file-upload>
 <form [formGroup]="addForm" (ngSubmit)="addMessage()">
 
     <label>Message
@@ -6,3 +7,4 @@
 
     <button type="submit">Send</button>
 </form>
+<button (click)="sendWizz()">Send WIZZ</button>

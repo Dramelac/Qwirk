@@ -3,6 +3,21 @@
 <div *ngFor="let message of messages | async">
     <div [class]="'message message-' + message.ownership">
         <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
+        <div *ngIf="message.type == 'picture'">
+            <a target="_blank" href="{{message.content | displayMainImage}}">
+                <span>{{message.content | displayFileName}}</span><br>
+                <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
+            </a>
+        </div>
+        <div *ngIf="message.type == 'file'" class="file-preview">
+            File upload<br>
+            <a target="_blank" href="{{message.content | displayMainImage}}">
+                <span>{{message.content | displayFileName}}</span>
+            </a>
+        </div>
+        <div *ngIf="message.type == 'wizz'" class="wizz-message">
+            WIZZZZZZ
+        </div>
         <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
     </div>
 </div>

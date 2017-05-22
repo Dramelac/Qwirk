@@ -5,6 +5,7 @@ import {RouterModule} from "@angular/router";
 import {AccountsModule} from "angular2-meteor-accounts-ui";
 import {MaterialModule} from "@angular/material";
 import {MomentModule} from "angular2-moment";
+import {FileDropModule} from "angular2-file-drop";
 import "hammerjs";
 import {AppComponent} from "./app.component";
 import {routes, ROUTES_PROVIDERS} from "./app.route";
@@ -14,6 +15,7 @@ import {AUTH_DECLARATIONS} from "./auth";
 import {USERS_DECLARATIONS} from "./user";
 import {CONTACT_DECLARATIONS} from "./contact-tab";
 import {MENU_DECLARATIONS} from "./menu";
+import {ContextMenuModule} from 'angular2-contextmenu';
 
 @NgModule({
     // Components, Pipes, Directive
@@ -42,7 +44,9 @@ import {MENU_DECLARATIONS} from "./menu";
         RouterModule.forRoot(routes),
         AccountsModule,
         MaterialModule,
-        MomentModule
+        MomentModule,
+        FileDropModule,
+        ContextMenuModule
     ],
     // Main Component
     bootstrap: [AppComponent]
