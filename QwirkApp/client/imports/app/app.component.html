@@ -68,6 +68,14 @@
 
     <!--nom utilisateur-->
     <div style="left:64px;top:200px;height: 40px;width: 200px;position: absolute;background-color: #0baf02; border-right: #0baf02 3px solid">
+        <div *ngIf="!user">
+            <a md-button [routerLink]="['/login']" >Login</a>
+            <a md-button [routerLink]="['/signup']">Sign up</a>
+        </div>
+        <div *ngIf="user">
+            <call-notif></call-notif>
+            <side-menu></side-menu>
+        </div>
 
     </div>
 
@@ -85,13 +93,54 @@
             </md-sidenav>
 
             <!--Liste Utilisateur-->
-            <a>
-                List User
-            </a>
+                <div>
+                    <p>Search contact</p>
+              <!--      <div>
+                        <input class="search-bar" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
+                        <div *ngIf="query">
+                            <button (click)="clearRequest()">X</button>
+                        </div>
+                    </div>
+                    <friendRequest-list></friendRequest-list>
+                    <h2>Contacts</h2>
+                    <div *ngIf="profilesFind == null && profiles">
+                        <div *ngFor="let profile of (profiles | async)">
+                            <button (click)="showMessages(profile.userId)">
+                                <img [src]="profile.picture" class="picture">
+                                <div>
+                                    <p>{{profile.username}}</p>
+                                    <status [numberStatus]="profile.status"></status>
+                                    <div>
+                                        <button (click)="deleteContact(profile.userId)">X</button>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
+                            <button type="submit">Search In Qwirk</button>
+                        </form>
+                    </div>
+                    <div *ngIf="profilesFind">
+                        <div *ngFor="let profile of profilesFind">
+                            <button>
+                                <img [src]="profile.picture" class="picture">
+                                <div>
+                                    <p>{{profile.username}}</p>
+                                    <p>{{profile.userId}}</p>
+                                    <div *ngIf="!requestSent(profile.userId)">
+                                        <button (click)="sendFriendRequest(profile.userId)">Add</button>
+                                    </div>
+                                    <div *ngIf="requestSent(profile.userId)">
+                                        <p>Envoyée</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    -->
+                </div>
 
         </md-sidenav-container>
-
-
     </div>
 
     <!--Bar titre -->
@@ -137,102 +186,7 @@
     </div>
 
 </div>
-    <!--
 
-    </div>
-    -->
-    <!--
-    <md-sidenav-container class="sidenav-container" style="height: 1000px;width: 64px">
-        <md-sidenav #start (open)="myinput.focus()" mode="side" style="background-color:#8bc34a ">
-            <button md-button (click)="start.close()" style="width: 50px;">
-                <img class="button-test" src="asset/img/home.png" >
-            </button>
-            <br>
-            <br>
-            <br>
-            <br>
-            <button md-button (click)="end.open()" >
-                <img class="button-test" src="asset/img/phone.png" >
-            </button>
-            <br>
-            <br>
-            <br>
-            <br>
-            <button md-button (click)="end.open()" >
-                <img class="button-test" src="asset/img/comments.png" >
-            </button>
-            <br>
-            <br>
-            <br>
-            <br>
-            <button md-button (click)="end.open()" >
-                <img class="button-test" src="asset/img/users.png" >
-            </button>
-            <br>
-            <br>
-            <br>
-            <br>
-            <button md-button (click)="end.open()" >
-                <img class="button-test" src="asset/img/television.png" >
-            </button>
-            <br>
-            <br>
-            <br>
-            <br>
-            <button md-button (click)="end.open()" >
-                <img class="button-test" src="asset/img/process.png" >
-            </button>
-            <br>
-            <br>
-            <br>
-            <br>
-            <input #myinput type="HIDDEN" >
-        </md-sidenav>
-
-        <md-sidenav #end align="end">
-            End Side Drawer
-            <br>
-            <button md-button (click)="end.close()">Close</button>
-        </md-sidenav>
-
-
-    </md-sidenav-container>
-
-
-    <div class="button-toggle" style="float:left">
-
-        <div>
-            <button md-button (click)="start.toggle()">Toggle Start Side Drawer</button>
-            <button md-button (click)="end.toggle()">Toggle End Side Drawer</button>
-        </div>
-
-
-    </div>
-    -->
-
-
-<!--<div layout="row" ng-controller="MyController">
-    <md-sidenav md-component-id="left" class="md-sidenav-left">
-        Left Nav!
-    </md-sidenav>
-
-    <md-content>
-        Center Content
-        <md-button ng-click="openLeftMenu()">
-            Open Left Menu
-        </md-button>
-    </md-content>
-
-    <md-sidenav md-component-id="right" md-is-locked-open="$mdMedia('min-width: 333px')" class="md-sidenav-right">
-        <form>
-            <md-input-container>
-                <label for="testInput">Test input</label>
-                <input id="testInput" ng-model="data" md-autofocus type="text">
-            </md-input-container>
-        </form>
-    </md-sidenav>
-</div>-->
-<!-- App layout -->
 
 
 

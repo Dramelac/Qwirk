@@ -8,14 +8,14 @@
         <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
               layout="column" layout-fill layout-padding layout-margin>
 
-            <md-input-container><input mdInput formControlName="email" type="email" placeholder="E-Mail"></md-input-container>
+            <md-input-container *ngIf="myProfile"><input mdInput formControlName="email" type="email" placeholder="E-Mail"></md-input-container>
             <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name"></md-input-container>
-            <md-input-container><input mdInput formControlName="firstname" type="text" placeholder="First name"></md-input-container>
-            <md-input-container><input mdInput formControlName="lastname" type="text" placeholder="Last name"></md-input-container>
-            <md-input-container><input mdInput formControlName="picture" type="text" placeholder="Picture"></md-input-container>
-            <md-input-container><input mdInput formControlName="newPassword" type="password" placeholder="New Password"></md-input-container>
-            <md-input-container><input mdInput formControlName="confirmPassword" type="password" placeholder="Confirm Password"></md-input-container>
-            <md-input-container><input mdInput formControlName="oldPassword" type="password" placeholder="Old Password"></md-input-container>
+            <md-input-container *ngIf="myProfile"><input mdInput formControlName="firstname" type="text" placeholder="First name"></md-input-container>
+            <md-input-container *ngIf="myProfile"><input mdInput formControlName="lastname" type="text" placeholder="Last name"></md-input-container>
+            <md-input-container *ngIf="myProfile"><input mdInput formControlName="picture" type="text" placeholder="Picture"></md-input-container>
+            <md-input-container *ngIf="myProfile"><input mdInput formControlName="newPassword" type="password" placeholder="New Password"></md-input-container>
+            <md-input-container *ngIf="myProfile"><input mdInput formControlName="confirmPassword" type="password" placeholder="Confirm Password"></md-input-container>
+            <md-input-container *ngIf="myProfile"><input mdInput formControlName="oldPassword" type="password" placeholder="Old Password"></md-input-container>
 
 
             <div layout="row" layout-align="space-between center">
@@ -23,9 +23,16 @@
             </div>
         </form>
 
-        <div [hidden]="error == ''">
+        <div *ngIf="error !== ''">
             <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
                 <p class="mat-body-1">{{ error }}</p>
+                <button (click)="error=''">X</button>
+            </md-toolbar>
+        </div>
+        <div *ngIf="success !== ''">
+            <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
+                <p class="mat-body-1">{{ success }}</p>
+                <button (click)="success=''">X</button>
             </md-toolbar>
         </div>
         <p>Debug UserId : {{ user._id }}</p>
