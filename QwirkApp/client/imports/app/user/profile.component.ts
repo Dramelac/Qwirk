@@ -13,6 +13,7 @@ import {InjectUser} from "angular2-meteor-accounts-ui";
 export class ProfileComponent implements OnInit {
     profileForm: FormGroup;
     error: string;
+    success: string;
     profile: Profile;
 
     constructor(private formBuilder: FormBuilder) {
@@ -36,15 +37,18 @@ export class ProfileComponent implements OnInit {
         });
 
         this.error = '';
+        this.success = '';
     }
 
     save() {
         this.error = '';
+        this.success = '';
         let formValue = this.profileForm.value;
         if (this.profileForm.valid && formValue.confirmPassword == formValue.newPassword && formValue.oldPassword != "") {
             Accounts.changePassword(formValue.oldPassword, formValue.newPassword, (err) => {
                 if (err){
                     this.error = err.reason;
+                    this.success = "";
                 }
             });
         }
@@ -60,15 +64,19 @@ export class ProfileComponent implements OnInit {
                 Meteor.call("updateEmail", formValue.email, Meteor.user().emails[0].address,
                     (error, result) => {
                         if (error){
-                            console.error(error);
+                            //console.error(error);
+                            this.error = error.reason;
+                            this.success = "";
                         }
                         if (result){
                             console.log(result);
                         }
                     });
             }
+            if (this.error === ""){
+                this.success = "Change saved !";
+            }
         }
-        //TODO add success message box
     }
 
 

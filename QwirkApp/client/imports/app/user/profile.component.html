@@ -23,9 +23,16 @@
             </div>
         </form>
 
-        <div [hidden]="error == ''">
+        <div *ngIf="error !== ''">
             <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
                 <p class="mat-body-1">{{ error }}</p>
+                <button (click)="error=''">X</button>
+            </md-toolbar>
+        </div>
+        <div *ngIf="success !== ''">
+            <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
+                <p class="mat-body-1">{{ success }}</p>
+                <button (click)="success=''">X</button>
             </md-toolbar>
         </div>
         <p>Debug UserId : {{ user._id }}</p>
