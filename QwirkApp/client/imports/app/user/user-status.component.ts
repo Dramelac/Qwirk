@@ -22,6 +22,10 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.loadingValue();
         console.log("sub to profile :", Meteor.userId());
+        this.subAction();
+    }
+
+    subAction(){
         this.profilesub = MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.zone.run(() => {
@@ -30,12 +34,16 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                         this.selectedStatus = this.profile.status;
                         //this.status = StatusToString(this.profile.status);
                     } else {
-                        this.loadingValue();
+                        console.log("profile not found, debug info :", Meteor.userId(), this.profile, this.profilesub);
+                        if (Meteor.userId()){
+                            console.log("Error loading profile");
+                        } else {
+                            this.loadingValue();
+                        }
                     }
                 });
             })
         });
-
     }
 
     ngOnDestroy(): void {
@@ -51,6 +59,10 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     }
 
     updateStatus(value): void {
-        Profiles.update(Meteor.user().profile.id, {$set: {status: parseInt(value)}});
+        if (this.profile){
+            Profiles.update(this.profile._id, {$set: {status: parseInt(value)}});
+        } else {
+            console.log("Error no profile selected.");
+        }
     }
 }
