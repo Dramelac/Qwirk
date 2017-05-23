@@ -1,25 +1,13 @@
 
 
+
+
 <!--
-<md-toolbar color="primary">
-    <a routerLink="/" class="toolbar-title">Qwirk</a>
-    <span class="fill-remaining-space"></span>
-    <div *ngIf="!user">
-        <a md-button [routerLink]="['/login']" >Login</a>
-        <a md-button [routerLink]="['/signup']">Sign up</a>
-    </div>
-    <div *ngIf="user">
-        <user-status></user-status>
-        <button md-button (click)="logout()">Logout</button>
-    </div>
-</md-toolbar>
 
--->
-
-<!--Page principal-->
+<!--Page principal
 <div style="height: 100%;width: 100%;position: absolute">
 
-    <!-- Menu tout à gauche-->
+    <!-- Menu tout à gauche
     <div style="height: 100%;width: 64px;position: absolute;background-color:#303030">
         <md-sidenav-container class="sidenav-container" style="height: 100%;width: 64px;background-color:#303030;overflow: hidden">
             <button md-button (click)="message.close()" >
@@ -61,12 +49,12 @@
 
     </div>
 
-    <!--logo Qwirk-->
+    <!--logo Qwirk
     <div style="left:64px;height: 200px;width: 200px;position: absolute;background-color: #e9e9e9; border-right: #d1d1d1 3px solid">
         <img class="logo" src="favicon.png" >
     </div>
 
-    <!--nom utilisateur-->
+    <!--nom utilisateur
     <div style="left:64px;top:200px;height: 40px;width: 200px;position: absolute;background-color: #0baf02; border-right: #0baf02 3px solid">
         <div *ngIf="!user">
             <a md-button [routerLink]="['/login']" >Login</a>
@@ -79,20 +67,19 @@
 
     </div>
 
-    <!--liste utilisateur/groupe/channel-->
+    <!--liste utilisateur/groupe/channel
     <div style="left:64px;top:240px;height: calc(100% - 240px);width: 200px;position: absolute;background-color: magenta; border-right: #d1d1d1 3px solid">
 
-
         <md-sidenav-container class="sidenav-container" style="height: 100%;width: 200px;background-color: #e9e9e9">
-            <!--Liste Groupe-->
-            <md-sidenav #users (open)="second.focus()" mode="side" style="height: 100%;width: 200px;background-color: #e9e9e9"" >
+            <!--Liste Groupe
+            <md-sidenav #users (open)="second.focus()" mode="side" style="height: 100%;width: 200px;background-color: #e9e9e9" >
                 <a>
                     List Groupe
                 </a>
                 <input #second type="HIDDEN" >
             </md-sidenav>
 
-            <!--Liste Utilisateur-->
+            <!--Liste Utilisateur
                 <div>
                     <p>Search contact</p>
               <!--      <div>
@@ -137,13 +124,13 @@
                             </button>
                         </div>
                     </div>
-                    -->
+
                 </div>
 
         </md-sidenav-container>
     </div>
 
-    <!--Bar titre -->
+    <!--Bar titre
     <div style="left:267px;top:0px;height: 180px;width: calc(100% - 267px);position: absolute;background-color: #e6e6e6;" >
         <div style="width: 400px;height: 120px ;margin: 30px auto">
             <p style="float: left;padding-right: 20px">
@@ -159,13 +146,13 @@
 
     </div>
 
-    <!--Div central-->
+    <!--Div central
     <div>
         <div style="left:267px;top:180px;height: calc(100% - 180px);width: calc(100% - 267px);position:absolute">
 
 
             <md-sidenav-container class="sidenav-container" style="height: 100%;width: 100%;background-color: #efefef">
-                <!--Message User-->
+                <!--Message User
                 <md-sidenav #message (open)="messageinput.focus()" mode="side" style="height: 100%;width: 100%;background-color: #efefef"" >
                 <a>
                     User messagedsfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfg
@@ -173,7 +160,7 @@
                 <input #messageinput type="HIDDEN" >
                 </md-sidenav>
 
-                <!--home-->
+                <!--home
                 <a>
 
                     homertzeqtqrgdsfgsdfgsdfgsdfgsdfsdfgsdfgsdfg
@@ -187,13 +174,38 @@
 
 </div>
 
+-->
 
 
+<div class="container-fluid" >
+    <div class="row">
+        <md-toolbar color="primary" >
+            <a routerLink="/" class="toolbar-title">Qwirk</a>
+            <span class="fill-remaining-space"></span>
+            <div *ngIf="!user">
+                <a md-button [routerLink]="['/login']" >Login</a>
+                <a md-button [routerLink]="['/signup']">Sign up</a>
+            </div>
+            <div *ngIf="user">
+                <user-status></user-status>
+                <button md-button (click)="logout()">Logout</button>
+            </div>
+        </md-toolbar>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div *ngIf="user">
+                <call-notif></call-notif>
+                <side-menu></side-menu>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <!-- Main page -->
+            <router-outlet></router-outlet>
+        </div>
 
-<!-- <div *ngIf="user">
-    <call-notif></call-notif>
-    <side-menu></side-menu>
-</div>-->
+    </div>
 
-<!-- Main page -->
-<!--<router-outlet></router-outlet> -->
+</div>
+
+

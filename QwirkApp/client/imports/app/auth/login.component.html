@@ -1,22 +1,19 @@
-<div class="mat-content" layout="row" layout-align="center start" layout-fill layout-margin>
+<div class="mat-content"  layout="row" layout-align="center start" layout-fill layout-margin >
     <div layout="column" flex flex-md="50" flex-lg="50" flex-gt-lg="33" class="mat-whiteframe-z2" layout-fill>
-        <md-toolbar class="mat-primary" color="secondary">
-            Sign in
-        </md-toolbar>
 
-        <div layout="column" layout-margin layout-padding>
+        <div layout="column"  layout-margin layout-padding style="text-align: center">
             <div layout="row" layout-margin>
-                <p class="mat-body-2"> Sign in with your email</p>
+                <img class="logo"  src="favicon.png" alt="logo qui tourne"/>
             </div>
 
             <form [formGroup]="loginForm" #f="ngForm" (ngSubmit)="login()"
                   layout="column" layout-fill layout-padding layout-margin>
 
                 <md-input-container><input mdInput formControlName="log" type="text" placeholder="Email/Username"></md-input-container>
+                </br>
                 <md-input-container><input mdInput formControlName="password" type="password" placeholder="Password"></md-input-container>
 
                 <div layout="row" layout-align="space-between center">
-                    <a md-button [routerLink]="['/recover']">Forgot password?</a>
                     <button md-raised-button class="mat-primary" type="submit" aria-label="login">Sign In</button>
                 </div>
             </form>
@@ -30,6 +27,7 @@
             <md-divider></md-divider>
 
             <div layout="row" layout-align="center">
+                <a md-button [routerLink]="['/recover']">Forgot password?</a>
                 <a md-button [routerLink]="['/signup']">Need an account?</a>
             </div>
         </div>

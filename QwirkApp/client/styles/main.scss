@@ -112,3 +112,27 @@ body {
   background: none;
   margin: -20 0 0 0;
 }
+@-webkit-keyframes monlogo {
+  to{
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.monlogo {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  -webkit-animation: monlogo 2s linear infinite;
+  animation: monlogo 5s infinite;
+}
+
+.container {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.col-md-10{
+  padding-right: 0;
+  padding-left: 0;
+
+}
