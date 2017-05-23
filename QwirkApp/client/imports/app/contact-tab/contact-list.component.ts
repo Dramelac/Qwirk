@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, NgZone} from "@angular/core";
+import {Component, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./contact-list.component.html";
 import {Observable} from "rxjs";
 import {Profile} from "../../../../both/models/profile.model";
@@ -8,6 +8,9 @@ import {Subscription} from "rxjs/Subscription";
 import {FriendRequest} from "../../../../both/models/friend-request.model";
 import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
 import {Router} from "@angular/router";
+import {Contacts} from "../../../../both/collections/contact.collection";
+import {Contact} from "../../../../both/models/contact.model";
+import {ContextMenuComponent} from "angular2-contextmenu";
 
 @Component({
     selector: 'contact-list',
@@ -19,35 +22,75 @@ export class ContactListComponent implements OnInit, OnDestroy {
     friendRequestsSub: Subscription;
     numberRequest: number;
 
+    contacts: Observable<Contact[]>;
     profiles: Observable<Profile[]>;
     profilesFind: Profile[];
     friendList: string[] = [];
 
     profilesSub: Subscription;
+    contactsSub: Subscription;
     query: string = null;
     moreSearch: boolean = false;
     inApp: boolean = false;
     currentUserId: string;
     private exist: boolean = false;
 
+    public items = [
+        { name: 'John', otherProperty: 'Foo' },
+        { name: 'Joe', otherProperty: 'Bar' }
+    ];
+    @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
+
     constructor(private zone: NgZone, private router: Router) {
     }
 
     ngOnInit(): void {
+        this.dataloading();
+        Tracker.autorun(() => {
+            let updateData = Session.get("dataUpdated");
+            if (updateData === true) {
+                console.log("detect update");
+                this.dataloading();
+                Session.set("dataUpdated", false);
+            }
+        });
+    }
+
+    dataloading(): void {
         this.currentUserId = Meteor.userId();
         this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe();
-        this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe();
-        this.profiles = Profiles
-            .find({userId: {$ne: this.currentUserId}});
 
-        if (this.profiles) {
-            this.profiles.subscribe((result: Profile[]) => {
-                for (var profile of result) {
-                    this.friendList.push(profile._id);
+        this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                console.log("refresh profile");
+                this.profiles = Profiles
+                    .find({userId: {$ne: this.currentUserId}});
+                if (this.profiles) {
+                    console.log('profiles : ', this.profiles);
+                } else {
+                    console.log('no profile found.');
                 }
+                this.contactsSub = MeteorObservable.subscribe('myContacts').subscribe(() => {
+                    console.log("refresh contact");
+                    this.contacts = Contacts.find();
+                    if (this.contacts) {
+                        this.contacts.subscribe((result: Contact[]) => {
+                            MeteorObservable.autorun().subscribe(() => {
+                                if(result){
+                                    this.zone.run(() => {
+                                        for(let contact of result){
+                                            contact.profile = Profiles.findOne({_id : contact.profileId});
+                                            console.log(contact.profile);
+                                        }
+                                    });
+                                }
+                                console.log("refresh Contact/Profile");
+                            });
+                        });
+                    }
+                });
             });
-        }
-
+        });
         this.friendRequests = FriendsRequest
             .find({destinator: Meteor.userId()});
         if (this.friendRequests) {
@@ -60,7 +103,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
             if (this.moreSearch) {
                 this.searchInQwirk();
             } else {
-                this.profiles = Profiles.find({$and: [{username: {$regex: ".*" + this.query + ".*"}}, {userId: {$ne: this.currentUserId}}]});
+                this.contacts= Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}});
                 this.inApp = true;
             }
         }
@@ -71,6 +114,15 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     searchInQwirk(): void {
+        this.contacts.subscribe((contactList : Contact[])=> {
+            if(this.friendList.length > 0){
+                this.friendList = []
+            }
+            for(let contact of contactList){
+                this.friendList.push(contact.profileId);
+            }
+        });
+        console.log("nb elem:",this.friendList.length);
         Meteor.call("searchUser", this.query, this.friendList, (error, result) => {
             if (error) {
                 console.log("erreur dans search")
@@ -85,7 +137,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     sendFriendRequest(friendId: string): void {
         Meteor.call("addFriendRequest", friendId, (error, result) => {
-
         });
     }
 
@@ -108,27 +159,28 @@ export class ContactListComponent implements OnInit, OnDestroy {
         this.profiles = Profiles.find({userId: {$ne: this.currentUserId}});
         this.moreSearch = false;
         this.inApp = false;
+        this.dataloading();
     }
 
-    showMessages(friendId: string): void {
-       Meteor.call("findContact",friendId,(error, result)=>{
-           if(error){
-               console.log("erreur showMessage");
-           }
-          else{
-               this.router.navigate(["/chat/" + result]);
-           }
-       });
+    showMessages(chatId: string): void {
+        this.router.navigate(["/chat/" + chatId]);
+
     }
 
-    deleteContact(friendId: string){
-        Meteor.call("removeContact", friendId, (error,result) => {
+    deleteContact(friendId: string) {
+        Meteor.call("removeContact", friendId, (error, result) => {
 
         });
+    }
+
+    showProfile(friendId: string):void{
+        console.log("test edit",friendId);
+        this.router.navigate(["/profile/" + friendId]);
     }
 
     ngOnDestroy(): void {
         this.profilesSub.unsubscribe();
         this.friendRequestsSub.unsubscribe();
+        this.contactsSub.unsubscribe();
     }
 }
