@@ -1,6 +1,6 @@
 import {MessageType} from "../both/models/message.model";
 import {Status} from "../both/models/status.enum";
-import {Chats, Messages, Profiles, Contacts} from "../both/collections";
+import {Chats, Contacts, Messages, Profiles} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
 import {FriendsRequest} from "../both/collections/friend-request.collection";
 import {Contact} from "../both/models/contact.model";
@@ -194,14 +194,16 @@ Meteor.methods({
             friendId: initiator,
             chatId: chatId,
             profileId: Profiles.findOne({userId : initiator})._id,
-            displayName: Meteor.users.findOne({_id : initiator}).username
+            displayName: Meteor.users.findOne({_id : initiator}).username,
+            isBloqued: false
         };
         const contactInitiator:Contact = {
             ownerId: initiator,
             friendId: Meteor.userId(),
             chatId: chatId,
             profileId: Profiles.findOne({userId : Meteor.userId()})._id,
-            displayName: Meteor.user().username
+            displayName: Meteor.user().username,
+            isBloqued: false
         };
         Contacts.collection.insert(contactUser);
         Contacts.collection.insert(contactInitiator);
