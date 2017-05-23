@@ -128,9 +128,14 @@ export class CallActionComponent implements OnInit, OnDestroy {
             console.log("Peer custom error : ", err);
         });
 
-        this.peer.on('disconnected', () => {
+        this.peer.on('close', () => {
+            console.log("close received");
+            //this.stopCall();
+        });
+
+        this.peer.on('disconnect', () => {
             console.log("disconnect received");
-            this.stopCall();
+            //this.stopCall();
         });
     }
 
@@ -149,7 +154,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
             MeteorObservable.subscribe('myCallRequest', this.requestId).subscribe(()=>{
                 MeteorObservable.autorun().subscribe(() => {
                     let request = CallRequests.findOne({_id:this.requestId});
-                    if (request.isReject){
+                    if (request && request.isReject){
                         this.detectReject();
                     }
                 })
@@ -158,12 +163,13 @@ export class CallActionComponent implements OnInit, OnDestroy {
     }
 
     detectReject(){
-        this.stopCall();
         CallRequests.remove({_id:this.requestId});
+        this.stopCall();
     }
 
     stopCall() {
         if (this.isCallActive) {
+            this.peer.disconnect();
             this.currentCall.close();
             this.isCallActive = false;
         }
