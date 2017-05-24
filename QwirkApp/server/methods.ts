@@ -1,6 +1,6 @@
 import {MessageType} from "../both/models/message.model";
 import {Status} from "../both/models/status.enum";
-import {Chats, Messages, Profiles, Contacts} from "../both/collections";
+import {Chats, Contacts, Messages, Profiles} from "../both/collections";
 import {Profile} from "../both/models/profile.model";
 import {FriendsRequest} from "../both/collections/friend-request.collection";
 import {Contact} from "../both/models/contact.model";

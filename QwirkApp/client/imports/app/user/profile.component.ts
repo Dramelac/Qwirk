@@ -7,6 +7,7 @@ import {InjectUser} from "angular2-meteor-accounts-ui";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Contacts} from "../../../../both/collections/contact.collection";
 import {Contact} from "../../../../both/models/contact.model";
+import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
     selector: 'profile',
@@ -30,6 +31,7 @@ export class ProfileComponent implements OnInit {
         this.route.params.map(params => params["profileID"]).subscribe(profile => {
             if(profile){
                 this.profileId = profile;
+                //TODO add contact sub (like bellow)
                 this.contact= Contacts.findOne({$and : [{ownerId : Meteor.userId()},{profileId : this.profileId}]});
                 console.log(this.contact);
                 this.profileForm = this.formBuilder.group({
@@ -39,17 +41,21 @@ export class ProfileComponent implements OnInit {
             } else{
 
                 // This is working because client is already sub to his profile in user-status
-                this.profile = Profiles.findOne({userId: Meteor.userId()});
+                MeteorObservable.subscribe('profile').subscribe(() => {
+                    MeteorObservable.autorun().subscribe(() => {
+                        this.profile = Profiles.findOne({userId: Meteor.userId()});
 
-                this.profileForm = this.formBuilder.group({
-                    username: [this.profile.username, Validators.required],
-                    picture: [this.profile.picture],
-                    firstname: [this.profile.firstname],
-                    lastname: [this.profile.lastname],
-                    email: [Meteor.user().emails[0].address, Validators.required],
-                    newPassword: [''],
-                    confirmPassword: [''],
-                    oldPassword: ['']
+                        this.profileForm = this.formBuilder.group({
+                            username: [this.profile.username, Validators.required],
+                            picture: [this.profile.picture],
+                            firstname: [this.profile.firstname],
+                            lastname: [this.profile.lastname],
+                            email: [Meteor.user().emails[0].address, Validators.required],
+                            newPassword: [''],
+                            confirmPassword: [''],
+                            oldPassword: ['']
+                        });
+                    })
                 });
             }
         });
