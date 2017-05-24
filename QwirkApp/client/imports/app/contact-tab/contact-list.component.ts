@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
 import {Contacts} from "../../../../both/collections/contact.collection";
 import {Contact} from "../../../../both/models/contact.model";
 import {ContextMenuComponent} from "angular2-contextmenu";
+import {Chats} from "../../../../both/collections/chat.collection";
 
 @Component({
     selector: 'contact-list',
@@ -176,6 +177,18 @@ export class ContactListComponent implements OnInit, OnDestroy {
     showProfile(friendId: string):void{
         console.log("test edit",friendId);
         this.router.navigate(["/profile/" + friendId]);
+    }
+
+    blockContact(contact: Contact, bool : boolean):void{
+        if(bool){
+            //contact was block
+            Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
+            console.log("bloquer");
+        }else {
+            //unblock contact
+            Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
+            console.log("debloquer");
+        }
     }
 
     ngOnDestroy(): void {

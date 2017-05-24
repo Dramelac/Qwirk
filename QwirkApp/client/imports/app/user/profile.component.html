@@ -4,7 +4,7 @@
         Profile
     </md-toolbar>
 
-    <div layout="column" layout-fill layout-margin layout-padding>
+    <div *ngIf="profileForm" layout="column" layout-fill layout-margin layout-padding>
         <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
               layout="column" layout-fill layout-padding layout-margin>
 
@@ -39,6 +39,9 @@
 
         <md-divider></md-divider>
 
+    </div>
+    <div *ngIf="!profileForm">
+        <p>Loading ...</p>
     </div>
 </div>
 </div>

@@ -7,4 +7,5 @@ export interface Contact extends CollectionObject {
     profile?: Profile,
     displayName?: string;
     chatId: string;
+    isBloqued: boolean;
 }

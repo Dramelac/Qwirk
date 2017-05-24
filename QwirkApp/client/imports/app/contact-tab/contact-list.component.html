@@ -10,16 +10,21 @@
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let contact of (contacts | async)">
-            <button (click)="showMessages(contact.chatId)" [contextMenu]="basicMenu" [contextMenuSubject]="contact">
-                <img *ngIf="contact.profile" [src]="contact.profile.picture" class="picture">
-                <div>
-                    <p>{{contact.displayName}}</p>
-                   <status *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
+            <div [contextMenu]="basicMenu" [contextMenuSubject]="contact">
+                <button [disabled]="contact.isBloqued" (click)="showMessages(contact.chatId)" >
+                    <img *ngIf="contact.profile" [src]="contact.profile.picture" class="picture">
                     <div>
-                        <button (click)="deleteContact(contact.profile.userId)">X</button>
+                        <p>{{contact.displayName}}</p>
+                        <status *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
+                        <div *ngIf="!contact.isBloqued">
+                            <button (click)="deleteContact(contact.profile.userId)">X</button>
+                        </div>
+                        <div *ngIf="contact.isBloqued">
+                            <i>Blocked</i>
+                        </div>
                     </div>
-                </div>
-            </button>
+                </button>
+            </div>
         </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
             <button type="submit">Search In Qwirk</button>
@@ -47,7 +52,8 @@
             <span><button (click)="showProfile(item?.profileId)">Edit Profile</button></span>
         </template>
         <template contextMenuItem let-item [enabled]="false">
-            <button (click)="showProfile(item?.profileId)">Bloquer</button>
+            <button *ngIf="!item?.isBloqued" (click)="blockContact(item,true)">Bloquer</button>
+            <button *ngIf="item?.isBloqued" (click)="blockContact(item,false)">Debloquer</button>
         </template>
     </context-menu>
 </div>

@@ -8,4 +8,5 @@ export interface Chat extends CollectionObject {
     title?: string;
     picture?: string;
     lastMessage?: Message;
+    blocked?: boolean;
 }
