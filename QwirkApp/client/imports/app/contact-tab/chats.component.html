@@ -1,6 +1,6 @@
 <h5>List chats : </h5>
 <div *ngFor="let chat of chats | async">
-    <button (click)="showMessages(chat._id)">
+    <button *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
         <img [src]="chat.picture" class="picture">
         <div>
             <h2 class="chat-title">{{chat.title}}</h2>

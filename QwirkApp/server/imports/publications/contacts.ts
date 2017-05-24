@@ -10,3 +10,13 @@ Meteor.publish('myContacts', function(): Mongo.Cursor<Contact> {
         ownerId: this.userId
     });
 });
+
+Meteor.publish('contact', function (profileId : string): Mongo.Cursor<Contact> {
+    if (!this.userId) {
+        return;
+    }
+    return Contacts.collection.find({
+        profileId : profileId
+    });
+
+});
