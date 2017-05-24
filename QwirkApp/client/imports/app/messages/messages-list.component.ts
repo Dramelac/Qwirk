@@ -74,6 +74,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
                                 return message;
                             });
+                            setTimeout(()=>{this.updateScroll()}, 100);
                             return messages;
                         });
 
@@ -83,7 +84,13 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
 
             });
+    }
 
+    updateScroll(){
+        let scrollPage = document.getElementsByTagName("body")[0];
+        if (scrollPage){
+            scrollPage.scrollTop = scrollPage.scrollHeight;
+        }
     }
 
     wizz(){
