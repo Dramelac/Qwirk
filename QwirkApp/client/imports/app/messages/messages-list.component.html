@@ -1,6 +1,7 @@
 <h4 *ngIf="chat">{{chat.title}}</h4>
 <call-action *ngIf="distantUserId" [userCallingId]="distantUserId" [chatId]="chatId"></call-action>
 <div id="ChatList">
+    <div *ngIf="loadingMessage">Loading older messages ...</div>
     <div *ngFor="let day of messagesDayGroups | async">
         <div>{{day.timestamp}}</div>
         <div *ngFor="let message of day.messages" >

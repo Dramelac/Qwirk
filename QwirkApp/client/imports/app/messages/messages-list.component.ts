@@ -138,7 +138,6 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     }
 
     autoRemoveScrollListener<T>(messagesCount: number): Observable<T> {
-        console.log("batchcount:", this.messageLazyLoadingLevel);
         return Observable.create((observer: Subscriber<T>) => {
             Messages.find({chatId:this.chatId}).subscribe({
                 next: (messages) => {
