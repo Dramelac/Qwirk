@@ -6,7 +6,6 @@ import {Contacts, Files, Profiles} from "../../../../both/collections";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MeteorObservable} from "meteor-rxjs";
-import {DisplayProfileImagePipe} from "../shared/display-profile-image.pipe";
 
 @Component({
     selector: 'profile',
@@ -23,7 +22,7 @@ export class ProfileComponent implements OnInit {
     profile: Profile;
     myProfile: boolean = true;
 
-    pictureUrl: string;
+    pictureId: string;
 
     constructor(private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
     }
@@ -41,6 +40,7 @@ export class ProfileComponent implements OnInit {
                 });
                 this.myProfile = false;
             } else {
+                this.pictureId = "";
 
                 // This is working because client is already sub to his profile in user-status
                 MeteorObservable.subscribe('profile').subscribe(() => {
@@ -59,7 +59,7 @@ export class ProfileComponent implements OnInit {
 
                             MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
                                 MeteorObservable.autorun().subscribe(() => {
-                                    this.pictureUrl = (new DisplayProfileImagePipe).transform(this.profile.picture);
+                                    this.pictureId = this.profile.picture;
                                 });
                             });
                         }

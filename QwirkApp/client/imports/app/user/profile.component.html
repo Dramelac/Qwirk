@@ -7,7 +7,7 @@
     <div *ngIf="profileForm && profile" layout="column" layout-fill layout-margin layout-padding>
 
         <p>Profile picture :
-            <img alt="picture" *ngIf="pictureUrl" [src]="pictureUrl" class="picture-thumbs">
+            <img alt="picture" *ngIf="pictureId" [src]="pictureId | displayProfileImage" class="picture-thumbs">
         </p>
         <file-upload (onFile)="onPictureUpdate($event)"></file-upload>
 

@@ -6,7 +6,6 @@ import {Profile} from "../../../../both/models/profile.model";
 import {Profiles} from "../../../../both/collections/profile.collection";
 import {MeteorObservable} from "meteor-rxjs";
 import {Subscription} from "rxjs/Subscription";
-import {DisplayProfileImagePipe} from "../shared/display-profile-image.pipe";
 
 @Component({
     selector: "user-status",
@@ -19,7 +18,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     profilesub: Subscription;
     selectedStatus: number;
 
-    pictureUrl: string;
+    pictureId: string;
 
     constructor(private zone: NgZone) {
     }
@@ -37,9 +36,10 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                     this.profile = Profiles.findOne({userId: Meteor.userId()});
                     if (this.profile) {
                         this.selectedStatus = this.profile.status;
+                        this.pictureId = "";
                         MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
                             MeteorObservable.autorun().subscribe(() => {
-                                this.pictureUrl = (new DisplayProfileImagePipe).transform(this.profile.picture);
+                                this.pictureId = this.profile.picture;
                             });
                         });
                         //this.status = StatusToString(this.profile.status);

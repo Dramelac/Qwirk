@@ -9,6 +9,9 @@ export class DisplayProfileImagePipe implements PipeTransform {
         if (!imageId) {
             return "/asset/user.png";
         }
+        if (/https?:\/\/.*/g.test(imageId)){
+            return imageId;
+        }
 
         let imageUrl: string;
         const found = Files.findOne(imageId);

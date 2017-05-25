@@ -25,7 +25,9 @@ export class StatusComponent implements OnDestroy, OnInit {
             MeteorObservable.autorun().subscribe(() => {
                 this.zone.run(() => {
                     let profile = Profiles.findOne({_id : this.profileId});
-                    this.status = StatusToString(profile.status);
+                    if (profile){
+                        this.status = StatusToString(profile.status);
+                    }
                 })
             });
         });
