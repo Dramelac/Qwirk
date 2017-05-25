@@ -9,6 +9,7 @@ import template from "./side-menu.component.html";
 export class SideMenuComponent implements OnInit {
 
     selected: number;
+    type:string;
 
     constructor() {}
 
@@ -18,5 +19,10 @@ export class SideMenuComponent implements OnInit {
 
     button(value: number): void{
         this.selected = value;
+        if(this.selected === 0){
+            this.type = "Chats";
+        }else if(this.selected === 2){
+            this.type = "Groups";
+        }
     }
 }

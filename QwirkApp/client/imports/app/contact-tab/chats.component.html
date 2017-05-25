@@ -1,4 +1,8 @@
-<h5>List chats : </h5>
+<h5 *ngIf="type === 'Chats' || type === null">List chats : </h5>
+<div *ngIf="type === 'Groups'">
+    <h5>List groups :</h5>
+    <button>Create Group</button>
+</div>
 <div *ngFor="let chat of chats | async">
     <button *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
         <img [src]="chat.picture" class="picture">
@@ -14,8 +18,8 @@
                 <span class="last-message-timestamp">{{chat.lastMessage.createdAt }}</span>
             </div>
         </div>
-        <div>
+        <!--<div>
             <button (click)="removeChat(chat)">Remove</button>
-        </div>
+        </div>-->
     </button>
 </div>

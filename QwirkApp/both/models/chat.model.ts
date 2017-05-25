@@ -9,4 +9,5 @@ export interface Chat extends CollectionObject {
     picture?: string;
     lastMessage?: Message;
     blocked?: boolean;
+    type:string;
 }

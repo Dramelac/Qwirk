@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, Input, OnDestroy, OnInit} from "@angular/core";
 import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
 import {Chat} from "../../../../both/models/chat.model";
@@ -9,7 +9,6 @@ import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {Profiles} from "../../../../both/collections/profile.collection";
 import {MessagesListComponent} from "../messages/messages-list.component";
-import {Contact} from "../../../../both/models/contact.model";
 import {Contacts} from "../../../../both/collections/contact.collection";
 
 @Component({
@@ -17,14 +16,16 @@ import {Contacts} from "../../../../both/collections/contact.collection";
     template
 })
 export class ChatsComponent implements OnInit, OnDestroy {
+    @Input("type") type: string;
     chats: Observable<Chat[]>;
     profilesSub: Subscription[];
     chatSub: Subscription;
     contactSub: Subscription[];
     ngOnInit(): void {
+        console.log(this.type);
         this.profilesSub = [];
         this.contactSub = [];
-        this.chatSub = MeteorObservable.subscribe('chats').subscribe(() => {
+        this.chatSub = MeteorObservable.subscribe('chats',this.type).subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.chats = this.findChats();
             });
