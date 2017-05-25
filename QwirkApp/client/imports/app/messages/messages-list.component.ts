@@ -95,8 +95,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                     return Object.keys(groupedMessages).map((timestamp: string) => {
                         return {
                             timestamp: timestamp,
-                            messages: groupedMessages[timestamp],
-                            today: Moment().format(dateFormat) === timestamp
+                            messages: groupedMessages[timestamp]
                         };
                     });
                 });
