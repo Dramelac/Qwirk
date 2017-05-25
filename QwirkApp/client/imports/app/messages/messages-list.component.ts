@@ -4,6 +4,7 @@ import {MeteorObservable} from "meteor-rxjs";
 import {Chats, Messages} from "../../../../both/collections";
 import {Message, MessageType} from "../../../../both/models/message.model";
 import template from "./messages-list.component.html";
+import style from "./messages-list.component.scss";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Chat} from "../../../../both/models/chat.model";
 import {Profiles} from "../../../../both/collections/profile.collection";
@@ -12,10 +13,12 @@ import * as Autolinker from "autolinker";
 import "jquery";
 import "jquery-ui";
 import * as _ from "underscore";
+import {Observable, Subscriber} from "rxjs";
 
 @Component({
     selector: 'messages-list',
-    template
+    template,
+    styles: [style]
 })
 export class MessagesListComponent implements OnInit, OnDestroy{
     chatId: string;
@@ -26,6 +29,8 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     distantUserId: string;
 
     autoScroller: MutationObserver;
+    messageLazyLoadingLevel: number = 0;
+    loadingMessage: boolean;
 
     constructor(private route: ActivatedRoute, private router: Router){}
 
@@ -38,6 +43,20 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
                 Meteor.subscribe("files", this.chatId);
                 this.messageSubscribe();
+
+                MeteorObservable.call('countMessages', this.chatId).subscribe((messagesCount: number) => {
+                    Observable
+                    // Chain every scroll event
+                        .fromEvent(document.getElementById("ChatList"), 'scroll')
+                        // Remove the scroll listener once all messages have been fetched
+                        .takeUntil(this.autoRemoveScrollListener(messagesCount))
+                        // Filter event handling unless we're at the top of the page
+                        .filter(() => !document.getElementById("ChatList").scrollTop)
+                        // Prohibit parallel subscriptions
+                        .filter(() => !this.loadingMessage)
+                        // Invoke the messages subscription once all the requirements have been met
+                        .forEach(() => this.messageSubscribe());
+                });
             });
     }
 
@@ -47,10 +66,11 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     }
 
     messageSubscribe(){
+        this.loadingMessage = true;
         if (this.messagesSub){
             this.messagesSub.unsubscribe();
         }
-        this.messagesSub = MeteorObservable.subscribe('messages', this.chatId).subscribe();
+        this.messagesSub = MeteorObservable.subscribe('messages', this.chatId, ++this.messageLazyLoadingLevel).subscribe();
         MeteorObservable.subscribe('chats').subscribe(()=>{
             MeteorObservable.autorun().subscribe(() => {
 
@@ -99,6 +119,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                         };
                     });
                 });
+                this.loadingMessage = false;
 
             });
 
@@ -106,7 +127,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     }
 
     autoScroll(): MutationObserver {
-        const autoScroller = new MutationObserver(MessagesListComponent.scrollDown.bind(this));
+        const autoScroller = new MutationObserver(this.scrollDown.bind(this));
 
         autoScroller.observe(document.getElementById("ChatList"), {
             childList: true,
@@ -116,9 +137,35 @@ export class MessagesListComponent implements OnInit, OnDestroy{
         return autoScroller;
     }
 
-    static scrollDown(): void {
-        let element = document.getElementsByTagName("body")[0];
-        element.scrollTop = element.scrollHeight;
+    autoRemoveScrollListener<T>(messagesCount: number): Observable<T> {
+        console.log("batchcount:", this.messageLazyLoadingLevel);
+        return Observable.create((observer: Subscriber<T>) => {
+            Messages.find({chatId:this.chatId}).subscribe({
+                next: (messages) => {
+                    // Once all messages have been fetched
+                    if (messagesCount !== messages.length) {
+                        return;
+                    }
+
+                    // Signal to stop listening to the scroll event
+                    observer.next();
+
+                    // Finish the observation to prevent unnecessary calculations
+                    observer.complete();
+                },
+                error: (e) => {
+                    observer.error(e);
+                }
+            });
+        });
+    }
+
+
+    scrollDown(): void {
+        if (!this.loadingMessage){
+            let element = document.getElementById("ChatList");
+            element.scrollTop = element.scrollHeight;
+        }
     }
 
 

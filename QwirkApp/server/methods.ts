@@ -122,8 +122,8 @@ Meteor.methods({
             })
         };
     },
-    countMessages(): number {
-        return Messages.collection.find().count();
+    countMessages(chatId): number {
+        return Messages.collection.find({chatId:chatId}).count();
     },
     searchUser(username: string,friendList: string[]){
         check(Meteor.userId(), nonEmptyString);
