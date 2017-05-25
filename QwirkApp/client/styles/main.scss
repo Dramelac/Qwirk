@@ -40,6 +40,15 @@ body {
 .picture {
   max-width: 48px;
   max-height: 48px;
+  float: left;
+  position: relative;
+  margin: auto;
+  margin-top: 2px;
+}
+
+.info-button-contact{
+  margin-left: 10px;
+  margin-top: 15px;
 }
 
 .emoticon {
@@ -136,6 +145,30 @@ body {
   padding-left: 0;
 
 }
+
+.col-md-7{
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.nom-utilisateur{
+  color: white;
+  font-size: 20px;
+}
+
+.col-md-3{
+  padding-right: 0;
+  padding-left: 0;
+
+}
+.col-md-9{
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+
 .logosignup{
   width: 300px;
   height: 300px;
@@ -144,4 +177,11 @@ body {
 .logo{
   width: 400px;
   height: 400px;
+}
+
+.button-contact{
+  padding-bottom: 15px;
+  width: 95%;
+  height: 60px;
+
 }

@@ -50,22 +50,7 @@
     </div>
 
     <!--logo Qwirk
-    <div style="left:64px;height: 200px;width: 200px;position: absolute;background-color: #e9e9e9; border-right: #d1d1d1 3px solid">
-        <img class="logo" src="favicon.png" >
-    </div>
 
-    <!--nom utilisateur
-    <div style="left:64px;top:200px;height: 40px;width: 200px;position: absolute;background-color: #0baf02; border-right: #0baf02 3px solid">
-        <div *ngIf="!user">
-            <a md-button [routerLink]="['/login']" >Login</a>
-            <a md-button [routerLink]="['/signup']">Sign up</a>
-        </div>
-        <div *ngIf="user">
-            <call-notif></call-notif>
-            <side-menu></side-menu>
-        </div>
-
-    </div>
 
     <!--liste utilisateur/groupe/channel
     <div style="left:64px;top:240px;height: calc(100% - 240px);width: 200px;position: absolute;background-color: magenta; border-right: #d1d1d1 3px solid">
@@ -177,29 +162,79 @@
 -->
 
 
-<div class="container-fluid" >
+<div class="container-fluid" style="overflow:hidden"   >
     <div class="row">
-        <md-toolbar color="primary" >
-            <a routerLink="/" class="toolbar-title">Qwirk</a>
-            <span class="fill-remaining-space"></span>
-            <div *ngIf="!user">
+        <div *ngIf="!user">
+            <md-toolbar color="primary"  >
+                <a routerLink="/" class="toolbar-title" style="padding-left: 15px">Qwirk</a>
+                <span class="fill-remaining-space"></span>
                 <a md-button [routerLink]="['/login']" >Login</a>
                 <a md-button [routerLink]="['/signup']">Sign up</a>
-            </div>
-            <div *ngIf="user">
-                <user-status></user-status>
-                <button md-button (click)="logout()">Logout</button>
-            </div>
-        </md-toolbar>
+            </md-toolbar>
+        </div>
     </div>
-    <div class="row">
-        <div class="col-md-2">
-            <div *ngIf="user">
-                <call-notif></call-notif>
-                <side-menu></side-menu>
+    <div class="row" style="height: 100%"  >
+        <div class="col-md-3" *ngIf="user" style="height: 100%" >
+            <div class="col-md-2" style="height: 100%;background-color: brown">
+
+                <md-sidenav-container class="sidenav-container" style="height: 100%;width: 66px;background-color:#303030">
+                    <button md-button (click)="message.close()" >
+                        <img class="button-sidenav" src="asset/img/home.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button md-button (click)="message.open()"  >
+                        <img class="button-sidenav" src="asset/img/comments.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button md-button (click)="users.close()" >
+                        <img class="button-sidenav" src="asset/img/user.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button md-button (click)="users.open()">
+                        <img class="button-sidenav" src="asset/img/users.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button md-button >
+                        <img class="button-sidenav" src="asset/img/process.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </md-sidenav-container>
+            </div>
+            <div class="col-md-7" style="height:100%;">
+                <div style="height: 200px;width: 100%;text-align: center;background-color: #e9e9e9; border-right: #d1d1d1 3px solid">
+                    <img class="logo" src="favicon.png" >
+
+                </div>
+                <div style="height: 40px;width: 100%;position: relative;background-color: #0baf02; border-right: #0baf02 3px solid;vertical-align: middle">
+                    <button md-button (click)="logout()" style="float: right;">Logout</button>
+                    <user-status ></user-status>
+                </div>
+                <div style="width: 100%;position: relative;background-color: #e9e9e9; border-right: #d1d1d1 3px solid;vertical-align: middle;height: calc(100% - 240px)">
+                    <side-menu ></side-menu>
+                </div>
             </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-3">
+            <div *ngIf="user">
+                <call-notif></call-notif>
+            </div>
+        </div>
+        <div class="col-md-9">
             <!-- Main page -->
             <router-outlet></router-outlet>
         </div>
@@ -207,5 +242,71 @@
     </div>
 
 </div>
+<!--
+<div class="row">
+    <div *ngIf="!user">
+        <md-toolbar color="primary" >
+            <a routerLink="/" class="toolbar-title">Qwirk</a>
+            <span class="fill-remaining-space"></span>
+            <a md-button [routerLink]="['/login']" >Login</a>
+            <a md-button [routerLink]="['/signup']">Sign up</a>
+        </md-toolbar>
+    </div>
+</div>
+<div class="col-md-3">
+    <div *ngIf="user">
+        <div class="row">
+            <div class="col-md-4">
+                <md-sidenav-container class="sidenav-container" style="height: 100%;background-color:#303030;overflow: hidden">
+                    <button md-button (click)="message.close()" >
+                        <img class="button-test" src="asset/img/home.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button md-button (click)="message.open()"  >
+                        <img class="button-test" src="asset/img/comments.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button md-button (click)="users.close()" >
+                        <img class="button-test" src="asset/img/user.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button md-button (click)="users.open()">
+                        <img class="button-test" src="asset/img/users.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button md-button >
+                        <img class="button-test" src="asset/img/process.png" >
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </md-sidenav-container>
+            </div>
+            <div class="col-md-8" *ngIf="user">
+                <user-status></user-status>
+                <button md-button (click)="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <!-- Main page
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+-->
 
 

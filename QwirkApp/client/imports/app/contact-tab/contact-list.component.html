@@ -1,8 +1,7 @@
-<div>
-    <p>Search contact</p>
+<div style="padding: 10px">
     <div>
         <input class="search-bar" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
-        <div *ngIf="query">
+        <div *ngIf="query" style="float: left;background-color: red">
             <button (click)="clearRequest()">X</button>
         </div>
     </div>
@@ -11,19 +10,21 @@
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let contact of (contacts | async)">
             <div [contextMenu]="basicMenu" [contextMenuSubject]="contact">
-                <button [disabled]="contact.isBloqued" (click)="showMessages(contact.chatId)" >
-                    <img *ngIf="contact.profile" [src]="contact.profile.picture" class="picture">
+                <button class="button-contact" [disabled]="contact.isBloqued" (click)="showMessages(contact.chatId)" >
+                    <img class="info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture" class="picture">
                     <div>
-                        <p>{{contact.displayName}}</p>
-                        <status *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
-                        <div *ngIf="!contact.isBloqued">
-                            <button (click)="deleteContact(contact.profile.userId)">X</button>
+                        <p class="info-button-contact" style="float: left">{{contact.displayName}}</p>
+                        <status class="info-button-contact" style="float: left" *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
+                        <div  style="float: right" *ngIf="!contact.isBloqued">
+                            <button class="info-button-contact" (click)="deleteContact(contact.profile.userId)">X</button>
                         </div>
-                        <div *ngIf="contact.isBloqued">
-                            <i>Blocked</i>
+                        <div  *ngIf="contact.isBloqued" style="float: left">
+                            <i class="info-button-contact" >Blocked</i>
                         </div>
                     </div>
                 </button>
+                <br>
+                <br>
             </div>
         </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
