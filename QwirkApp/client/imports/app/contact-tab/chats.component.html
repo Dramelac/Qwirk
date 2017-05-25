@@ -1,7 +1,7 @@
-<h5 *ngIf="type === 'Chats' || type === null">List chats : </h5>
+<h5 *ngIf="type === 'Chats' || !type">List chats : </h5>
 <div *ngIf="type === 'Groups'">
     <h5>List groups :</h5>
-    <button>Create Group</button>
+    <button (click)="createGroup()">Create Group</button>
 </div>
 <div *ngFor="let chat of chats | async">
     <button *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
@@ -9,17 +9,15 @@
         <div>
             <h2 class="chat-title">{{chat.title}}</h2>
 
-            <div *ngIf="chat.lastMessage">
-                <p>
+                <div *ngIf="chat.lastMessage">
+                    <p>
                     <span *ngIf="chat.lastMessage.type == 'text'"
                           [innerHTML]="chat.lastMessage.content | slice:0:32"></span>
-                    <span *ngIf="chat.lastMessage.content.length > 32">...</span>
-                </p>
-                <span class="last-message-timestamp">{{chat.lastMessage.createdAt }}</span>
+                        <span *ngIf="chat.lastMessage.content.length > 32">...</span>
+                    </p>
+                    <span class="last-message-timestamp">{{chat.lastMessage.createdAt }}</span>
+                </div>
             </div>
-        </div>
-        <!--<div>
-            <button (click)="removeChat(chat)">Remove</button>
-        </div>-->
-    </button>
+        </button>
+    </div>
 </div>

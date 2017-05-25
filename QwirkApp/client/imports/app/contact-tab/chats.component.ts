@@ -22,6 +22,9 @@ export class ChatsComponent implements OnInit, OnDestroy {
     chatSub: Subscription;
     contactSub: Subscription[];
     ngOnInit(): void {
+        if(!this.type){
+            this.type = "Chats";
+        }
         console.log(this.type);
         this.profilesSub = [];
         this.contactSub = [];
@@ -47,7 +50,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
     }
 
     findChats(): Observable<Chat[]> {
-        return Chats.find().map(chats => {
+        return Chats.find({type : this.type}).map(chats => {
             chats.forEach(chat => {
                 if (!chat.title && chat.user.length == 2 && chat.admin.length == 0) {
                     const receiverId = chat.user.find(m => m !== Meteor.userId());
@@ -108,17 +111,16 @@ export class ChatsComponent implements OnInit, OnDestroy {
         });
     }
 
-    removeChat(chat: Chat): void {
-        MeteorObservable.call('removeChat', chat._id).subscribe({
-            error: (e: Error) => {
-                if (e) {
-                    console.error(e);
-                }
-            }
-        });
+    showMessages(chat: string): void {
+        if(!this.type || this.type === "Chats"){
+            this.router.navigate(["/chat/" + chat]);
+        }
+        if(this.type === "Groups"){
+            this.router.navigate(["/group/" + chat]);
+        }
     }
 
-    showMessages(chat: string): void {
-        this.router.navigate(["/chat/" + chat]);
+    createGroup() : void {
+        this.router.navigate(["/addGroup"]);
     }
 }

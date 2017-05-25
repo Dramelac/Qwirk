@@ -11,7 +11,6 @@ import {Router} from "@angular/router";
 import {Contacts} from "../../../../both/collections/contact.collection";
 import {Contact} from "../../../../both/models/contact.model";
 import {ContextMenuComponent} from "angular2-contextmenu";
-import {Chats} from "../../../../both/collections/chat.collection";
 
 @Component({
     selector: 'contact-list',
@@ -36,10 +35,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
     currentUserId: string;
     private exist: boolean = false;
 
-    public items = [
-        { name: 'John', otherProperty: 'Foo' },
-        { name: 'Joe', otherProperty: 'Bar' }
-    ];
     @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
     constructor(private zone: NgZone, private router: Router) {
@@ -67,12 +62,10 @@ export class ContactListComponent implements OnInit, OnDestroy {
                 this.profiles = Profiles
                     .find({userId: {$ne: this.currentUserId}});
                 if (this.profiles) {
-                    console.log('profiles : ', this.profiles);
                 } else {
                     console.log('no profile found.');
                 }
                 this.contactsSub = MeteorObservable.subscribe('myContacts').subscribe(() => {
-                    console.log("refresh contact");
                     this.contacts = Contacts.find();
                     if (this.contacts) {
                         this.contacts.subscribe((result: Contact[]) => {
@@ -81,11 +74,9 @@ export class ContactListComponent implements OnInit, OnDestroy {
                                     this.zone.run(() => {
                                         for(let contact of result){
                                             contact.profile = Profiles.findOne({_id : contact.profileId});
-                                            console.log(contact.profile);
                                         }
                                     });
                                 }
-                                console.log("refresh Contact/Profile");
                             });
                         });
                     }
@@ -175,7 +166,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     showProfile(friendId: string):void{
-        console.log("test edit",friendId);
         this.router.navigate(["/profile/" + friendId]);
     }
 
@@ -183,11 +173,9 @@ export class ContactListComponent implements OnInit, OnDestroy {
         if(bool){
             //contact was block
             Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
-            console.log("bloquer");
         }else {
             //unblock contact
             Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
-            console.log("debloquer");
         }
     }
 

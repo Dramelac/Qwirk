@@ -62,7 +62,7 @@ Meteor.methods({
             user: [Meteor.userId(), receiverId],
             admin: [],
             publicly: false,
-            type:"Chat"
+            type:"Chats"
         };
 
         Chats.insert(chat);
@@ -186,7 +186,7 @@ Meteor.methods({
             user: [Meteor.userId(), initiator],
             admin: [],
             publicly: false,
-            type:"chat"
+            type:"Chats"
         };
 
         let chatId = Chats.collection.insert(chat);
