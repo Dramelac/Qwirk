@@ -7,4 +7,5 @@ export interface CallRequest extends CollectionObject {
     peerId: string;
     chatId: string;
     video: boolean;
+    isReject: boolean;
 }

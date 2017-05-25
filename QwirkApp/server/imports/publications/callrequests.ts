@@ -10,3 +10,14 @@ Meteor.publish('callrequest', function(): Mongo.Cursor<CallRequest> {
         targetUserId: this.userId
     });
 });
+
+Meteor.publish('myCallRequest', function(id: string): Mongo.Cursor<CallRequest> {
+    if (!this.userId) {
+        return;
+    }
+
+    return CallRequests.collection.find({
+        ownerUserId: this.userId,
+        _id: id
+    });
+});

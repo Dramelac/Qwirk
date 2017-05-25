@@ -6,14 +6,18 @@
             <button (click)="clearRequest()">X</button>
         </div>
     </div>
+    <friendRequest-list></friendRequest-list>
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
-        <div *ngFor="let profile of (profiles | async)">
-            <button>
-                <img [src]="profile.picture" class="picture">
+        <div *ngFor="let contact of (contacts | async)">
+            <button (click)="showMessages(contact.chatId)" [contextMenu]="basicMenu" [contextMenuSubject]="contact">
+                <img *ngIf="contact.profile" [src]="contact.profile.picture" class="picture">
                 <div>
-                    <p>{{profile.username}}</p>
-                    <p>{{profile.userId}}</p>
+                    <p>{{contact.displayName}}</p>
+                   <status *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
+                    <div>
+                        <button (click)="deleteContact(contact.profile.userId)">X</button>
+                    </div>
                 </div>
             </button>
         </div>
@@ -28,9 +32,22 @@
                 <div>
                     <p>{{profile.username}}</p>
                     <p>{{profile.userId}}</p>
-                    <button (click)="sendFriendRequest()">Add</button>
+                    <div *ngIf="!requestSent(profile.userId)">
+                        <button (click)="sendFriendRequest(profile.userId)">Add</button>
+                    </div>
+                    <div *ngIf="requestSent(profile.userId)">
+                        <p>Envoyée</p>
+                    </div>
                 </div>
             </button>
         </div>
     </div>
+    <context-menu class="angular2-contextmenu">
+        <template contextMenuItem let-item [enabled]="false">
+            <span><button (click)="showProfile(item?.profileId)">Edit Profile</button></span>
+        </template>
+        <template contextMenuItem let-item [enabled]="false">
+            <button (click)="showProfile(item?.profileId)">Bloquer</button>
+        </template>
+    </context-menu>
 </div>

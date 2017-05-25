@@ -6,7 +6,6 @@ export interface Profile extends CollectionObject {
     birthday?: Date;
     firstname?: string;
     lastname?: string;
-    contacts?: string[];
     status?: number;
     username?: string;
     picture?: string;

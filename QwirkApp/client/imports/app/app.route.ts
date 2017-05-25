@@ -16,6 +16,7 @@ export const routes: Route[] = [
     {path: 'recover', component: RecoverComponent},
     {path: 'reset-password/:token', component: ResetPasswordComponent},
     {path: 'verify-email/:token', component: VerifyMailComponent},
+    {path: 'profile/:profileID', component: ProfileComponent},
     {path: 'profile', component: ProfileComponent}
 ];
 
