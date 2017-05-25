@@ -22,6 +22,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     chat: Chat;
     paramsSub: Subscription;
     messages: Observable<Message[]>;
+    messagesDayGroups;
     messagesSub: Subscription;
     distantUserId: string;
 
@@ -37,55 +38,60 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                 this.chatId = chat;
 
                 Meteor.subscribe("files", this.chatId);
+                this.messageSubscribe();
+            });
+    }
 
-                if (this.messagesSub){
-                    this.messagesSub.unsubscribe();
+    ngOnDestroy() {
+        this.autoScroller.disconnect();
+        this.messagesSub.unsubscribe();
+    }
+
+    messageSubscribe(){
+        if (this.messagesSub){
+            this.messagesSub.unsubscribe();
+        }
+        this.messagesSub = MeteorObservable.subscribe('messages', this.chatId).subscribe();
+        MeteorObservable.subscribe('chats').subscribe(()=>{
+            MeteorObservable.autorun().subscribe(() => {
+
+                this.chat = Chats.findOne(this.chatId);
+                if (!this.chat){
+                    this.router.navigate(['/']);
+                    return;
+                }
+                if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
+                    this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
+                    MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
+                        let profile = Profiles.findOne({userId: this.distantUserId});
+                        if (profile) {
+                            this.chat.title = profile.username;
+                            this.chat.picture = profile.picture;
+                            //TODO Add status user
+                        }
+                    });
                 }
 
-                this.messagesSub = MeteorObservable.subscribe('messages', this.chatId).subscribe();
-                MeteorObservable.subscribe('chats').subscribe(()=>{
-                    MeteorObservable.autorun().subscribe(() => {
-
-                        this.chat = Chats.findOne(this.chatId);
-                        if (!this.chat){
-                            this.router.navigate(['/']);
-                            return;
+                this.messages = Messages.find(
+                    {chatId: this.chatId},
+                    {sort: {createdAt: 1}}
+                ).map((messages: Message[]) => {
+                    messages.forEach((message) => {
+                        message.ownership = Meteor.userId() === message.ownerId ? 'mine' : 'other';
+                        message.content = MessagesListComponent.processMessage(message.content);
+                        if (message.type==MessageType.WIZZ &&
+                            Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))){
+                            this.wizz();
                         }
-                        if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
-                            this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
-                            MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
-                                let profile = Profiles.findOne({userId: this.distantUserId});
-                                if (profile) {
-                                    this.chat.title = profile.username;
-                                    this.chat.picture = profile.picture;
-                                    //TODO Add status user
-                                }
-                            });
-                        }
-
-                        this.messages = Messages.find(
-                            {chatId: this.chatId},
-                            {sort: {createdAt: 1}}
-                        ).map((messages: Message[]) => {
-                            messages.forEach((message) => {
-                                message.ownership = Meteor.userId() === message.ownerId ? 'mine' : 'other';
-                                message.content = MessagesListComponent.processMessage(message.content);
-                                if (message.type==MessageType.WIZZ &&
-                                    Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))){
-                                    this.wizz();
-                                }
-
-                                return message;
-                            });
-                            return messages;
-                        });
-
+                        return message;
                     });
 
+                    return messages;
                 });
 
-
             });
+
+        });
     }
 
     autoScroll(): MutationObserver {
@@ -184,10 +190,5 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
     removeMessage(msg: Message): void {
         Messages.remove(msg._id);
-    }
-
-    ngOnDestroy() {
-        this.autoScroller.disconnect();
-        this.messagesSub.unsubscribe();
     }
 }
