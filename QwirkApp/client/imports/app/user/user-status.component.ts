@@ -1,20 +1,25 @@
 import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./user-status.component.html";
+import style from "./user-status.component.scss";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {Profile} from "../../../../both/models/profile.model";
 import {Profiles} from "../../../../both/collections/profile.collection";
 import {MeteorObservable} from "meteor-rxjs";
 import {Subscription} from "rxjs/Subscription";
+import {DisplayProfileImagePipe} from "../shared/display-profile-image.pipe";
 
 @Component({
     selector: "user-status",
-    template
+    template,
+    styles: [style]
 })
 @InjectUser('user')
 export class UserStatusComponent implements OnInit, OnDestroy {
     profile: Profile;
     profilesub: Subscription;
     selectedStatus: number;
+
+    pictureUrl: string;
 
     constructor(private zone: NgZone) {
     }
@@ -32,6 +37,11 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                     this.profile = Profiles.findOne({userId: Meteor.userId()});
                     if (this.profile) {
                         this.selectedStatus = this.profile.status;
+                        MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
+                            MeteorObservable.autorun().subscribe(() => {
+                                this.pictureUrl = (new DisplayProfileImagePipe).transform(this.profile.picture);
+                            });
+                        });
                         //this.status = StatusToString(this.profile.status);
                     } else {
                         console.log("profile not found, debug info :", Meteor.userId(), this.profile, this.profilesub);

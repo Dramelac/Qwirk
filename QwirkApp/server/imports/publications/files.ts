@@ -7,3 +7,11 @@ Meteor.publish('files', function(chatId) {
     //TODO check chatId from user
     return Files.collection.find({chatId: chatId});
 });
+
+Meteor.publish('file', function(fileId) {
+    if (!fileId || !this.userId){
+        return null;
+    }
+
+    return Files.collection.find(fileId);
+});
