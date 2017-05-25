@@ -9,6 +9,8 @@ import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {Profiles} from "../../../../both/collections/profile.collection";
 import {MessagesListComponent} from "../messages/messages-list.component";
+import {Contact} from "../../../../both/models/contact.model";
+import {Contacts} from "../../../../both/collections/contact.collection";
 
 @Component({
     selector: 'chat-list',
@@ -18,9 +20,10 @@ export class ChatsComponent implements OnInit, OnDestroy {
     chats: Observable<Chat[]>;
     profilesSub: Subscription[];
     chatSub: Subscription;
-
+    contactSub: Subscription[];
     ngOnInit(): void {
         this.profilesSub = [];
+        this.contactSub = [];
         this.chatSub = MeteorObservable.subscribe('chats').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.chats = this.findChats();
@@ -31,6 +34,9 @@ export class ChatsComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.chatSub.unsubscribe();
         this.profilesSub.forEach((sub) => {
+            sub.unsubscribe();
+        });
+        this.contactSub.forEach((sub) => {
             sub.unsubscribe();
         });
     }
@@ -47,10 +53,17 @@ export class ChatsComponent implements OnInit, OnDestroy {
                     this.profilesSub.push(MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
                             let profile = Profiles.findOne({userId: receiverId});
-                            if (profile) {
-                                chat.title = profile.username;
-                                chat.picture = profile.picture;
-                            }
+                            this.contactSub.push(MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    let contact = Contacts.findOne({profileId : profile._id});
+                                    if (contact) {
+                                        chat.title = contact.displayName;
+                                        chat.picture = profile.picture;
+                                        chat.blocked = contact.isBloqued;
+                                    }
+                                });
+                            }));
+
                         });
                     }));
                 }
