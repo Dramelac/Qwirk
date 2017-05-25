@@ -25,7 +25,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadingValue();
-        console.log("sub to profile :", Meteor.userId());
+        //console.log("sub to profile :", Meteor.userId());
         this.subAction();
     }
 
@@ -44,7 +44,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                         });
                         //this.status = StatusToString(this.profile.status);
                     } else {
-                        console.log("profile not found, debug info :", Meteor.userId(), this.profile, this.profilesub);
+                        //console.log("profile not found, debug info :", Meteor.userId(), this.profile, this.profilesub);
                         if (Meteor.userId()){
                             console.log("Error loading profile");
                         } else {
@@ -57,7 +57,6 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        console.log("destroy user profile sub");
         this.profilesub.unsubscribe();
     }
 

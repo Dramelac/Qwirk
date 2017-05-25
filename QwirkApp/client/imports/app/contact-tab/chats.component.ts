@@ -62,7 +62,6 @@ export class ChatsComponent implements OnInit, OnDestroy {
                                             chat.picture = "";
                                             MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
                                                 MeteorObservable.autorun().subscribe(() => {
-                                                    console.log("yolo");
                                                     this.zone.run(()=>{
                                                         chat.picture = profile.picture;
                                                     });
