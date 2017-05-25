@@ -1,11 +1,15 @@
 <h4 *ngIf="chat">{{chat.title}}</h4>
 <call-action *ngIf="distantUserId" [userCallingId]="distantUserId" [chatId]="chatId"></call-action>
 <div id="ChatList">
-    <div *ngIf="loadingMessage">Loading older messages ...</div>
+    <div *ngIf="loadingMessage">Loading messages ...</div>
     <div *ngFor="let day of messagesDayGroups | async">
         <div>{{day.timestamp}}</div>
         <div *ngFor="let message of day.messages" >
             <div [class]="'message message-' + message.ownership">
+                <div *ngIf="message.ownerName">
+                    <span>{{message.ownerName}}</span>
+                    <img *ngIf="message.ownerPictureId" [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture" alt="pic">
+                </div>
                 <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
                 <div *ngIf="message.type == 'picture'">
                     <a target="_blank" href="{{message.content | displayMainImage}}">

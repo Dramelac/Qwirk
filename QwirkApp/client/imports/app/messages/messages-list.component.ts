@@ -20,7 +20,7 @@ import {Observable, Subscriber} from "rxjs";
     template,
     styles: [style]
 })
-export class MessagesListComponent implements OnInit, OnDestroy{
+export class MessagesListComponent implements OnInit, OnDestroy {
     chatId: string;
     chat: Chat;
     paramsSub: Subscription;
@@ -32,7 +32,8 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     messageLazyLoadingLevel: number = 0;
     loadingMessage: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router){}
+    constructor(private route: ActivatedRoute, private router: Router) {
+    }
 
     ngOnInit() {
         this.autoScroller = this.autoScroll();
@@ -65,17 +66,17 @@ export class MessagesListComponent implements OnInit, OnDestroy{
         this.messagesSub.unsubscribe();
     }
 
-    messageSubscribe(){
+    messageSubscribe() {
         this.loadingMessage = true;
-        if (this.messagesSub){
+        if (this.messagesSub) {
             this.messagesSub.unsubscribe();
         }
         this.messagesSub = MeteorObservable.subscribe('messages', this.chatId, ++this.messageLazyLoadingLevel).subscribe();
-        MeteorObservable.subscribe('chats').subscribe(()=>{
+        MeteorObservable.subscribe('chats').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
 
                 this.chat = Chats.findOne(this.chatId);
-                if (!this.chat){
+                if (!this.chat) {
                     this.router.navigate(['/']);
                     return;
                 }
@@ -96,10 +97,26 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                     {sort: {createdAt: 1}}
                 ).map((messages: Message[]) => {
                     messages.forEach((message) => {
-                        message.ownership = Meteor.userId() === message.ownerId ? 'mine' : 'other';
+                        if (Meteor.userId() === message.ownerId) {
+                            message.ownership = 'mine';
+                        } else {
+                            message.ownership = 'other';
+                            MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
+                                let profile = Profiles.findOne({userId: message.ownerId});
+                                if (profile) {
+                                    MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                                        MeteorObservable.autorun().subscribe(() => {
+                                            message.ownerPictureId = profile.picture;
+                                        });
+                                    });
+                                    //TODO update to contact name
+                                    message.ownerName = profile.username;
+                                }
+                            });
+                        }
                         message.content = MessagesListComponent.processMessage(message.content);
-                        if (message.type==MessageType.WIZZ &&
-                            Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))){
+                        if (message.type == MessageType.WIZZ &&
+                            Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))) {
                             this.wizz();
                         }
                         return message;
@@ -139,7 +156,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
     autoRemoveScrollListener<T>(messagesCount: number): Observable<T> {
         return Observable.create((observer: Subscriber<T>) => {
-            Messages.find({chatId:this.chatId}).subscribe({
+            Messages.find({chatId: this.chatId}).subscribe({
                 next: (messages) => {
                     // Once all messages have been fetched
                     if (messagesCount !== messages.length) {
@@ -161,31 +178,31 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
 
     scrollDown(): void {
-        if (!this.loadingMessage){
+        if (!this.loadingMessage) {
             let element = document.getElementById("ChatList");
             element.scrollTop = element.scrollHeight;
         }
     }
 
 
-    wizz(){
-        $("body").effect("shake", {times:4,distance:25, direction:"left"});
+    wizz() {
+        $("body").effect("shake", {times: 4, distance: 25, direction: "left"});
         let audio = new Audio("/asset/wizz.wav");
         audio.play();
     }
 
-    static processMessage(msg: string): string{
+    static processMessage(msg: string): string {
         //console.log("before :", msg);
         msg = MessagesListComponent.processEmoji(msg);
 
         // italic
-        msg = msg.replace(/\\([^\\]+)\\/g,"<i>$1</i>");
+        msg = msg.replace(/\\([^\\]+)\\/g, "<i>$1</i>");
         // bold
-        msg = msg.replace(/\*([^*]+)\*/g,"<b>$1</b>");
+        msg = msg.replace(/\*([^*]+)\*/g, "<b>$1</b>");
         // underline
-        msg = msg.replace(/_([^_]+)_/g,"<u>$1</u>");
+        msg = msg.replace(/_([^_]+)_/g, "<u>$1</u>");
         // strike
-        msg = msg.replace(/~([^~]+)~/g,"<del>$1</del>");
+        msg = msg.replace(/~([^~]+)~/g, "<del>$1</del>");
 
         // url
         msg = Autolinker.link(msg);
@@ -201,45 +218,45 @@ export class MessagesListComponent implements OnInit, OnDestroy{
         //console.log("before :", msg);
 
         //Angel - ():)
-        msg = msg.replace(/\(\):\)/g,"<img src='/emoticon/angel.png' class='emoticon' alt='angel'>");
+        msg = msg.replace(/\(\):\)/g, "<img src='/emoticon/angel.png' class='emoticon' alt='angel'>");
         //Angry - è_é
-        msg = msg.replace(/\(angry\)/g,"<img src='/emoticon/angry-2.png' class='emoticon' alt='angry'>");
+        msg = msg.replace(/\(angry\)/g, "<img src='/emoticon/angry-2.png' class='emoticon' alt='angry'>");
         //Confused - :S / :s
-        msg = msg.replace(/:-?[Ss]/g,"<img src='/emoticon/confused-3.png' class='emoticon' alt='confused'>");
+        msg = msg.replace(/:-?[Ss]/g, "<img src='/emoticon/confused-3.png' class='emoticon' alt='confused'>");
         // :P / :P
-        msg = msg.replace(/:-?[Pp]/g,"<img src='/emoticon/happy-6.png' class='emoticon' alt='happy'>");
+        msg = msg.replace(/:-?[Pp]/g, "<img src='/emoticon/happy-6.png' class='emoticon' alt='happy'>");
         // :) / :-)
-        msg = msg.replace(/:-?\)/g,"<img src='/emoticon/smile.png' class='emoticon' alt='smile'>");
+        msg = msg.replace(/:-?\)/g, "<img src='/emoticon/smile.png' class='emoticon' alt='smile'>");
         // :D / :d
-        msg = msg.replace(/:-?[Dd]/g,"<img src='/emoticon/happy-8.png' class='emoticon' alt='very happy'>");
+        msg = msg.replace(/:-?[Dd]/g, "<img src='/emoticon/happy-8.png' class='emoticon' alt='very happy'>");
         // ^^ ^_^
-        msg = msg.replace(/\^_?\^/g,"<img src='/emoticon/happy-9.png' class='emoticon' alt='very happy'>");
+        msg = msg.replace(/\^_?\^/g, "<img src='/emoticon/happy-9.png' class='emoticon' alt='very happy'>");
         // :* :-*
-        msg = msg.replace(/:-?\*/g,"<img src='/emoticon/kiss-1.png' class='emoticon' alt='kiss'>");
+        msg = msg.replace(/:-?\*/g, "<img src='/emoticon/kiss-1.png' class='emoticon' alt='kiss'>");
         // xD XD xd
-        msg = msg.replace(/[xX]-?[dD]/g,"<img src='/emoticon/laughing-1.png' class='emoticon' alt='laughing'>");
+        msg = msg.replace(/[xX]-?[dD]/g, "<img src='/emoticon/laughing-1.png' class='emoticon' alt='laughing'>");
         // :( :-(
-        msg = msg.replace(/:-?\(/g,"<img src='/emoticon/sad-1.png' class='emoticon' alt='sad'>");
+        msg = msg.replace(/:-?\(/g, "<img src='/emoticon/sad-1.png' class='emoticon' alt='sad'>");
         // ;( ;-( :'-(
-        msg = msg.replace(/(;|:')-?\(/g,"<img src='/emoticon/sad-3.png' class='emoticon' alt='cry'>");
+        msg = msg.replace(/(;|:')-?\(/g, "<img src='/emoticon/sad-3.png' class='emoticon' alt='cry'>");
         // :/ :-/
-        msg = msg.replace(/:-?\/(?!\/)/g,"<img src='/emoticon/sceptic-4.png' class='emoticon' alt='sceptic'>");
+        msg = msg.replace(/:-?\/(?!\/)/g, "<img src='/emoticon/sceptic-4.png' class='emoticon' alt='sceptic'>");
         // -_-
-        msg = msg.replace(/-_-/g,"<img src='/emoticon/sceptic-5.png' class='emoticon' alt='sceptic'>");
+        msg = msg.replace(/-_-/g, "<img src='/emoticon/sceptic-5.png' class='emoticon' alt='sceptic'>");
         // :X :x
-        msg = msg.replace(/:-?[Xx]/g,"<img src='/emoticon/secret.png' class='emoticon' alt='secret'>");
+        msg = msg.replace(/:-?[Xx]/g, "<img src='/emoticon/secret.png' class='emoticon' alt='secret'>");
         // :O :o
-        msg = msg.replace(/:-?[Oo]/g,"<img src='/emoticon/shocked-2.png' class='emoticon' alt='shocked'>");
+        msg = msg.replace(/:-?[Oo]/g, "<img src='/emoticon/shocked-2.png' class='emoticon' alt='shocked'>");
         // XO Xo xo xO
-        msg = msg.replace(/[Xx][Oo]/g,"<img src='/emoticon/shocked-3.png' class='emoticon' alt='shocked'>");
+        msg = msg.replace(/[Xx][Oo]/g, "<img src='/emoticon/shocked-3.png' class='emoticon' alt='shocked'>");
         // XS xs
-        msg = msg.replace(/[Xx][Ss]/g,"<img src='/emoticon/sick-2.png' class='emoticon' alt='sick'>");
+        msg = msg.replace(/[Xx][Ss]/g, "<img src='/emoticon/sick-2.png' class='emoticon' alt='sick'>");
         // ;) / ;-)
-        msg = msg.replace(/;-?\)/g,"<img src='/emoticon/winking.png' class='emoticon' alt='winking'>");
+        msg = msg.replace(/;-?\)/g, "<img src='/emoticon/winking.png' class='emoticon' alt='winking'>");
         // ;p / ;-P
-        msg = msg.replace(/;-?[Pp]/g,"<img src='/emoticon/wink-1.png' class='emoticon' alt='wink'>");
+        msg = msg.replace(/;-?[Pp]/g, "<img src='/emoticon/wink-1.png' class='emoticon' alt='wink'>");
         // (rich) $_$
-        msg = msg.replace(/(\(rich\)|\$_\$)/g,"<img src='/emoticon/rich.png' class='emoticon' alt='rich'>");
+        msg = msg.replace(/(\(rich\)|\$_\$)/g, "<img src='/emoticon/rich.png' class='emoticon' alt='rich'>");
 
         //console.log("after :", msg);
         return msg;
