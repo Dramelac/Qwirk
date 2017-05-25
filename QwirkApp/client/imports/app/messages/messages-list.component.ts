@@ -106,7 +106,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     }
 
     autoScroll(): MutationObserver {
-        const autoScroller = new MutationObserver(this.scrollDown.bind(this));
+        const autoScroller = new MutationObserver(MessagesListComponent.scrollDown.bind(this));
 
         autoScroller.observe(document.getElementById("ChatList"), {
             childList: true,
@@ -116,7 +116,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
         return autoScroller;
     }
 
-    scrollDown(): void {
+    static scrollDown(): void {
         let element = document.getElementsByTagName("body")[0];
         element.scrollTop = element.scrollHeight;
     }
@@ -199,7 +199,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
         return msg;
     }
 
-    removeMessage(msg: Message): void {
-        Messages.remove(msg._id);
+    removeMessage(msgId: string): void {
+        Messages.remove(msgId);
     }
 }

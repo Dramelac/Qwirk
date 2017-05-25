@@ -22,6 +22,7 @@
                     WIZZZZZZ
                 </div>
                 <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+                <button *ngIf="message.ownership == 'mine'" (click)="removeMessage(message._id)">X</button>
             </div>
         </div>
     </div>
