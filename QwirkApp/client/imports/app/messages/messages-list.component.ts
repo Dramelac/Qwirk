@@ -25,9 +25,12 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     messagesSub: Subscription;
     distantUserId: string;
 
+    autoScroller: MutationObserver;
+
     constructor(private route: ActivatedRoute, private router: Router){}
 
     ngOnInit() {
+        this.autoScroller = this.autoScroll();
         this.paramsSub = this.route.params
             .map(params => params["chatId"])
             .subscribe(chat => {
@@ -74,7 +77,6 @@ export class MessagesListComponent implements OnInit, OnDestroy{
 
                                 return message;
                             });
-                            setTimeout(()=>{this.updateScroll()}, 100);
                             return messages;
                         });
 
@@ -86,12 +88,22 @@ export class MessagesListComponent implements OnInit, OnDestroy{
             });
     }
 
-    updateScroll(){
-        let scrollPage = document.getElementsByTagName("body")[0];
-        if (scrollPage){
-            scrollPage.scrollTop = scrollPage.scrollHeight;
-        }
+    autoScroll(): MutationObserver {
+        const autoScroller = new MutationObserver(this.scrollDown.bind(this));
+
+        autoScroller.observe(document.getElementById("ChatList"), {
+            childList: true,
+            subtree: true
+        });
+
+        return autoScroller;
     }
+
+    scrollDown(): void {
+        let element = document.getElementsByTagName("body")[0];
+        element.scrollTop = element.scrollHeight;
+    }
+
 
     wizz(){
         $("body").effect("shake", {times:4,distance:25, direction:"left"});
@@ -175,6 +187,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     }
 
     ngOnDestroy() {
+        this.autoScroller.disconnect();
         this.messagesSub.unsubscribe();
     }
 }
