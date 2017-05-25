@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
 import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
 import {Chats, Messages} from "../../../../both/collections";
@@ -12,6 +11,7 @@ import * as Moment from "moment";
 import * as Autolinker from "autolinker";
 import "jquery";
 import "jquery-ui";
+import * as _ from "underscore";
 
 @Component({
     selector: 'messages-list',
@@ -21,7 +21,6 @@ export class MessagesListComponent implements OnInit, OnDestroy{
     chatId: string;
     chat: Chat;
     paramsSub: Subscription;
-    messages: Observable<Message[]>;
     messagesDayGroups;
     messagesSub: Subscription;
     distantUserId: string;
@@ -72,7 +71,7 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                     });
                 }
 
-                this.messages = Messages.find(
+                this.messagesDayGroups = Messages.find(
                     {chatId: this.chatId},
                     {sort: {createdAt: 1}}
                 ).map((messages: Message[]) => {
@@ -86,7 +85,20 @@ export class MessagesListComponent implements OnInit, OnDestroy{
                         return message;
                     });
 
-                    return messages;
+                    // create days groups
+                    const dateFormat = 'D MMMM Y';
+                    const groupedMessages = _.groupBy(messages, (message) => {
+                        return Moment(message.createdAt).format(dateFormat);
+                    });
+
+                    // build object by day / messages list
+                    return Object.keys(groupedMessages).map((timestamp: string) => {
+                        return {
+                            timestamp: timestamp,
+                            messages: groupedMessages[timestamp],
+                            today: Moment().format(dateFormat) === timestamp
+                        };
+                    });
                 });
 
             });
