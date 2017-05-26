@@ -21,7 +21,6 @@ export class MessageFormComponent implements OnInit {
         this.addForm = this.formBuilder.group({
             content: ['', Validators.required]
         });
-        console.log("Init message form, isAdmin:", this.chat.isAdmin, "chat type:", this.chat.type);
     }
 
     addMessage(): void {
