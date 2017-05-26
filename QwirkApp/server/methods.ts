@@ -255,11 +255,17 @@ Meteor.methods({
                 break;
             case "ban":
                 //TODO add reason message
-                Chats.update(chat._id,{$pull:{user:targetUserId, admin:targetUserId}});
-                //TODO add ban list
+                Chats.update(chat._id,{
+                    $pull:{
+                        user:targetUserId,
+                        admin:targetUserId
+                    },
+                    $push:{
+                        ban:targetUserId
+                    }});
                 break;
             case "unban":
-                //TODO remove user from ban list
+                Chats.update(chat._id,{$pull:{ban:targetUserId}});
                 break;
             case "promote":
                 Chats.update(chat._id,{$push:{admin:targetUserId}});
