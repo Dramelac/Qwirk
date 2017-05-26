@@ -11,11 +11,13 @@ export class MessageFormComponent implements OnInit {
     addForm: FormGroup;
     @Input('chat') chat: Chat;
 
-    constructor(
-        private formBuilder: FormBuilder
-    ) {}
+    error: string;
+
+    constructor(private formBuilder: FormBuilder) {
+    }
 
     ngOnInit() {
+        this.error = "";
         this.addForm = this.formBuilder.group({
             content: ['', Validators.required]
         });
@@ -23,50 +25,105 @@ export class MessageFormComponent implements OnInit {
     }
 
     addMessage(): void {
-        if (!Meteor.userId()){
+        if (!Meteor.userId()) {
             alert('Please log in to add a message');
             return;
         }
-        if (this.chat.isAdmin && this.chat.type === "Group"){
-            if (this.checkGroupCommand()){
-                return;
+        if (this.addForm.valid) {
+            this.error = "";
+            if (this.chat.isAdmin && this.chat.type === "Groups") {
+                if (this.checkGroupCommand()) {
+                    return;
+                }
             }
-        }
-        if (this.addForm.valid){
-            Meteor.call("addMessage", MessageType.TEXT,this.chat._id, this.addForm.value.content,
+
+            Meteor.call("addMessage", MessageType.TEXT, this.chat._id, this.addForm.value.content,
                 (error, result) => {
-                    if (error){
+                    if (error) {
                         console.error("Error:", error);
                     }
-            });
+                });
             //Messages.insert(Object.assign({}, this.addForm.value, { owner: Meteor.userId() }));
 
             this.addForm.reset();
         }
     }
 
-    checkGroupCommand():boolean{
-        let input = this.addForm.value.content;
+    checkGroupCommand(): boolean {
+        let input: string = this.addForm.value.content;
+        let result: boolean = false;
 
+        //kick for specific time (+resaon)
+        if (/^\/kick( .*)?$/.test(input)) {
+            let arg = input.split(' ');
+            if (arg.length < 3 || !/^\/kick [\S]+ [0-9]+ ?(.*)?$/.test(input)) {
+                this.error = "Error syntax, command : /kick \<user\> \<time second\> [reason]";
+            } else {
+                let regexResult = /^\/kick [\S]+ [0-9]+ ?(.*)?$/.exec(input);
+                let reason: string = regexResult[1];
+                let user: string = arg[1];
+                let time: number = Number(arg[2]);
+                console.log("detect kick user :", user, " , time :", time, " , reason :", reason);
+                this.addForm.reset();
+            }
+            result = true;
+        }
 
+        //ban (+reason)
+        if (/^\/ban( .*)?$/.test(input)) {
+            let arg = input.split(' ');
+            if (arg.length < 2 || !/^\/ban [\S]+ ?(.*)?$/.test(input)) {
+                this.error = "Error syntax, command : /ban \<user\> [reason]";
+            } else {
+                let regexResult = /^\/ban [\S]+ ?(.*)?$/.exec(input);
+                let reason: string = regexResult[1];
+                let user: string = arg[1];
+                let time: number = Number(arg[2]);
+                console.log("detect ban user :", user, " , reason :", reason);
+                this.addForm.reset();
+            }
+            result = true;
+        }
 
-        return false;
+        //unban / promote / demote
+        if (/^\/(promote|demote|unban)( .*)?$/.test(input)) {
+            let arg = input.split(' ');
+            let regexResult = /^\/(promote|demote|unban).*$/.exec(input);
+            let command: string = regexResult[1];
+            if (arg.length < 2 || !/^\/(promote|demote|unban) [\S]+$/.test(input)) {
+                this.error = "Error syntax, command : /" + command + " \<user\>";
+            } else {
+                let user: string = arg[1];
+                console.log("detect ", command, ", user :", user);
+                this.addForm.reset();
+            }
+            result = true;
+        }
+
+        //help
+        if (/^\/help( .*)?$/.test(input)) {
+            this.error = "Command list : /kick /ban /unban /promote /demote";
+            this.addForm.reset();
+            result = true;
+        }
+
+        return result;
     }
 
-    onFileUploaded(file: File){
+    onFileUploaded(file: File) {
         let type = /image\/.*/g.test(file.type) ? MessageType.PICTURE : MessageType.FILE;
         Meteor.call("addMessage", type, this.chat._id, file._id,
             (error, result) => {
-                if (error){
+                if (error) {
                     console.error("Error:", error);
                 }
             });
     }
 
-    sendWizz(){
+    sendWizz() {
         Meteor.call("addMessage", MessageType.WIZZ, this.chat._id, "wizz",
             (error, result) => {
-                if (error){
+                if (error) {
                     console.error("Error:", error);
                 }
             });
