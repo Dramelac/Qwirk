@@ -7,6 +7,11 @@ export const Files = new MongoObservable.Collection<File>('files');
 export const FilesStore = new UploadFS.store.GridFS({
     collection: Files.collection,
     name: 'files',
+    // Apply a filter to restrict file upload
+    filter: new UploadFS.Filter({
+        minSize: 1,
+        maxSize: 50 * (1024 * 1000), // 50MB
+    }),
     permissions: new UploadFS.StorePermissions({
         insert(userId, file) {
             return !file.userId || file.userId === userId;

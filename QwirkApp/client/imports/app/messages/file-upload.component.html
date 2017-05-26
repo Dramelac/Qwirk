@@ -17,4 +17,11 @@
     </div>
 </div>
 
+<div *ngIf="error !== ''">
+    <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
+        <p class="mat-body-1">{{ error }}</p>
+        <button (click)="error=''">X</button>
+    </md-toolbar>
+</div>
+
 <input type="file" class="file-input" (change)="onFileSelectChange()"/>
