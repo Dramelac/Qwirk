@@ -1,4 +1,4 @@
-import { CollectionObject } from './collection-object.model';
+import {CollectionObject} from "./collection-object.model";
 import {Message} from "./message.model";
 
 export interface Chat extends CollectionObject {
@@ -10,4 +10,5 @@ export interface Chat extends CollectionObject {
     lastMessage?: Message;
     blocked?: boolean;
     type:string;
+    isAdmin?:boolean;
 }

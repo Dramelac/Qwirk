@@ -1,13 +1,11 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
-import {Chats, Messages} from "../../../../both/collections";
-import {Message, MessageType} from "../../../../both/models/message.model";
+import {Chats, Messages, Profiles} from "../../../../both/collections";
+import {Chat, Message, MessageType} from "../../../../both/models";
 import template from "./messages-list.component.html";
 import style from "./messages-list.component.scss";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Chat} from "../../../../both/models/chat.model";
-import {Profiles} from "../../../../both/collections/profile.collection";
 import * as Moment from "moment";
 import * as Autolinker from "autolinker";
 import "jquery";
@@ -80,6 +78,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/']);
                     return;
                 }
+                this.chat.isAdmin = _.contains(this.chat.admin, Meteor.userId());
                 if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
                     this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
                     MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {

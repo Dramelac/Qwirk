@@ -32,4 +32,4 @@
         </div>
     </div>
 </div>
-<message-form [chatId]="chatId"></message-form>
+<message-form *ngIf="chat" [chat]="chat"></message-form>

@@ -1,8 +1,7 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import template from "./message-form.component.html";
-import {MessageType} from "../../../../both/models/message.model";
-import {File} from "../../../../both/models";
+import {Chat, File, MessageType} from "../../../../both/models";
 
 @Component({
     selector: 'message-form',
@@ -10,7 +9,7 @@ import {File} from "../../../../both/models";
 })
 export class MessageFormComponent implements OnInit {
     addForm: FormGroup;
-    @Input('chatId') chatId: string;
+    @Input('chat') chat: Chat;
 
     constructor(
         private formBuilder: FormBuilder
@@ -20,6 +19,7 @@ export class MessageFormComponent implements OnInit {
         this.addForm = this.formBuilder.group({
             content: ['', Validators.required]
         });
+        console.log("Init message form, isAdmin:", this.chat.isAdmin, "chat type:", this.chat.type);
     }
 
     addMessage(): void {
@@ -27,8 +27,13 @@ export class MessageFormComponent implements OnInit {
             alert('Please log in to add a message');
             return;
         }
+        if (this.chat.isAdmin && this.chat.type === "Group"){
+            if (this.checkGroupCommand()){
+                return;
+            }
+        }
         if (this.addForm.valid){
-            Meteor.call("addMessage", MessageType.TEXT,this.chatId, this.addForm.value.content,
+            Meteor.call("addMessage", MessageType.TEXT,this.chat._id, this.addForm.value.content,
                 (error, result) => {
                     if (error){
                         console.error("Error:", error);
@@ -40,9 +45,17 @@ export class MessageFormComponent implements OnInit {
         }
     }
 
+    checkGroupCommand():boolean{
+        let input = this.addForm.value.content;
+
+
+
+        return false;
+    }
+
     onFileUploaded(file: File){
         let type = /image\/.*/g.test(file.type) ? MessageType.PICTURE : MessageType.FILE;
-        Meteor.call("addMessage", type, this.chatId, file._id,
+        Meteor.call("addMessage", type, this.chat._id, file._id,
             (error, result) => {
                 if (error){
                     console.error("Error:", error);
@@ -51,7 +64,7 @@ export class MessageFormComponent implements OnInit {
     }
 
     sendWizz(){
-        Meteor.call("addMessage", MessageType.WIZZ, this.chatId, "wizz",
+        Meteor.call("addMessage", MessageType.WIZZ, this.chat._id, "wizz",
             (error, result) => {
                 if (error){
                     console.error("Error:", error);
