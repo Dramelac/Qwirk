@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import template from "./message-form.component.html";
 import {Chat, File, MessageType} from "../../../../both/models";
+import {Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'message-form',
@@ -52,6 +53,12 @@ export class MessageFormComponent implements OnInit {
         let input: string = this.addForm.value.content;
         let result: boolean = false;
 
+        let command: string;
+        let reason: string;
+        let user: string;
+        let time: number;
+        let exec: boolean = false;
+
         //kick for specific time (+resaon)
         if (/^\/kick( .*)?$/.test(input)) {
             let arg = input.split(' ');
@@ -59,11 +66,12 @@ export class MessageFormComponent implements OnInit {
                 this.error = "Error syntax, command : /kick \<user\> \<time second\> [reason]";
             } else {
                 let regexResult = /^\/kick [\S]+ [0-9]+ ?(.*)?$/.exec(input);
-                let reason: string = regexResult[1];
-                let user: string = arg[1];
-                let time: number = Number(arg[2]);
+                command = "kick";
+                reason = regexResult[1];
+                user = arg[1];
+                time = Number(arg[2]);
                 console.log("detect kick user :", user, " , time :", time, " , reason :", reason);
-                this.addForm.reset();
+                exec = true;
             }
             result = true;
         }
@@ -75,11 +83,12 @@ export class MessageFormComponent implements OnInit {
                 this.error = "Error syntax, command : /ban \<user\> [reason]";
             } else {
                 let regexResult = /^\/ban [\S]+ ?(.*)?$/.exec(input);
-                let reason: string = regexResult[1];
-                let user: string = arg[1];
-                let time: number = Number(arg[2]);
+                command = "ban";
+                reason = regexResult[1];
+                user = arg[1];
+                time = Number(arg[2]);
                 console.log("detect ban user :", user, " , reason :", reason);
-                this.addForm.reset();
+                exec = true;
             }
             result = true;
         }
@@ -88,13 +97,13 @@ export class MessageFormComponent implements OnInit {
         if (/^\/(promote|demote|unban)( .*)?$/.test(input)) {
             let arg = input.split(' ');
             let regexResult = /^\/(promote|demote|unban).*$/.exec(input);
-            let command: string = regexResult[1];
+            command = regexResult[1];
             if (arg.length < 2 || !/^\/(promote|demote|unban) [\S]+$/.test(input)) {
                 this.error = "Error syntax, command : /" + command + " \<user\>";
             } else {
-                let user: string = arg[1];
+                user = arg[1];
                 console.log("detect ", command, ", user :", user);
-                this.addForm.reset();
+                exec = true;
             }
             result = true;
         }
@@ -104,6 +113,25 @@ export class MessageFormComponent implements OnInit {
             this.error = "Command list : /kick /ban /unban /promote /demote";
             this.addForm.reset();
             result = true;
+        }
+
+        if (exec) {
+            let targetUser = Profiles.findOne({username:user});
+            if (targetUser){
+                Meteor.call("groupCommand", command, this.chat._id, targetUser.userId, reason, time,
+                    (error, result) => {
+                        if (error) {
+                            console.error("Error:", error);
+                        }
+                        if (result){
+                            console.log("Result command :", result)
+                        }
+                    });
+
+                this.addForm.reset();
+            } else {
+                this.error = "Error, user not found";
+            }
         }
 
         return result;

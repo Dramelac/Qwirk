@@ -1,9 +1,5 @@
-import {MessageType} from "../both/models/message.model";
-import {Status} from "../both/models/status.enum";
-import {Chats, Contacts, Messages, Profiles} from "../both/collections";
-import {Profile} from "../both/models/profile.model";
-import {FriendsRequest} from "../both/collections/friend-request.collection";
-import {Contact} from "../both/models/contact.model";
+import {Contact, MessageType, Profile, Status} from "../both/models";
+import {Chats, Contacts, FriendsRequest, Messages, Profiles} from "../both/collections";
 
 const nonEmptyString = Match.Where((str) => {
     if (str != null) {
@@ -123,9 +119,11 @@ Meteor.methods({
             })
         };
     },
+
     countMessages(chatId): number {
         return Messages.collection.find({chatId:chatId}).count();
     },
+
     searchUser(username: string,friendList: string[]){
         check(Meteor.userId(), nonEmptyString);
         check(username, nonEmptyString);
@@ -133,6 +131,7 @@ Meteor.methods({
         let result = Profiles.find({$and: [{username: {$regex: ".*" + username + ".*"}}, {_id: {$nin: friendList}}, {userId : {$ne :Meteor.userId()}}]});
         return result.fetch();
     },
+
     addFriendRequest(friendId: string){
         if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to send firendRequest');
         check(friendId, nonEmptyString);
@@ -155,6 +154,7 @@ Meteor.methods({
             })
         };
     },
+
     requestExist(friendId: string){
 
         if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to send firendRequest');
@@ -169,6 +169,7 @@ Meteor.methods({
 
 
     },
+
     removeFriendRequest(initiator: string){
         if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to remove firendRequest');
         check(initiator, nonEmptyString);
@@ -180,6 +181,7 @@ Meteor.methods({
             ]
         })
     },
+
     newContact(initiator: string): void{
         //On crée un chat pour les nouveux friendList
         const chat = {
@@ -211,6 +213,7 @@ Meteor.methods({
         Contacts.collection.insert(contactInitiator);
         Meteor.call("removeFriendRequest",initiator);
     },
+
     removeContact(friendId: string){
         //On recupère le contact rattaché a user actuel
         var contacts = Contacts.collection.findOne({$and : [{ownerId : Meteor.userId()}, {friendId: friendId}]});
@@ -220,10 +223,53 @@ Meteor.methods({
         Meteor.call("removeChat",contacts.chatId);
         Contacts.remove({chatId : contacts.chatId});
     },
+
     findContact(friendId:string) : string{
         if (!Meteor.userId()) throw new Meteor.Error('unauthorized', 'User must be logged-in to search in contact');
         if(friendId){
             return Contacts.collection.findOne({$and : [{ownerId : Meteor.userId()},{friendId: friendId}]}).chatId;
         }
+    },
+
+    groupCommand(command:string,groupId:string,targetUserId:string,reason?:string,time?:number){
+        //must be logged in
+        if (!this.userId){
+            return;
+        }
+        //check user admin
+        let chat = Chats.findOne({chatId:groupId, admin:this.userId, type:"Groups"});
+
+        //can't self target
+        if (!chat || this.userId === targetUserId){
+            return;
+        }
+        //can't target group owner
+        if (targetUserId === chat.ownerId){
+            return;
+        }
+
+        //process command
+        switch (command){
+            case "kick":
+                //TODO add kick feature
+                break;
+            case "ban":
+                //TODO add reason message
+                Chats.update(chat._id,{$pull:{user:targetUserId, admin:targetUserId}});
+                //TODO add ban list
+                break;
+            case "unban":
+                //TODO remove user from ban list
+                break;
+            case "promote":
+                Chats.update(chat._id,{$push:{admin:targetUserId}});
+                break;
+            case "demote":
+                Chats.update(chat._id,{$pull:{admin:targetUserId}});
+                break;
+            default:
+                return;
+        }
+        //TODO add info message to group
     }
 });

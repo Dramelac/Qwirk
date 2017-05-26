@@ -11,4 +11,5 @@ export interface Chat extends CollectionObject {
     blocked?: boolean;
     type:string;
     isAdmin?:boolean;
+    ownerId?:string;
 }
