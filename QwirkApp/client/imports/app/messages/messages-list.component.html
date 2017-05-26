@@ -1,24 +1,35 @@
 <h4 *ngIf="chat">{{chat.title}}</h4>
 <call-action *ngIf="distantUserId" [userCallingId]="distantUserId" [chatId]="chatId"></call-action>
-<div *ngFor="let message of messages | async">
-    <div [class]="'message message-' + message.ownership">
-        <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
-        <div *ngIf="message.type == 'picture'">
-            <a target="_blank" href="{{message.content | displayMainImage}}">
-                <span>{{message.content | displayFileName}}</span><br>
-                <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
-            </a>
+<div id="ChatList">
+    <div *ngIf="loadingMessage">Loading messages ...</div>
+    <div *ngFor="let day of messagesDayGroups | async">
+        <div>{{day.timestamp}}</div>
+        <div *ngFor="let message of day.messages" >
+            <div [class]="'message message-' + message.ownership">
+                <div *ngIf="message.ownerName">
+                    <span>{{message.ownerName}}</span>
+                    <img [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture" alt="pic">
+                </div>
+                <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
+                <div *ngIf="message.type == 'picture'">
+                    <a target="_blank" href="{{message.content | displayMainImage}}">
+                        <span>{{message.content | displayFileName}}</span><br>
+                        <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
+                    </a>
+                </div>
+                <div *ngIf="message.type == 'file'" class="file-preview">
+                    File upload<br>
+                    <a target="_blank" href="{{message.content | displayMainImage}}">
+                        <span>{{message.content | displayFileName}}</span>
+                    </a>
+                </div>
+                <div *ngIf="message.type == 'wizz'" class="wizz-message">
+                    WIZZZZZZ
+                </div>
+                <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+                <button *ngIf="message.ownership == 'mine'" (click)="removeMessage(message._id)">X</button>
+            </div>
         </div>
-        <div *ngIf="message.type == 'file'" class="file-preview">
-            File upload<br>
-            <a target="_blank" href="{{message.content | displayMainImage}}">
-                <span>{{message.content | displayFileName}}</span>
-            </a>
-        </div>
-        <div *ngIf="message.type == 'wizz'" class="wizz-message">
-            WIZZZZZZ
-        </div>
-        <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
     </div>
 </div>
 <message-form [chatId]="chatId"></message-form>

@@ -13,5 +13,7 @@ export interface Message extends CollectionObject {
     createdAt?: Date;
     ownerId?: string;
     ownership?: string;
-    type?: MessageType
+    type?: MessageType,
+    ownerName?: string;
+    ownerPictureId?: string;
 }

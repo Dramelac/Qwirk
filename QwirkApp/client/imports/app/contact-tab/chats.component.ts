@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from "@angular/core";
+import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
 import {Chat} from "../../../../both/models/chat.model";
@@ -45,7 +45,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
         });
     }
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private zone: NgZone) {
 
     }
 
@@ -57,16 +57,25 @@ export class ChatsComponent implements OnInit, OnDestroy {
                     this.profilesSub.push(MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
                             let profile = Profiles.findOne({userId: receiverId});
-                            this.contactSub.push(MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
-                                MeteorObservable.autorun().subscribe(() => {
-                                    let contact = Contacts.findOne({profileId : profile._id});
-                                    if (contact) {
-                                        chat.title = contact.displayName;
-                                        chat.picture = profile.picture;
-                                        chat.blocked = contact.isBloqued;
-                                    }
-                                });
-                            }));
+                            if (profile){
+                                this.contactSub.push(MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                                    MeteorObservable.autorun().subscribe(() => {
+                                        let contact = Contacts.findOne({profileId : profile._id});
+                                        if (contact) {
+                                            chat.title = contact.displayName;
+                                            chat.blocked = contact.isBloqued;
+                                            chat.picture = "";
+                                            MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                                                MeteorObservable.autorun().subscribe(() => {
+                                                    this.zone.run(()=>{
+                                                        chat.picture = profile.picture;
+                                                    });
+                                                });
+                                            });
+                                        }
+                                    });
+                                }));
+                            }
 
                         });
                     }));

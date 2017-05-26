@@ -1,4 +1,7 @@
-<a md-button [routerLink]="['/profile']"><span *ngIf="profile.username">{{ profile.username }}</span></a>
+<a md-button [routerLink]="['/profile']">
+    <img [src]="pictureId | displayProfileImage" alt="profile" class="tiny-picture"/>
+    <span *ngIf="profile && profile.username">{{ profile.username }}</span>
+</a>
 <select [(ngModel)]="selectedStatus" (ngModelChange)="updateStatus($event)">
     <option value="0">Invisible</option>
     <option value="1">Online</option>

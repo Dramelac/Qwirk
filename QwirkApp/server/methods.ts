@@ -30,7 +30,7 @@ Meteor.methods({
             lastname: lastname,
             birthday: birthday,
             username: username,
-            picture: "/asset/user.png"
+            picture: ""
         };
         let profileId = Profiles.collection.insert(profil);
         Meteor.users.update(Meteor.userId(), {$set: {"profile.id": profileId}});
@@ -123,8 +123,8 @@ Meteor.methods({
             })
         };
     },
-    countMessages(): number {
-        return Messages.collection.find().count();
+    countMessages(chatId): number {
+        return Messages.collection.find({chatId:chatId}).count();
     },
     searchUser(username: string,friendList: string[]){
         check(Meteor.userId(), nonEmptyString);
