@@ -26,7 +26,9 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.loadingValue();
         //console.log("sub to profile :", Meteor.userId());
-        this.subAction();
+        setTimeout(()=>{
+            this.subAction();
+        },100);
     }
 
     subAction(){
