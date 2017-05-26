@@ -8,7 +8,7 @@
             <div [class]="'message message-' + message.ownership">
                 <div *ngIf="message.ownerName">
                     <span>{{message.ownerName}}</span>
-                    <img *ngIf="message.ownerPictureId" [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture" alt="pic">
+                    <img [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture" alt="pic">
                 </div>
                 <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
                 <div *ngIf="message.type == 'picture'">

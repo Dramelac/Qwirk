@@ -111,6 +111,8 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                                     });
                                     //TODO update to contact name
                                     message.ownerName = profile.username;
+                                } else {
+                                    console.log("Error loading distant profile");
                                 }
                             });
                         }
