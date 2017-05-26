@@ -251,7 +251,20 @@ Meteor.methods({
         //process command
         switch (command){
             case "kick":
-                //TODO add kick feature
+                if(time){
+                    Chats.update(chat._id,{
+                        $pull:{
+                            user:targetUserId,
+                            admin:targetUserId
+                        }});
+                    setTimeout(()=>{
+                        Chats.update(chat._id,{
+                        $push:{
+                            user:targetUserId
+                        }});
+                    },time*1000);
+                }
+                //TODO add reason message
                 break;
             case "ban":
                 //TODO add reason message
