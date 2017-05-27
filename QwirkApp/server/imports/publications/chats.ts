@@ -1,18 +1,15 @@
 import {Chats, Messages} from "../../../both/collections";
-import {Chat, ChatType, Message} from "../../../both/models";
+import {Chat, Message} from "../../../both/models";
 import Cursor = Mongo.Cursor;
 
-Meteor.publishComposite('chats', function(type?: ChatType): PublishCompositeConfig<Chat> {
+Meteor.publishComposite('chats', function(): PublishCompositeConfig<Chat> {
     if (!this.userId) {
         return;
-    }
-    if(!type){
-        type = ChatType.CHAT;
     }
 
     return {
         find: () => {
-            return Chats.collection.find({$and : [{ user: this.userId },{type : type}]});
+            return Chats.collection.find({ user: this.userId });
         },
 
         children: [

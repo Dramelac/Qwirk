@@ -22,10 +22,9 @@ export class ChatsComponent implements OnInit, OnDestroy {
         if(!this.type){
             this.type = ChatType.CHAT;
         }
-        console.log(this.type);
         this.profilesSub = [];
         this.contactSub = [];
-        this.chatSub = MeteorObservable.subscribe('chats',this.type).subscribe(() => {
+        this.chatSub = MeteorObservable.subscribe('chats').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.chats = this.findChats();
             });
