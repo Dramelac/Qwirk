@@ -13,12 +13,14 @@ import {MeteorObservable} from "meteor-rxjs";
 export class CallActionComponent implements OnInit, OnDestroy {
 
     myVideo: SafeUrl;
-    distantVideo: SafeUrl;
+    localStream: MediaStream;
+
     peerId: string;
     peer: PeerJs.Peer;
-    localStream: MediaStream;
     currentCall: PeerJs.MediaConnection;
-    remoteStream: MediaStream;
+
+    distantVideo: SafeUrl[];
+    remoteStream: MediaStream[];
 
     requestListId: string[];
     isCallActive: boolean;
@@ -39,6 +41,8 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.micButton = "Mute";
         this.camButton = "Video";
         this.requestListId = [];
+        this.remoteStream = [];
+        this.distantVideo = [];
 
         Tracker.autorun(() => {
             let callId = Session.get("activeCall");
@@ -120,9 +124,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
             this.currentCall.answer(this.localStream);
 
             this.currentCall.on('stream', (remoteStream) => {
-                this.remoteStream = remoteStream;
+                this.remoteStream.push(remoteStream);
                 this.zone.run(() => {
-                    this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.remoteStream));
+                    this.distantVideo.push(this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream)));
                 });
             });
         });
@@ -161,9 +165,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
             });
             MeteorObservable.subscribe('myCallRequest', this.chat._id).subscribe(() => {
                 MeteorObservable.autorun().subscribe(() => {
-                    this.requestListId.forEach((reqId)=>{
-                        let request:CallRequest = CallRequests.findOne({_id:reqId});
-                        if (request && request.isReject){
+                    this.requestListId.forEach((reqId) => {
+                        let request: CallRequest = CallRequests.findOne({_id: reqId});
+                        if (request && request.isReject) {
                             this.detectReject(reqId);
                         }
                     });
@@ -199,7 +203,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
         }
         this.zone.run(() => {
             this.myVideo = "";
-            this.distantVideo = "";
+            this.distantVideo = [];
             this.peerId = "";
         });
         Session.set("activeCall", null);
@@ -218,9 +222,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
             this.currentCall = this.peer.call(callId, this.localStream);
             this.currentCall.on('stream', (remoteStream) => {
-                this.remoteStream = remoteStream;
+                this.remoteStream.push(remoteStream);
                 this.zone.run(() => {
-                    this.distantVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream));
+                    this.distantVideo.push(this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream)));
                 });
             });
         }
