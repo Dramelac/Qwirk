@@ -24,7 +24,7 @@ export class CallNotifComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.callRequestSub = MeteorObservable.subscribe('callrequest').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
-                this.callRequest = CallRequests.find().map((notifs: CallRequest[]) => {
+                this.callRequest = CallRequests.find({targetUserId:Meteor.userId()}).map((notifs: CallRequest[]) => {
                     notifs.forEach((notif) => {
                         //TODO update username to contact name
                         let profile: Profile = Profiles.findOne({userId:notif.ownerUserId});
