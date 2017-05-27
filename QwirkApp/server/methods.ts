@@ -1,4 +1,4 @@
-import {Contact, MessageType, Profile, Status} from "../both/models";
+import {Chat, ChatType, Contact, MessageType, Profile, Status} from "../both/models";
 import {Chats, Contacts, FriendsRequest, Messages, Profiles} from "../both/collections";
 import * as _ from "underscore";
 
@@ -55,11 +55,11 @@ Meteor.methods({
                 'Chat already exists');
         }
 
-        const chat = {
+        const chat:Chat = {
             user: [Meteor.userId(), receiverId],
             admin: [],
             publicly: false,
-            type: "Chats"
+            type: ChatType.CHAT
         };
 
         Chats.insert(chat);
@@ -186,11 +186,11 @@ Meteor.methods({
 
     newContact(initiator: string): void{
         //On crée un chat pour les nouveux friendList
-        const chat = {
+        const chat:Chat = {
             user: [Meteor.userId(), initiator],
             admin: [],
             publicly: false,
-            type: "Chats"
+            type: ChatType.CHAT
         };
 
         let chatId = Chats.collection.insert(chat);
@@ -239,7 +239,7 @@ Meteor.methods({
             return;
         }
         //load chat
-        let chat = Chats.findOne({chatId: groupId, admin: this.userId, type: "Groups"});
+        let chat = Chats.findOne({chatId: groupId, admin: this.userId, type: ChatType.GROUP});
 
         //check existing chat | can't self target
         if (!chat || this.userId === targetUserId) {

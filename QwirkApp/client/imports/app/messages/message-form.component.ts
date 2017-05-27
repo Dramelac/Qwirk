@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import template from "./message-form.component.html";
-import {Chat, File, MessageType} from "../../../../both/models";
+import {Chat, ChatType, File, MessageType} from "../../../../both/models";
 import {Profiles} from "../../../../both/collections";
 
 @Component({
@@ -31,7 +31,7 @@ export class MessageFormComponent implements OnInit {
         }
         if (this.addForm.valid) {
             this.error = "";
-            if (this.chat.isAdmin && this.chat.type === "Groups") {
+            if (this.chat.isAdmin && this.chat.type === ChatType.GROUP) {
                 if (this.checkGroupCommand()) {
                     return;
                 }

@@ -1,29 +1,26 @@
 import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
-import {Chat} from "../../../../both/models/chat.model";
-import {Chats, Messages} from "../../../../both/collections";
+import {Chat, ChatType, Message} from "../../../../both/models";
+import {Chats, Contacts, Messages, Profiles} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
-import {Message} from "../../../../both/models/message.model";
 import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
-import {Profiles} from "../../../../both/collections/profile.collection";
 import {MessagesListComponent} from "../messages/messages-list.component";
-import {Contacts} from "../../../../both/collections/contact.collection";
 
 @Component({
     selector: 'chat-list',
     template
 })
 export class ChatsComponent implements OnInit, OnDestroy {
-    @Input("type") type: string;
+    @Input("type") type: ChatType;
     chats: Observable<Chat[]>;
     profilesSub: Subscription[];
     chatSub: Subscription;
     contactSub: Subscription[];
     ngOnInit(): void {
         if(!this.type){
-            this.type = "Chats";
+            this.type = ChatType.CHAT;
         }
         console.log(this.type);
         this.profilesSub = [];
@@ -121,10 +118,10 @@ export class ChatsComponent implements OnInit, OnDestroy {
     }
 
     showMessages(chat: string): void {
-        if(!this.type || this.type === "Chats"){
+        if(this.type === ChatType.CHAT){
             this.router.navigate(["/chat/" + chat]);
         }
-        if(this.type === "Groups"){
+        else if(this.type === ChatType.GROUP){
             this.router.navigate(["/group/" + chat]);
         }
     }
