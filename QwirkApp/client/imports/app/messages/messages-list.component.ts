@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
-import {Chats, Messages, Profiles} from "../../../../both/collections";
+import {Chats, Files, Messages, Profiles} from "../../../../both/collections";
 import {Chat, Message, MessageType} from "../../../../both/models";
 import template from "./messages-list.component.html";
 import style from "./messages-list.component.scss";
@@ -263,7 +263,10 @@ export class MessagesListComponent implements OnInit, OnDestroy {
         return msg;
     }
 
-    removeMessage(msgId: string): void {
-        Messages.remove(msgId);
+    removeMessage(msg: Message): void {
+        if (msg.type === MessageType.PICTURE || msg.type === MessageType.FILE){
+            Files.remove({_id:msg.content});
+        }
+        Messages.remove(msg._id);
     }
 }
