@@ -12,12 +12,12 @@ Meteor.publish('callrequest', function(): Mongo.Cursor<CallRequest> {
 });
 
 Meteor.publish('myCallRequest', function(id: string): Mongo.Cursor<CallRequest> {
-    if (!this.userId) {
+    if (!this.userId || !id) {
         return;
     }
 
     return CallRequests.collection.find({
         ownerUserId: this.userId,
-        _id: id
+        chatId: id
     });
 });

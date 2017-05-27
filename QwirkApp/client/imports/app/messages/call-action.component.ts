@@ -2,7 +2,8 @@ import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-action.component.html";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
-import {CallRequests} from "../../../../both/collections/call-request.collection";
+import {CallRequest, Chat} from "../../../../both/models";
+import {CallRequests} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
@@ -19,14 +20,15 @@ export class CallActionComponent implements OnInit, OnDestroy {
     currentCall: PeerJs.MediaConnection;
     remoteStream: MediaStream;
 
-    requestId: string;
+    requestListId: string[];
     isCallActive: boolean;
 
     micButton: string;
     camButton: string;
 
-    @Input("chatId") chatId: string;
-    @Input("userCallingId") userCallingId: string;
+    formId: string;
+
+    @Input("chat") chat: Chat;
 
     constructor(private zone: NgZone, private sanitizer: DomSanitizer) {
     }
@@ -36,6 +38,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.isCallActive = false;
         this.micButton = "Mute";
         this.camButton = "Video";
+        this.requestListId = [];
 
         Tracker.autorun(() => {
             let callId = Session.get("activeCall");
@@ -47,7 +50,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
     checkInputCall() {
         //console.log("checking call");
-        if (Session.equals("activeCall", this.chatId)) {
+        if (Session.equals("activeCall", this.chat._id)) {
             console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callPeerId"));
             this.initPeer(Session.get("callVideo"), () => {
                 this.acceptCall(Session.get("callPeerId"))
@@ -143,28 +146,41 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.initPeer(video);
 
         this.peer.on('open', () => {
-            this.requestId = CallRequests.collection.insert({
-                targetUserId: this.userCallingId,
-                ownerUserId: Meteor.userId(),
-                peerId: this.peerId,
-                chatId: this.chatId,
-                video: video,
-                isReject: false
+            this.chat.user.forEach((userId) => {
+                if (userId !== Meteor.userId()) {
+                    let reqId = CallRequests.collection.insert({
+                        targetUserId: userId,
+                        ownerUserId: Meteor.userId(),
+                        peerId: this.peerId,
+                        chatId: this.chat._id,
+                        video: video,
+                        isReject: false
+                    });
+                    this.requestListId.push(reqId);
+                }
             });
-            MeteorObservable.subscribe('myCallRequest', this.requestId).subscribe(()=>{
+            MeteorObservable.subscribe('myCallRequest', this.chat._id).subscribe(() => {
                 MeteorObservable.autorun().subscribe(() => {
-                    let request = CallRequests.findOne({_id:this.requestId});
-                    if (request && request.isReject){
-                        this.detectReject();
-                    }
+                    this.requestListId.forEach((reqId)=>{
+                        let request:CallRequest = CallRequests.findOne({_id:reqId});
+                        if (request && request.isReject){
+                            this.detectReject(reqId);
+                        }
+                    });
                 })
             });
         });
     }
 
-    detectReject(){
-        CallRequests.remove({_id:this.requestId});
-        this.stopCall();
+    detectReject(reqId: string) {
+        CallRequests.remove({_id: reqId});
+        let index = this.requestListId.indexOf(reqId);
+        if (index >= 0) {
+            this.requestListId.splice(index, 1);
+        }
+        if (this.requestListId.length === 0) {
+            this.stopCall();
+        }
     }
 
     stopCall() {
@@ -191,7 +207,11 @@ export class CallActionComponent implements OnInit, OnDestroy {
         Session.set("callVideo", null);
     }
 
-    acceptCall(callId: string) {
+    acceptCall(callId?: string) {
+        if (!callId) {
+            callId = this.formId;
+            this.initPeer(true);
+        }
         console.log("accept call : ", callId, this.localStream);
         if (callId) {
             this.isCallActive = true;

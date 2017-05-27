@@ -17,3 +17,6 @@
     <button (click)="stopCall()">Stop call</button>
     <span>Debug peerId : {{ peerId }}</span>
 </div>
+
+<input [(ngModel)]="formId" type="text" name="callId"/>
+<button (click)="acceptCall()">Call</button>
