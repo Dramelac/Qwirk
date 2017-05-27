@@ -100,7 +100,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             message.ownership = 'mine';
                         } else {
                             message.ownership = 'other';
-                            MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
+                            MeteorObservable.subscribe('profiles', message.ownerId).subscribe(() => {
                                 let profile = Profiles.findOne({userId: message.ownerId});
                                 if (profile) {
                                     MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
