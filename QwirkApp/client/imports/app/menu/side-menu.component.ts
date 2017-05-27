@@ -10,21 +10,16 @@ import {ChatType} from "../../../../both/models/chat.model";
 export class SideMenuComponent implements OnInit {
 
     selected: number;
-    type:ChatType;
+    typeChat:ChatType = ChatType.CHAT;
+    typeGroup:ChatType = ChatType.GROUP;
 
     constructor() {}
 
     ngOnInit() {
-        this.type = ChatType.CHAT;
         this.selected = 0;
     }
 
     button(value: number): void{
-        if(value === 0){
-            this.type = ChatType.CHAT;
-        }else if(value === 2){
-            this.type = ChatType.GROUP;
-        }
         this.selected = value;
     }
 }
