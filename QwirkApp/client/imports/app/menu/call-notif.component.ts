@@ -24,9 +24,10 @@ export class CallNotifComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.callRequestSub = MeteorObservable.subscribe('callrequest').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
-                this.callRequest = CallRequests.find({targetUserId:Meteor.userId()}).map((notifs: CallRequest[]) => {
+                this.callRequest = CallRequests.find({targetUsersId:Meteor.userId()}).map((notifs: CallRequest[]) => {
                     notifs.forEach((notif) => {
                         //TODO update username to contact name
+                        //TODO update to group name
                         let profile: Profile = Profiles.findOne({userId:notif.ownerUserId});
                         if (profile){
                             notif.ownerName = profile.username;
@@ -45,13 +46,19 @@ export class CallNotifComponent implements OnInit, OnDestroy {
 
     acceptCall(request: CallRequest){
         Session.set("activeCall", request.chatId);
-        Session.set("callPeerId", request.peerId);
+        Session.set("callId", request._id);
         Session.set("callVideo", request.video);
-        CallRequests.remove(request._id);
+        CallRequests.update(request._id, {
+            $pull:{targetUsersId:Meteor.userId()},
+            $push:{onlineUsers:Meteor.userId()}
+        });
         this.router.navigate(['/chat/'+request.chatId]);
     }
 
     refuseCall(request: CallRequest){
-        CallRequests.update(request._id, {$set:{isReject:true}});
+        CallRequests.update(request._id, {
+            $pull:{targetUsersId:Meteor.userId()},
+            $push:{rejectUsers:Meteor.userId()}
+        });
     }
 }

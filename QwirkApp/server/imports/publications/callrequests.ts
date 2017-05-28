@@ -7,7 +7,10 @@ Meteor.publish('callrequest', function(): Mongo.Cursor<CallRequest> {
     }
 
     return CallRequests.collection.find({
-        targetUserId: this.userId
+        $or: [
+            {targetUsersId: this.userId},
+            {onlineUsers: this.userId}
+    ]
     });
 });
 

@@ -1,5 +1,6 @@
 import {MongoObservable} from "meteor-rxjs";
 import {CallRequest} from "../models/call-request.model";
+import * as _ from "underscore";
 
 export const CallRequests = new MongoObservable.Collection<CallRequest>("callrequests");
 
@@ -9,10 +10,11 @@ CallRequests.allow({
         return doc.ownerUserId === userId;
     },
     update: function (userId, doc) {
-        return doc.targetUserId === userId || doc.ownerUserId === userId;
+        //TODO check field update
+        return _.contains(doc.targetUsersId, userId) || _.contains(doc.onlineUsers, userId) || doc.ownerUserId === userId;
     },
     remove: function (userId, doc) {
-        return doc.targetUserId === userId || doc.ownerUserId === userId;
+        return doc.ownerUserId === userId;
     },
 });
 

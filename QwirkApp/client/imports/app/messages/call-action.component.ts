@@ -22,8 +22,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
     distantVideo: SafeUrl[];
     remoteStream: MediaStream[];
 
-    requestListId: string[];
+    requestId: string;
     isCallActive: boolean;
+    isHost:boolean;
 
     micButton: string;
     camButton: string;
@@ -40,9 +41,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.isCallActive = false;
         this.micButton = "Mute";
         this.camButton = "Video";
-        this.requestListId = [];
         this.remoteStream = [];
         this.distantVideo = [];
+        this.isHost = false;
 
         Tracker.autorun(() => {
             let callId = Session.get("activeCall");
@@ -55,9 +56,9 @@ export class CallActionComponent implements OnInit, OnDestroy {
     checkInputCall() {
         //console.log("checking call");
         if (Session.equals("activeCall", this.chat._id)) {
-            console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callPeerId"));
+            console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callId"));
             this.initPeer(Session.get("callVideo"), () => {
-                this.acceptCall(Session.get("callPeerId"))
+                this.acceptCall(Session.get("callId"))
             });
         }
     }
@@ -148,46 +149,52 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
     call(video: boolean): void {
         this.initPeer(video);
+        this.isHost = true;
 
         this.peer.on('open', () => {
-            this.chat.user.forEach((userId) => {
-                if (userId !== Meteor.userId()) {
-                    let reqId = CallRequests.collection.insert({
-                        targetUserId: userId,
-                        ownerUserId: Meteor.userId(),
-                        peerId: this.peerId,
-                        chatId: this.chat._id,
-                        video: video,
-                        isReject: false
-                    });
-                    this.requestListId.push(reqId);
-                }
+            this.requestId = CallRequests.collection.insert({
+                targetUsersId: this.chat.user.filter((u) => {
+                    return u !== Meteor.userId();
+                }),
+                onlineUsers: [Meteor.userId()],
+                rejectUsers: [],
+                ownerUserId: Meteor.userId(),
+                peerId: [this.peerId],
+                chatId: this.chat._id,
+                video: video
             });
+            console.log("Create request:", this.requestId);
             MeteorObservable.subscribe('myCallRequest', this.chat._id).subscribe(() => {
                 MeteorObservable.autorun().subscribe(() => {
-                    this.requestListId.forEach((reqId) => {
-                        let request: CallRequest = CallRequests.findOne({_id: reqId});
-                        if (request && request.isReject) {
-                            this.detectReject(reqId);
-                        }
+                    let request: CallRequest = CallRequests.findOne({
+                        _id: this.requestId,
+                        ownerUserId: Meteor.userId()
                     });
+                    if (request && request.onlineUsers.length === 1 && request.targetUsersId.length === 0) {
+                        this.ownerStopCall();
+                    }
                 })
             });
         });
     }
 
-    detectReject(reqId: string) {
-        CallRequests.remove({_id: reqId});
-        let index = this.requestListId.indexOf(reqId);
-        if (index >= 0) {
-            this.requestListId.splice(index, 1);
-        }
-        if (this.requestListId.length === 0) {
-            this.stopCall();
-        }
+    ownerStopCall() {
+        CallRequests.remove({_id: this.requestId});
+        this.isHost = false;
+        this.stopCall();
     }
 
     stopCall() {
+        if (this.isHost){
+            this.ownerStopCall();
+            return;
+        } else {
+            console.log("End client call",this.requestId);
+            CallRequests.update(this.requestId, {
+                $pull:{onlineUsers:Meteor.userId()},
+                $push:{rejectUsers:Meteor.userId()}
+            });
+        }
         if (this.isCallActive) {
             this.peer.disconnect();
             this.currentCall.close();
@@ -207,20 +214,28 @@ export class CallActionComponent implements OnInit, OnDestroy {
             this.peerId = "";
         });
         Session.set("activeCall", null);
-        Session.set("callPeerId", null);
+        Session.set("callId", null);
         Session.set("callVideo", null);
     }
 
     acceptCall(callId?: string) {
+        let peerId;
         if (!callId) {
-            callId = this.formId;
+            peerId = this.formId;
             this.initPeer(true);
+        }else {
+            let request = CallRequests.findOne(callId);
+            if (!request) return;
+            console.log("call object:", request);
+            this.requestId = request._id;
+            peerId = request.peerId[0];
         }
-        console.log("accept call : ", callId, this.localStream);
-        if (callId) {
+
+        console.log("accept call : ", peerId, this.localStream);
+        if (peerId) {
             this.isCallActive = true;
 
-            this.currentCall = this.peer.call(callId, this.localStream);
+            this.currentCall = this.peer.call(peerId, this.localStream);
             this.currentCall.on('stream', (remoteStream) => {
                 this.remoteStream.push(remoteStream);
                 this.zone.run(() => {
