@@ -22,7 +22,6 @@ CallRequests.allow({
         return false;
     },
     update: function (userId, doc) {
-        //TODO check field update
         return _.contains(doc.targetUsersId, userId) || _.contains(doc.onlineUsers, userId) || doc.ownerUserId === userId;
     },
     remove: function (userId, doc) {
@@ -30,3 +29,8 @@ CallRequests.allow({
     },
 });
 
+CallRequests.deny({
+    update: function (userId, doc, fields, modifier) {
+        return !!fields['ownerUserId'] || !!fields['chatId'] || !!fields['video'];
+    }
+});
