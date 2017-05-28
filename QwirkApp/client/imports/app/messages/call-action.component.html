@@ -7,11 +7,11 @@
     <div *ngIf="!isCallActive">
         <span>Calling ...</span>
     </div>
-    You: <video [src]="myVideo" muted="true" class="myVideo" autoplay></video>
+    You: <video [src]="myVideo" muted="true" class="myVideo" autoplay poster="asset/user.png"></video>
 
     <div *ngIf="isCallActive">
         <div *ngFor="let videoStream of distantVideo">
-            Your friend: <video [src]="videoStream" class="theirVideo" autoplay></video>
+            Your friend: <video [src]="videoStream" class="theirVideo" autoplay poster="asset/user.png"></video>
         </div>
     </div>
     <button (click)="mute()">{{micButton}}</button>
