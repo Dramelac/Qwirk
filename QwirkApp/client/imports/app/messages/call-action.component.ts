@@ -17,14 +17,14 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
     peerId: string;
     peer: PeerJs.Peer;
-    currentCall: PeerJs.MediaConnection;
+    currentCall: PeerJs.MediaConnection[];
 
     distantVideo: SafeUrl[];
     remoteStream: MediaStream[];
 
     requestId: string;
     isCallActive: boolean;
-    isHost:boolean;
+    isHost: boolean;
 
     micButton: string;
     camButton: string;
@@ -43,6 +43,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
         this.camButton = "Video";
         this.remoteStream = [];
         this.distantVideo = [];
+        this.currentCall = [];
         this.isHost = false;
 
         Tracker.autorun(() => {
@@ -57,6 +58,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
         //console.log("checking call");
         if (Session.equals("activeCall", this.chat._id)) {
             console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callId"));
+            this.requestId = Session.get("callId");
             this.initPeer(Session.get("callVideo"), () => {
                 this.acceptCall(Session.get("callId"))
             });
@@ -92,11 +94,6 @@ export class CallActionComponent implements OnInit, OnDestroy {
                 } else {
                     this.camButton = "Hide video"
                 }
-                //console.log("Test callback : ", callback);
-                if (callback) {
-                    //console.log("exec callback");
-                    callback();
-                }
             }, function (error) {
                 console.log(error);
             }
@@ -114,6 +111,15 @@ export class CallActionComponent implements OnInit, OnDestroy {
             this.zone.run(() => {
                 this.peerId = this.peer.id;
             });
+            if (!this.isHost){
+                console.log("Add peer id",this.peer.id);
+                CallRequests.update(this.requestId,{$push:{peerId:this.peer.id}});
+            }
+            //console.log("Test callback : ", callback);
+            if (callback) {
+                //console.log("exec callback");
+                callback();
+            }
         });
 
         // This event: remote peer receives a call
@@ -121,10 +127,10 @@ export class CallActionComponent implements OnInit, OnDestroy {
             console.log("call received");
             this.isCallActive = true;
 
-            this.currentCall = incomingCall;
-            this.currentCall.answer(this.localStream);
+            this.currentCall.push(incomingCall);
+            incomingCall.answer(this.localStream);
 
-            this.currentCall.on('stream', (remoteStream) => {
+            incomingCall.on('stream', (remoteStream) => {
                 this.remoteStream.push(remoteStream);
                 this.zone.run(() => {
                     this.distantVideo.push(this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream)));
@@ -148,8 +154,8 @@ export class CallActionComponent implements OnInit, OnDestroy {
     }
 
     call(video: boolean): void {
-        this.initPeer(video);
         this.isHost = true;
+        this.initPeer(video);
 
         this.peer.on('open', () => {
             this.requestId = CallRequests.collection.insert({
@@ -185,19 +191,21 @@ export class CallActionComponent implements OnInit, OnDestroy {
     }
 
     stopCall() {
-        if (this.isHost){
+        if (this.isHost) {
             this.ownerStopCall();
             return;
         } else {
-            console.log("End client call",this.requestId);
             CallRequests.update(this.requestId, {
-                $pull:{onlineUsers:Meteor.userId()},
-                $push:{rejectUsers:Meteor.userId()}
+                $pull: {onlineUsers: Meteor.userId(),
+                        peerId: this.peerId},
+                $push: {rejectUsers: Meteor.userId()}
             });
         }
         if (this.isCallActive) {
             this.peer.disconnect();
-            this.currentCall.close();
+            this.currentCall.forEach((call) => {
+                call.close();
+            });
             this.isCallActive = false;
         }
         if (this.peer) {
@@ -219,28 +227,32 @@ export class CallActionComponent implements OnInit, OnDestroy {
     }
 
     acceptCall(callId?: string) {
-        let peerId;
+        let peerId: string[] = [];
         if (!callId) {
-            peerId = this.formId;
+            peerId.push(this.formId);
             this.initPeer(true);
-        }else {
+        } else {
             let request = CallRequests.findOne(callId);
             if (!request) return;
-            console.log("call object:", request);
-            this.requestId = request._id;
-            peerId = request.peerId[0];
+            peerId = request.peerId;
+            console.log("Call request calling all peer", request, peerId);
         }
 
-        console.log("accept call : ", peerId, this.localStream);
         if (peerId) {
             this.isCallActive = true;
 
-            this.currentCall = this.peer.call(peerId, this.localStream);
-            this.currentCall.on('stream', (remoteStream) => {
-                this.remoteStream.push(remoteStream);
-                this.zone.run(() => {
-                    this.distantVideo.push(this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream)));
-                });
+            peerId.forEach((id) => {
+                if (id !== this.peerId){
+                    console.log("Calling peer",id);
+                    let currentCall = this.peer.call(id, this.localStream);
+                    currentCall.on('stream', (remoteStream) => {
+                        this.remoteStream.push(remoteStream);
+                        this.zone.run(() => {
+                            this.distantVideo.push(this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream)));
+                        });
+                    });
+                    this.currentCall.push(currentCall);
+                }
             });
         }
     }
