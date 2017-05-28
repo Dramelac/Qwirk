@@ -71,6 +71,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
     }
 
     initPeer(video: boolean, callback = null) {
+        let execCallback = false;
         // get audio/video
         navigator.getUserMedia = ( navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
@@ -94,6 +95,17 @@ export class CallActionComponent implements OnInit, OnDestroy {
                 } else {
                     this.camButton = "Hide video"
                 }
+
+                if (execCallback) {
+                    //console.log("Test callback : ", callback);
+                    if (callback) {
+                        //console.log("exec callback");
+                        callback();
+                    }
+                } else {
+                    execCallback = true;
+                }
+
             }, function (error) {
                 console.log(error);
             }
@@ -111,14 +123,18 @@ export class CallActionComponent implements OnInit, OnDestroy {
             this.zone.run(() => {
                 this.peerId = this.peer.id;
             });
-            if (!this.isHost){
-                console.log("Add peer id",this.peer.id);
-                CallRequests.update(this.requestId,{$push:{peerId:this.peer.id}});
+            if (!this.isHost) {
+                console.log("Add peer id", this.peer.id);
+                CallRequests.update(this.requestId, {$push: {peerId: this.peer.id}});
             }
-            //console.log("Test callback : ", callback);
-            if (callback) {
-                //console.log("exec callback");
-                callback();
+            if (execCallback) {
+                //console.log("Test callback : ", callback);
+                if (callback) {
+                    //console.log("exec callback");
+                    callback();
+                }
+            } else {
+                execCallback = true;
             }
         });
 
@@ -169,7 +185,6 @@ export class CallActionComponent implements OnInit, OnDestroy {
                 chatId: this.chat._id,
                 video: video
             });
-            console.log("Create request:", this.requestId);
             MeteorObservable.subscribe('myCallRequest', this.chat._id).subscribe(() => {
                 MeteorObservable.autorun().subscribe(() => {
                     let request: CallRequest = CallRequests.findOne({
@@ -196,8 +211,10 @@ export class CallActionComponent implements OnInit, OnDestroy {
             return;
         } else {
             CallRequests.update(this.requestId, {
-                $pull: {onlineUsers: Meteor.userId(),
-                        peerId: this.peerId},
+                $pull: {
+                    onlineUsers: Meteor.userId(),
+                    peerId: this.peerId
+                },
                 $push: {rejectUsers: Meteor.userId()}
             });
         }
@@ -235,15 +252,23 @@ export class CallActionComponent implements OnInit, OnDestroy {
             let request = CallRequests.findOne(callId);
             if (!request) return;
             peerId = request.peerId;
-            console.log("Call request calling all peer", request, peerId);
+
+            MeteorObservable.subscribe('callrequest').subscribe(() => {
+                MeteorObservable.autorun().subscribe(() => {
+                    let request: CallRequest = CallRequests.findOne({_id: this.requestId});
+                    if (!request) {
+                        //console.log("End call detected");
+                        this.stopCall();
+                    }
+                })
+            });
         }
 
         if (peerId) {
             this.isCallActive = true;
 
             peerId.forEach((id) => {
-                if (id !== this.peerId){
-                    console.log("Calling peer",id);
+                if (id !== this.peerId) {
                     let currentCall = this.peer.call(id, this.localStream);
                     currentCall.on('stream', (remoteStream) => {
                         this.remoteStream.push(remoteStream);
