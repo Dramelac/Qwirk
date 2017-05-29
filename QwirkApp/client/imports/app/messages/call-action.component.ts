@@ -243,26 +243,21 @@ export class CallActionComponent implements OnInit, OnDestroy {
         Session.set("callVideo", null);
     }
 
-    acceptCall(callId?: string) {
-        let peerId: string[] = [];
-        if (!callId) {
-            peerId.push(this.formId);
-            this.initPeer(true);
-        } else {
-            let request = CallRequests.findOne(callId);
-            if (!request) return;
-            peerId = request.peerId;
+    acceptCall(callId: string) {
+        let peerId: string[];
+        let request = CallRequests.findOne(callId);
+        if (!request) return;
+        peerId = request.peerId;
 
-            MeteorObservable.subscribe('callrequest').subscribe(() => {
-                MeteorObservable.autorun().subscribe(() => {
-                    let request: CallRequest = CallRequests.findOne({_id: this.requestId});
-                    if (!request) {
-                        //console.log("End call detected");
-                        this.stopCall();
-                    }
-                })
-            });
-        }
+        MeteorObservable.subscribe('callrequest').subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                let request: CallRequest = CallRequests.findOne({_id: this.requestId});
+                if (!request) {
+                    //console.log("End call detected");
+                    this.stopCall();
+                }
+            })
+        });
 
         if (peerId) {
             this.isCallActive = true;
