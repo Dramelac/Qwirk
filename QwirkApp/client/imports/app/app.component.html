@@ -1,27 +1,18 @@
-
-
-
-
-
-<div class="container-fluid" style="overflow:hidden"   >
-    <div class="row">
-        <div *ngIf="!user">
-            <qwirk-index></qwirk-index>
-        </div>
+<div class="container-fluid" style="overflow:hidden">
+    <div class="row" *ngIf="!user">
+        <qwirk-index></qwirk-index>
     </div>
-    <div class="row" style="height: 100%"  >
-        <div class="col-md-2" *ngIf="user" style="height: 100%" >
-                    <side-menu ></side-menu>
+
+    <div *ngIf="user">
+        <call-notif></call-notif>
+    </div>
+    <div class="row" style="height: 100%">
+        <div class="col-md-2" *ngIf="user" style="height: 100%">
+            <side-menu></side-menu>
         </div>
         <div class="col-md-10" style="height: 100%">
             <router-outlet></router-outlet>
         </div>
 
-    </div>
-
-    <div class="col-md-3">
-        <div *ngIf="user">
-            <call-notif></call-notif>
-        </div>
     </div>
 </div>
