@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-<file-upload #upload [chatId]="chatId" (onFile)="onFileUploaded($event)"></file-upload>
-=======
 <file-upload #upload [chatId]="chat._id" (onFile)="onFileUploaded($event)"></file-upload>
 <div *ngIf="error !== ''">
     <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
@@ -9,7 +5,6 @@
         <button (click)="error=''">X</button>
     </md-toolbar>
 </div>
->>>>>>> 1e7d18a4c5694c5bc4c41090d3c5ef9391a92fd0
 <form [formGroup]="addForm" (ngSubmit)="addMessage()">
 
     <label>Message
