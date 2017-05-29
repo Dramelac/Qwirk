@@ -2,6 +2,9 @@ import {Component, OnInit} from "@angular/core";
 
 import template from "./side-menu.component.html";
 import {ChatType} from "../../../../both/models/chat.model";
+import {Status} from "../../../../both/models/status.enum";
+import {Profiles} from "../../../../both/collections/profile.collection";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'side-menu',
@@ -13,7 +16,7 @@ export class SideMenuComponent implements OnInit {
     typeChat:ChatType = ChatType.CHAT;
     typeGroup:ChatType = ChatType.GROUP;
 
-    constructor() {}
+    constructor(private router: Router) {}
 
     ngOnInit() {
         this.selected = 0;
@@ -21,5 +24,12 @@ export class SideMenuComponent implements OnInit {
 
     button(value: number): void{
         this.selected = value;
+    }
+
+
+    logout() {
+        Profiles.update(Meteor.user().profile.id, {$set: {status: Status.Offline}});
+        Meteor.logout();
+        this.router.navigate(['/']);
     }
 }

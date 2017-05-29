@@ -180,8 +180,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.profilesSub.unsubscribe();
-        this.friendRequestsSub.unsubscribe();
-        this.contactsSub.unsubscribe();
+        if (this.profilesSub) this.profilesSub.unsubscribe();
+        if (this.friendRequestsSub) this.friendRequestsSub.unsubscribe();
+        if (this.contactsSub) this.contactsSub.unsubscribe();
     }
 }

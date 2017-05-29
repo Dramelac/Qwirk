@@ -1,18 +1,18 @@
-<div class="container-fluid" style="overflow:hidden">
+<div class="container-fluid" >
     <div class="row" *ngIf="!user">
         <qwirk-index></qwirk-index>
     </div>
 
-    <div *ngIf="user">
-        <call-notif></call-notif>
-    </div>
-    <div class="row" style="height: 100%">
-        <div class="col-md-2" *ngIf="user" style="height: 100%">
+    <div class="row div-max" >
+        <div class="col-md-2 div-max" *ngIf="user">
             <side-menu></side-menu>
         </div>
-        <div class="col-md-10" style="height: 100%">
+        <div class="col-md-10 div-max" >
             <router-outlet></router-outlet>
         </div>
+    </div>
 
+    <div *ngIf="user">
+        <call-notif></call-notif>
     </div>
 </div>

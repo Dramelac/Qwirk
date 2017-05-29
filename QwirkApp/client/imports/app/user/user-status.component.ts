@@ -59,7 +59,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.profilesub.unsubscribe();
+        if (this.profilesub) this.profilesub.unsubscribe();
     }
 
 

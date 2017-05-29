@@ -19,11 +19,5 @@ export class AppComponent {
 
     }
 
-    logout() {
-        Profiles.update(Meteor.user().profile.id, {$set: {status: Status.Offline}});
-        Meteor.logout();
-        this.router.navigate(['/']);
-    }
-
 }
 
