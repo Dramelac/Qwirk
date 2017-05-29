@@ -1,4 +1,4 @@
-<a md-button [routerLink]="['/profile']">
+<a md-button >
     <img [src]="pictureId | displayProfileImage" alt="profile" class="tiny-picture"/>
     <span class="nom-utilisateur" *ngIf="profile && profile.username">{{ profile.username }}</span>
 </a>
