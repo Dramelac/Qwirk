@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Subscription} from "rxjs/Subscription";
+import {Observable, Subscription} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
 import {Router} from "@angular/router";
-import {CallRequest, Chat, ChatType, Contact, Profile} from "../../../../both/models";
+import {CallRequest, Chat, ChatType, Contact, Profile, SessionKey} from "../../../../both/models";
 import {CallRequests, Chats, Contacts, Profiles} from "../../../../both/collections";
 import template from "./call-notif.component.html";
 
@@ -51,9 +50,9 @@ export class CallNotifComponent implements OnInit, OnDestroy {
     }
 
     acceptCall(request: CallRequest) {
-        Session.set("activeCall", true);
-        Session.set("callId", request._id);
-        Session.set("callVideo", request.video);
+        Session.set(SessionKey.ActiveCall.toString(), true);
+        Session.set(SessionKey.CallId.toString(), request._id);
+        Session.set(SessionKey.CallVideo.toString(), request.video);
         CallRequests.update(request._id, {
             $pull: {targetUsersId: Meteor.userId()},
             $push: {onlineUsers: Meteor.userId()}

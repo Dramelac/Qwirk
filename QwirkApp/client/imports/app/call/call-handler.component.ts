@@ -2,7 +2,7 @@ import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-handler.component.html";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
-import {CallRequest, Chat} from "../../../../both/models";
+import {CallRequest, Chat, SessionKey} from "../../../../both/models";
 import {CallRequests} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 
@@ -45,7 +45,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.isHost = false;
 
         Tracker.autorun(() => {
-            let isCall = Session.get("activeCall");
+            let isCall = Session.get(SessionKey.ActiveCall.toString());
             //console.log("detect change ! , ", callId);
             this.checkInputCall();
         });
@@ -54,15 +54,19 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
     checkInputCall() {
         //console.log("checking call");
-        if (Session.equals("activeCall", true)) {
-            console.log("activating call", Session.get("activeCall"), Session.get("callVideo"), Session.get("callId"));
-            this.chat = Session.get("launchCall");
-            if (Session.equals("isHost",true)){
-                this.call(Session.get("callVideo"));
+        let video = Session.get(SessionKey.CallVideo.toString());
+        if (Session.equals(SessionKey.ActiveCall.toString(), true)) {
+            console.log("activating call",
+                Session.get(SessionKey.ActiveCall.toString()),
+                "Video:",video,
+                "CallId:", Session.get(SessionKey.CallId.toString()));
+            this.chat = Session.get(SessionKey.LaunchCallChat.toString());
+            if (Session.equals(SessionKey.IsHost.toString(),true)){
+                this.call(video);
             } else {
-                this.requestId = Session.get("callId");
-                this.initPeer(Session.get("callVideo"), () => {
-                    this.acceptCall(Session.get("callId"))
+                this.requestId = Session.get(SessionKey.CallId.toString());
+                this.initPeer(video, () => {
+                    this.acceptCall(Session.get(SessionKey.CallId.toString()))
                 });
             }
         }
@@ -241,9 +245,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             this.distantVideo = [];
             this.peerId = "";
         });
-        Session.set("activeCall", null);
-        Session.set("callId", null);
-        Session.set("callVideo", null);
+        Session.set(SessionKey.ActiveCall.toString(), null);
+        Session.set(SessionKey.CallId.toString(), null);
+        Session.set(SessionKey.CallVideo.toString(), null);
     }
 
     acceptCall(callId: string) {

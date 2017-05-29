@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit, NgZone} from "@angular/core";
 import template from "./call-action.component.html";
-import {Chat} from "../../../../both/models";
+import {Chat, SessionKey} from "../../../../both/models";
 
 @Component({
     selector: 'call-action',
@@ -17,7 +17,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.isCallActive = false;
         Tracker.autorun(() => {
-            let isCall = Session.get("activeCall");
+            let isCall = Session.get(SessionKey.ActiveCall.toString());
             this.zone.run(()=>{
                 this.isCallActive = isCall;
             });
@@ -30,11 +30,11 @@ export class CallActionComponent implements OnInit, OnDestroy {
     }
 
     call(video: boolean): void {
-        Session.set("launchCall", this.chat);
-        Session.set("callWithVideo", video);
-        Session.set("isHost", true);
+        Session.set(SessionKey.LaunchCallChat.toString(), this.chat);
+        Session.set(SessionKey.CallVideo.toString(), video);
+        Session.set(SessionKey.IsHost.toString(), true);
 
-        Session.set("activeCall", true);
+        Session.set(SessionKey.ActiveCall.toString(), true);
     }
 
 }
