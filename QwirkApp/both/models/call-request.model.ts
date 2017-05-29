@@ -1,4 +1,5 @@
 import {CollectionObject} from "./collection-object.model";
+import {SafeUrl} from "@angular/platform-browser";
 
 export interface CallRequest extends CollectionObject {
     targetUsersId: string[];
@@ -14,4 +15,11 @@ export interface PeerUser {
     userId: string;
     profileId: string;
     peerId: string;
+}
+
+export interface CallUser {
+    username: string;
+    pictureId?: string;
+    videoStream?: MediaStreamTrack;
+    videoURL: SafeUrl;
 }

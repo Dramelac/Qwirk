@@ -2,10 +2,9 @@ import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-handler.component.html";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
-import {CallRequest, Chat, SessionKey} from "../../../../both/models";
-import {CallRequests, Chats} from "../../../../both/collections";
+import {CallRequest, CallUser, Chat, PeerUser, SessionKey} from "../../../../both/models";
+import {CallRequests, Chats, Profiles} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
-import {PeerUser} from "../../../../both/models/call-request.model";
 
 @Component({
     selector: 'call-handler',
@@ -20,8 +19,8 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     peer: PeerJs.Peer;
     currentCall: PeerJs.MediaConnection[];
 
-    distantVideo: SafeUrl[];
     remoteStream: MediaStream[];
+    userList: CallUser[];
 
     requestId: string;
     isCallActive: boolean;
@@ -41,7 +40,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.micButton = "Mute";
         this.camButton = "Video";
         this.remoteStream = [];
-        this.distantVideo = [];
+        this.userList = [];
         this.currentCall = [];
         this.isHost = false;
 
@@ -163,11 +162,23 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             this.currentCall.push(incomingCall);
             incomingCall.answer(this.localStream);
 
+            console.log("stream call receive:", incomingCall.peer, incomingCall);
+
+            incomingCall.on('close', () => {
+                console.log("A peer disconnected");
+                //TODO remove old client
+            });
+
             incomingCall.on('stream', (remoteStream) => {
                 this.remoteStream.push(remoteStream);
-                this.zone.run(() => {
-                    this.distantVideo.push(this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream)));
+                let request = CallRequests.findOne({_id: this.requestId, "onlineUsers.peerId": incomingCall.peer});
+                if (!request) return;
+                let user: PeerUser[] = request.onlineUsers.filter((u) => {
+                    return u.peerId === incomingCall.peer;
                 });
+                if (user.length > 0) {
+                    this.addUserList(user[0], remoteStream);
+                }
             });
         });
 
@@ -257,7 +268,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         }
         this.zone.run(() => {
             this.myVideo = "";
-            this.distantVideo = [];
+            this.userList = [];
             this.peerId = "";
         });
         Session.set(SessionKey.ActiveCall.toString(), null);
@@ -290,14 +301,37 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     let currentCall = this.peer.call(user.peerId, this.localStream);
                     currentCall.on('stream', (remoteStream) => {
                         this.remoteStream.push(remoteStream);
-                        this.zone.run(() => {
-                            this.distantVideo.push(this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(remoteStream)));
-                        });
+                        this.addUserList(user, remoteStream);
+
                     });
                     this.currentCall.push(currentCall);
                 }
             });
         }
+    }
+
+    addUserList(user: PeerUser, stream: MediaStream) {
+        let tempUser: CallUser;
+        MeteorObservable.subscribe('profiles', user.userId).subscribe(() => {
+            let profile = Profiles.findOne({_id: user.profileId});
+            if (profile) {
+                //TODO update to contact name
+                tempUser = {
+                    username: profile.username,
+                    videoStream: stream.getVideoTracks().length >= 1 ? stream.getVideoTracks()[0] : null,
+                    videoURL: this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream))
+                }
+                ;
+                MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                    MeteorObservable.autorun().subscribe(() => {
+                        tempUser.pictureId = profile.picture;
+                    });
+                });
+                this.userList.push(tempUser);
+            } else {
+                console.log("Error loading distant profile");
+            }
+        });
     }
 
     mute() {

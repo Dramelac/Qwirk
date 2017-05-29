@@ -6,8 +6,10 @@
     You: <video [src]="myVideo" muted="true" class="myVideo" autoplay poster="asset/user.png"></video>
 
     <div *ngIf="isCallActive">
-        <div *ngFor="let videoStream of distantVideo">
-            Your friend: <video [src]="videoStream" class="theirVideo" autoplay poster="asset/user.png"></video>
+        <div *ngFor="let user of userList">
+            <span>{{user.username}}</span>
+            <video [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL" class="theirVideo" autoplay poster="asset/user.png"></video>
+            <img [src]="user.pictureId | displayProfileImage" alt="user picture" style="max-width: 300px">
         </div>
     </div>
     <button (click)="mute()">{{micButton}}</button>
