@@ -55,6 +55,12 @@ body {
   max-width: 30px;
   max-height: 30px;
 }
+.icone-select{
+  width: 80px;
+  height: 80px;
+  float: left;
+  display:block ;
+}
 
 .picture-thumbs {
   max-width: 200px;
@@ -162,11 +168,18 @@ body {
   padding-left: 0;
 
 }
+.col-md-2{
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
 .col-md-9{
   padding-right: 0;
   padding-left: 0;
 
 }
+
 
 
 .logosignup{
