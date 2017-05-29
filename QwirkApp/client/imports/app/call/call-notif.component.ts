@@ -53,10 +53,6 @@ export class CallNotifComponent implements OnInit, OnDestroy {
         Session.set(SessionKey.ActiveCall.toString(), true);
         Session.set(SessionKey.CallId.toString(), request._id);
         Session.set(SessionKey.CallVideo.toString(), request.video);
-        CallRequests.update(request._id, {
-            $pull: {targetUsersId: Meteor.userId()},
-            $push: {onlineUsers: Meteor.userId()}
-        });
         this.router.navigate(['/chat/' + request.chatId]);
     }
 

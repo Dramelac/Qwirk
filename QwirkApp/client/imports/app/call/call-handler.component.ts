@@ -5,6 +5,7 @@ import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CallRequest, Chat, SessionKey} from "../../../../both/models";
 import {CallRequests, Chats} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
+import {PeerUser} from "../../../../both/models/call-request.model";
 
 @Component({
     selector: 'call-handler',
@@ -58,9 +59,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         if (Session.equals(SessionKey.ActiveCall.toString(), true)) {
             console.log("activating call",
                 Session.get(SessionKey.ActiveCall.toString()),
-                "Video:",video,
+                "Video:", video,
                 "CallId:", Session.get(SessionKey.CallId.toString()));
-            if (Session.equals(SessionKey.IsHost.toString(),true)){
+            if (Session.equals(SessionKey.IsHost.toString(), true)) {
                 this.chat = Session.get(SessionKey.LaunchCallChat.toString());
                 this.call(video);
             } else {
@@ -132,7 +133,16 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             });
             if (!this.isHost) {
                 console.log("Add peer id", this.peer.id);
-                CallRequests.update(this.requestId, {$push: {peerId: this.peer.id}});
+                CallRequests.update(this.requestId, {
+                    $push: {
+                        onlineUsers: {
+                            userId: Meteor.userId(),
+                            profileId: Meteor.user().profile.id,
+                            peerId: this.peer.id
+                        }
+                    },
+                    $pull: {targetUsersId: Meteor.userId()}
+                });
             }
             if (execCallback) {
                 //console.log("Test callback : ", callback);
@@ -186,10 +196,13 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 targetUsersId: this.chat.user.filter((u) => {
                     return u !== Meteor.userId();
                 }),
-                onlineUsers: [Meteor.userId()],
+                onlineUsers: [{
+                    userId: Meteor.userId(),
+                    profileId: Meteor.user().profile.id,
+                    peerId: this.peer.id
+                }],
                 rejectUsers: [],
                 ownerUserId: Meteor.userId(),
-                peerId: [this.peerId],
                 chatId: this.chat._id,
                 video: video
             });
@@ -220,8 +233,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         } else {
             CallRequests.update(this.requestId, {
                 $pull: {
-                    onlineUsers: Meteor.userId(),
-                    peerId: this.peerId
+                    onlineUsers: {
+                        userId: Meteor.userId()
+                    }
                 },
                 $push: {rejectUsers: Meteor.userId()}
             });
@@ -252,11 +266,11 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     }
 
     acceptCall(callId: string) {
-        let peerId: string[];
+        let onlineUsers: PeerUser[];
         let request = CallRequests.findOne(callId);
         if (!request) return;
-        peerId = request.peerId;
-        this.chat = Chats.findOne({_id:request.chatId});
+        onlineUsers = request.onlineUsers;
+        this.chat = Chats.findOne({_id: request.chatId});
 
         MeteorObservable.subscribe('callrequest').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
@@ -268,12 +282,12 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             })
         });
 
-        if (peerId) {
+        if (onlineUsers) {
             this.isCallActive = true;
 
-            peerId.forEach((id) => {
-                if (id !== this.peerId) {
-                    let currentCall = this.peer.call(id, this.localStream);
+            onlineUsers.forEach((user) => {
+                if (user.peerId !== this.peerId) {
+                    let currentCall = this.peer.call(user.peerId, this.localStream);
                     currentCall.on('stream', (remoteStream) => {
                         this.remoteStream.push(remoteStream);
                         this.zone.run(() => {

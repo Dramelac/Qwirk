@@ -9,7 +9,7 @@ CallRequests.allow({
     insert: function (userId, doc) {
         if (doc.rejectUsers.length !== 0 ||
             doc.onlineUsers.length > 1 ||
-            doc.onlineUsers[0] !== userId){
+            doc.onlineUsers[0].userId !== userId){
             return false;
         }
         let chat = Chats.findOne({_id:doc.chatId,user:userId});
@@ -21,8 +21,11 @@ CallRequests.allow({
         }
         return false;
     },
-    update: function (userId, doc) {
-        return _.contains(doc.targetUsersId, userId) || _.contains(doc.onlineUsers, userId) || doc.ownerUserId === userId;
+    update: function (userId, doc, fields, modifier) {
+        return _.contains(doc.targetUsersId, userId) ||
+            _.contains(doc.rejectUsers, userId) ||
+            _.contains(doc.onlineUsers.map((u)=>{return u.userId}), userId) ||
+            doc.ownerUserId === userId;
     },
     remove: function (userId, doc) {
         return doc.ownerUserId === userId;
