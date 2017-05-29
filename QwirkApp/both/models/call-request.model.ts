@@ -22,4 +22,5 @@ export interface CallUser {
     pictureId?: string;
     videoStream?: MediaStreamTrack;
     videoURL: SafeUrl;
+    peerId: string;
 }

@@ -162,11 +162,16 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             this.currentCall.push(incomingCall);
             incomingCall.answer(this.localStream);
 
-            console.log("stream call receive:", incomingCall.peer, incomingCall);
-
             incomingCall.on('close', () => {
                 console.log("A peer disconnected");
-                //TODO remove old client
+                let index = this.userList.indexOf(this.userList.filter((u) => {
+                    return u.peerId === incomingCall.peer;
+                })[0]);
+                if (index >= 0){
+                    this.zone.run(()=>{
+                        this.userList.splice(index,1);
+                    });
+                }
             });
 
             incomingCall.on('stream', (remoteStream) => {
@@ -252,10 +257,10 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             });
         }
         if (this.isCallActive) {
-            this.peer.disconnect();
             this.currentCall.forEach((call) => {
                 call.close();
             });
+            this.peer.disconnect();
             this.isCallActive = false;
         }
         if (this.peer) {
@@ -274,6 +279,8 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         Session.set(SessionKey.ActiveCall.toString(), null);
         Session.set(SessionKey.CallId.toString(), null);
         Session.set(SessionKey.CallVideo.toString(), null);
+        Session.set(SessionKey.LaunchCallChat.toString(), null);
+        Session.set(SessionKey.IsHost.toString(), false);
     }
 
     acceptCall(callId: string) {
@@ -319,15 +326,20 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 tempUser = {
                     username: profile.username,
                     videoStream: stream.getVideoTracks().length >= 1 ? stream.getVideoTracks()[0] : null,
-                    videoURL: this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream))
+                    videoURL: this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream)),
+                    peerId: user.peerId
                 }
                 ;
                 MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
-                        tempUser.pictureId = profile.picture;
+                        this.zone.run(()=>{
+                            tempUser.pictureId = profile.picture;
+                        });
                     });
                 });
-                this.userList.push(tempUser);
+                this.zone.run(()=>{
+                    this.userList.push(tempUser);
+                });
             } else {
                 console.log("Error loading distant profile");
             }
