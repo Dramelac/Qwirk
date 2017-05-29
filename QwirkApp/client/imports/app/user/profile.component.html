@@ -4,7 +4,14 @@
         Profile
     </md-toolbar>
 
-    <div *ngIf="profileForm" layout="column" layout-fill layout-margin layout-padding>
+    <div *ngIf="profileForm && profile" layout="column" layout-fill layout-margin layout-padding>
+
+        <p>Profile picture :
+            <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
+        </p>
+        <file-upload (onFile)="onPictureUpdate($event)"></file-upload>
+
+
         <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
               layout="column" layout-fill layout-padding layout-margin>
 
@@ -12,7 +19,6 @@
             <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name"></md-input-container>
             <md-input-container *ngIf="myProfile"><input mdInput formControlName="firstname" type="text" placeholder="First name"></md-input-container>
             <md-input-container *ngIf="myProfile"><input mdInput formControlName="lastname" type="text" placeholder="Last name"></md-input-container>
-            <md-input-container *ngIf="myProfile"><input mdInput formControlName="picture" type="text" placeholder="Picture"></md-input-container>
             <md-input-container *ngIf="myProfile"><input mdInput formControlName="newPassword" type="password" placeholder="New Password"></md-input-container>
             <md-input-container *ngIf="myProfile"><input mdInput formControlName="confirmPassword" type="password" placeholder="Confirm Password"></md-input-container>
             <md-input-container *ngIf="myProfile"><input mdInput formControlName="oldPassword" type="password" placeholder="Old Password"></md-input-container>
@@ -36,8 +42,6 @@
             </md-toolbar>
         </div>
         <p>Debug UserId : {{ user._id }}</p>
-
-        <md-divider></md-divider>
 
     </div>
     <div *ngIf="!profileForm">

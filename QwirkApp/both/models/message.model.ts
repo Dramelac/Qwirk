@@ -4,7 +4,8 @@ export enum MessageType {
     TEXT = <any>'text',
     PICTURE = <any>'picture',
     FILE = <any>'file',
-    WIZZ = <any>'wizz'
+    WIZZ = <any>'wizz',
+    ANNOUNCE = <any>'announce'
 }
 
 export interface Message extends CollectionObject {
@@ -13,5 +14,7 @@ export interface Message extends CollectionObject {
     createdAt?: Date;
     ownerId?: string;
     ownership?: string;
-    type?: MessageType
+    type?: MessageType,
+    ownerName?: string;
+    ownerPictureId?: string;
 }

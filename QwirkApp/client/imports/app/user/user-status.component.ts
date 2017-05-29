@@ -1,5 +1,6 @@
 import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./user-status.component.html";
+import style from "./user-status.component.scss";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {Profile} from "../../../../both/models/profile.model";
 import {Profiles} from "../../../../both/collections/profile.collection";
@@ -8,7 +9,8 @@ import {Subscription} from "rxjs/Subscription";
 
 @Component({
     selector: "user-status",
-    template
+    template,
+    styles: [style]
 })
 @InjectUser('user')
 export class UserStatusComponent implements OnInit, OnDestroy {
@@ -16,13 +18,17 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     profilesub: Subscription;
     selectedStatus: number;
 
+    pictureId: string;
+
     constructor(private zone: NgZone) {
     }
 
     ngOnInit(): void {
         this.loadingValue();
-        console.log("sub to profile :", Meteor.userId());
-        this.subAction();
+        //console.log("sub to profile :", Meteor.userId());
+        setTimeout(()=>{
+            this.subAction();
+        },100);
     }
 
     subAction(){
@@ -32,9 +38,15 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                     this.profile = Profiles.findOne({userId: Meteor.userId()});
                     if (this.profile) {
                         this.selectedStatus = this.profile.status;
+                        this.pictureId = "";
+                        MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
+                            MeteorObservable.autorun().subscribe(() => {
+                                this.pictureId = this.profile.picture;
+                            });
+                        });
                         //this.status = StatusToString(this.profile.status);
                     } else {
-                        console.log("profile not found, debug info :", Meteor.userId(), this.profile, this.profilesub);
+                        //console.log("profile not found, debug info :", Meteor.userId(), this.profile, this.profilesub);
                         if (Meteor.userId()){
                             console.log("Error loading profile");
                         } else {
@@ -47,7 +59,6 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        console.log("destroy user profile sub");
         this.profilesub.unsubscribe();
     }
 

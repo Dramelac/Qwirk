@@ -19,6 +19,8 @@ export class FileUploadComponent implements OnInit {
     elapsed: string;
     remaining: string;
 
+    error: string;
+
     @Input('chatId') chatId: string;
     @Output() onFile: EventEmitter<File> = new EventEmitter<File>();
 
@@ -26,6 +28,7 @@ export class FileUploadComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.error = "";
         $(document).ready(function () {
             $("body").bind('dragover', function () {
                 $(".modal-file-drop").addClass('modal-file-drop-dragover');
@@ -68,6 +71,7 @@ export class FileUploadComponent implements OnInit {
             .catch((error) => {
                 this.uploading = false;
                 console.log(`Something went wrong!`, error);
+                this.error = error.reason;
             });
     }
 

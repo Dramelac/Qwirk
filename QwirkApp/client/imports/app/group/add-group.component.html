@@ -1,0 +1,18 @@
+<div>
+    <h5>New Group</h5>
+    <!--[formGroup]="addForm" (ngSubmit)="addMessage()"-->
+    <form>
+
+        <label>Group's Name
+            <input placeholder="Title"></input>
+        </label>
+        <label>Contacts
+            <input placeholder="list contacts name" (click)="listContact()"></md-input-container>
+            <select>
+                <option *ngFor="let contact of contacts | async" [value]="contact.displayName">{{x.name}}</option>
+            </select>
+        </label>
+
+        <button type="submit">Create</button>
+    </form>
+</div>

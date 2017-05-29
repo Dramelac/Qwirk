@@ -1,27 +1,27 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
-import {Chat} from "../../../../both/models/chat.model";
-import {Chats, Messages} from "../../../../both/collections";
+import {Chat, ChatType, Message} from "../../../../both/models";
+import {Chats, Contacts, Messages, Profiles} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
-import {Message} from "../../../../both/models/message.model";
 import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
-import {Profiles} from "../../../../both/collections/profile.collection";
 import {MessagesListComponent} from "../messages/messages-list.component";
-import {Contact} from "../../../../both/models/contact.model";
-import {Contacts} from "../../../../both/collections/contact.collection";
 
 @Component({
     selector: 'chat-list',
     template
 })
 export class ChatsComponent implements OnInit, OnDestroy {
+    @Input("type") type: ChatType;
     chats: Observable<Chat[]>;
     profilesSub: Subscription[];
     chatSub: Subscription;
     contactSub: Subscription[];
     ngOnInit(): void {
+        if(!this.type){
+            this.type = ChatType.CHAT;
+        }
         this.profilesSub = [];
         this.contactSub = [];
         this.chatSub = MeteorObservable.subscribe('chats').subscribe(() => {
@@ -41,28 +41,37 @@ export class ChatsComponent implements OnInit, OnDestroy {
         });
     }
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private zone: NgZone) {
 
     }
 
     findChats(): Observable<Chat[]> {
-        return Chats.find().map(chats => {
+        return Chats.find({type : this.type}).map(chats => {
             chats.forEach(chat => {
                 if (!chat.title && chat.user.length == 2 && chat.admin.length == 0) {
                     const receiverId = chat.user.find(m => m !== Meteor.userId());
                     this.profilesSub.push(MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
                             let profile = Profiles.findOne({userId: receiverId});
-                            this.contactSub.push(MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
-                                MeteorObservable.autorun().subscribe(() => {
-                                    let contact = Contacts.findOne({profileId : profile._id});
-                                    if (contact) {
-                                        chat.title = contact.displayName;
-                                        chat.picture = profile.picture;
-                                        chat.blocked = contact.isBloqued;
-                                    }
-                                });
-                            }));
+                            if (profile){
+                                this.contactSub.push(MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                                    MeteorObservable.autorun().subscribe(() => {
+                                        let contact = Contacts.findOne({profileId : profile._id});
+                                        if (contact) {
+                                            chat.title = contact.displayName;
+                                            chat.blocked = contact.isBloqued;
+                                            chat.picture = "";
+                                            MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                                                MeteorObservable.autorun().subscribe(() => {
+                                                    this.zone.run(()=>{
+                                                        chat.picture = profile.picture;
+                                                    });
+                                                });
+                                            });
+                                        }
+                                    });
+                                }));
+                            }
 
                         });
                     }));
@@ -107,17 +116,16 @@ export class ChatsComponent implements OnInit, OnDestroy {
         });
     }
 
-    removeChat(chat: Chat): void {
-        MeteorObservable.call('removeChat', chat._id).subscribe({
-            error: (e: Error) => {
-                if (e) {
-                    console.error(e);
-                }
-            }
-        });
+    showMessages(chat: string): void {
+        if(this.type === ChatType.CHAT){
+            this.router.navigate(["/chat/" + chat]);
+        }
+        else if(this.type === ChatType.GROUP){
+            this.router.navigate(["/group/" + chat]);
+        }
     }
 
-    showMessages(chat: string): void {
-        this.router.navigate(["/chat/" + chat]);
+    createGroup() : void {
+        this.router.navigate(["/addGroup"]);
     }
 }

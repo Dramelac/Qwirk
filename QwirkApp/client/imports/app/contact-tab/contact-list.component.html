@@ -11,7 +11,7 @@
         <div *ngFor="let contact of (contacts | async)">
             <div [contextMenu]="basicMenu" [contextMenuSubject]="contact">
                 <button class="button-contact" [disabled]="contact.isBloqued" (click)="showMessages(contact.chatId)" >
-                    <img class="info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture" class="picture">
+                    <img class="info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture | displayProfileImage" class="picture">
                     <div>
                         <p class="info-button-contact" style="float: left">{{contact.displayName}}</p>
                         <status class="info-button-contact" style="float: left" *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
@@ -34,7 +34,7 @@
     <div *ngIf="profilesFind">
         <div *ngFor="let profile of profilesFind">
             <button>
-                <img [src]="profile.picture" class="picture">
+                <img [src]="profile.picture | displayProfileImage" class="picture">
                 <div>
                     <p>{{profile.username}}</p>
                     <p>{{profile.userId}}</p>

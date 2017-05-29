@@ -7,17 +7,19 @@ export const Files = new MongoObservable.Collection<File>('files');
 export const FilesStore = new UploadFS.store.GridFS({
     collection: Files.collection,
     name: 'files',
+    // Apply a filter to restrict file upload
+    filter: new UploadFS.Filter({
+        minSize: 1,
+        maxSize: 50 * (1024 * 1000), // 50MB
+    }),
     permissions: new UploadFS.StorePermissions({
         insert(userId, file) {
-            // allow anyone to upload a file, but check that uploaded file is attached to the user that uploads the file
             return !file.userId || file.userId === userId;
         },
         remove(userId, file) {
-            // allow anyone to remove public files, but only owners to remove their files
             return !file.userId || userId === file.userId;
         },
         update(userId, file) {
-            // allow anyone to update public files, but only owners to update their files
             return !file.userId || userId === file.userId;
         }
     }),
@@ -25,9 +27,16 @@ export const FilesStore = new UploadFS.store.GridFS({
         //TODO check chatId permission
         if (file.chatId) {
             return true;
+            //response.writeHead(403);
+            //return false;
         } else {
-            response.writeHead(403);
-            return false;
+            return true;
         }
     }
+});
+
+Files.allow({
+    remove: function (userId, doc) {
+        return userId === doc.userId;
+    },
 });

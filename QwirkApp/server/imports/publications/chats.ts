@@ -1,8 +1,6 @@
-import {Chats} from "../../../both/collections/chat.collection";
-import {Chat} from "../../../both/models/chat.model";
+import {Chats, Messages} from "../../../both/collections";
+import {Chat, Message} from "../../../both/models";
 import Cursor = Mongo.Cursor;
-import {Messages} from "../../../both/collections/message.collection";
-import {Message} from "../../../both/models/message.model";
 
 Meteor.publishComposite('chats', function(): PublishCompositeConfig<Chat> {
     if (!this.userId) {
