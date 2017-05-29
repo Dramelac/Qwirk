@@ -3,7 +3,7 @@ import template from "./call-handler.component.html";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CallRequest, Chat, SessionKey} from "../../../../both/models";
-import {CallRequests} from "../../../../both/collections";
+import {CallRequests, Chats} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
@@ -60,8 +60,8 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 Session.get(SessionKey.ActiveCall.toString()),
                 "Video:",video,
                 "CallId:", Session.get(SessionKey.CallId.toString()));
-            this.chat = Session.get(SessionKey.LaunchCallChat.toString());
             if (Session.equals(SessionKey.IsHost.toString(),true)){
+                this.chat = Session.get(SessionKey.LaunchCallChat.toString());
                 this.call(video);
             } else {
                 this.requestId = Session.get(SessionKey.CallId.toString());
@@ -255,6 +255,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         let request = CallRequests.findOne(callId);
         if (!request) return;
         peerId = request.peerId;
+        this.chat = Chats.findOne({_id:request.chatId});
 
         MeteorObservable.subscribe('callrequest').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
