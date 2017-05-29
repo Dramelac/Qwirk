@@ -14,6 +14,8 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
     myVideo: SafeUrl;
     localStream: MediaStream;
+    myVideoStream: MediaStreamTrack;
+    myPicture: string;
 
     peerId: string;
     peer: PeerJs.Peer;
@@ -43,6 +45,17 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.userList = [];
         this.currentCall = [];
         this.isHost = false;
+
+        MeteorObservable.subscribe('profile').subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                let profile = Profiles.findOne({userId:Meteor.userId()});
+                MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                    MeteorObservable.autorun().subscribe(() => {
+                        this.myPicture = profile.picture;
+                    });
+                });
+            });
+        });
 
         Tracker.autorun(() => {
             let isCall = Session.get(SessionKey.ActiveCall.toString());
@@ -102,6 +115,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 } else {
                     this.camButton = "Hide video"
                 }
+                this.myVideoStream = this.localStream.getVideoTracks()[0];
 
                 if (execCallback) {
                     //console.log("Test callback : ", callback);
@@ -167,9 +181,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 let index = this.userList.indexOf(this.userList.filter((u) => {
                     return u.peerId === incomingCall.peer;
                 })[0]);
-                if (index >= 0){
-                    this.zone.run(()=>{
-                        this.userList.splice(index,1);
+                if (index >= 0) {
+                    this.zone.run(() => {
+                        this.userList.splice(index, 1);
                     });
                 }
             });
@@ -332,12 +346,12 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 ;
                 MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
-                        this.zone.run(()=>{
+                        this.zone.run(() => {
                             tempUser.pictureId = profile.picture;
                         });
                     });
                 });
-                this.zone.run(()=>{
+                this.zone.run(() => {
                     this.userList.push(tempUser);
                 });
             } else {
