@@ -29,8 +29,6 @@ export class CallActionComponent implements OnInit, OnDestroy {
     micButton: string;
     camButton: string;
 
-    formId: string;
-
     @Input("chat") chat: Chat;
 
     constructor(private zone: NgZone, private sanitizer: DomSanitizer) {
