@@ -16,9 +16,6 @@
                     <div>
                         <p>{{contact.displayName}}</p>
                         <status *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
-                        <div *ngIf="!contact.isBloqued">
-                            <button (click)="deleteContact(contact.profile.userId)">X</button>
-                        </div>
                         <div *ngIf="contact.isBloqued">
                             <i>Blocked</i>
                         </div>
@@ -32,7 +29,7 @@
     </div>
     <div *ngIf="profilesFind">
         <div *ngFor="let profile of profilesFind">
-            <button>
+            <div>
                 <img [src]="profile.picture | displayProfileImage" class="picture">
                 <div>
                     <p>{{profile.username}}</p>
@@ -44,7 +41,7 @@
                         <p>Envoyée</p>
                     </div>
                 </div>
-            </button>
+            </div>
         </div>
     </div>
     <context-menu class="angular2-contextmenu">
@@ -54,6 +51,11 @@
         <template contextMenuItem let-item [enabled]="false">
             <button *ngIf="!item?.isBloqued" (click)="blockContact(item,true)">Bloquer</button>
             <button *ngIf="item?.isBloqued" (click)="blockContact(item,false)">Debloquer</button>
+        </template>
+        <template contextMenuItem let-item [enabled]="false">
+            <span>
+                <button (click)="deleteContact(item?.profile.userId)">Delete</button>
+            </span>
         </template>
     </context-menu>
 </div>
