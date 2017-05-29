@@ -6,12 +6,7 @@
 <div class="container-fluid" style="overflow:hidden"   >
     <div class="row">
         <div *ngIf="!user">
-            <md-toolbar color="primary"  >
-                <a routerLink="/" class="toolbar-title" style="padding-left: 15px">Qwirk</a>
-                <span class="fill-remaining-space"></span>
-                <a md-button [routerLink]="['/login']" >Login</a>
-                <a md-button [routerLink]="['/signup']">Sign up</a>
-            </md-toolbar>
+            <qwirk-index></qwirk-index>
         </div>
     </div>
     <div class="row" style="height: 100%"  >
