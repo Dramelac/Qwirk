@@ -1,10 +1,13 @@
-<div class="div-color-logout">
+<div class="div-color-logout" *ngIf="!hideIndex">
     <p>Welcome</p>
     <p>to</p>
     <p>Qwirk</p>
     <div >
-        <button md-raised-button class="mat-primary" [routerLink]="['/login']" >Login</button>
-        <button md-raised-button class="mat-primary" [routerLink]="['/signup']">Sign up</button>
+        <button md-raised-button class="mat-primary" (click)="switchState()" [routerLink]="['/login']" >Login</button>
+        <button md-raised-button class="mat-primary" (click)="switchState()" [routerLink]="['/signup']">Sign up</button>
     </div>
 
+</div>
+<div *ngIf="hideIndex">
+    <button md-raised-button class="mat-primary" (click)="switchState()" [routerLink]="['/']">Go back</button>
 </div>
