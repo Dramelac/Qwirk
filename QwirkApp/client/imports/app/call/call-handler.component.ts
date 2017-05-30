@@ -69,17 +69,17 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         //console.log("checking call");
         let video = Session.get(SessionKey.CallVideo.toString());
         if (Session.equals(SessionKey.ActiveCall.toString(), true)) {
-            console.log("activating call",
+            /*console.log("activating call",
                 Session.get(SessionKey.ActiveCall.toString()),
                 "Video:", video,
-                "CallId:", Session.get(SessionKey.CallId.toString()));
+                "CallId:", Session.get(SessionKey.CallId.toString()));*/
             if (Session.equals(SessionKey.IsHost.toString(), true)) {
                 this.chat = Session.get(SessionKey.LaunchCallChat.toString());
                 this.call(video);
             } else {
                 this.requestId = Session.get(SessionKey.CallId.toString());
                 this.initPeer(video, () => {
-                    this.acceptCall(Session.get(SessionKey.CallId.toString()))
+                    this.acceptCall(this.requestId);
                 });
             }
         }
@@ -114,6 +114,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     this.video();
                 } else {
                     this.camButton = "Hide video"
+                }
+                if (this.localStream.getVideoTracks().length === 0){
+                    this.camButton = null;
                 }
                 this.myVideoStream = this.localStream.getVideoTracks()[0];
 

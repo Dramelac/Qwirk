@@ -15,7 +15,7 @@
         </div>
     </div>
     <button (click)="mute()">{{micButton}}</button>
-    <button (click)="video()">{{camButton}}</button>
+    <button *ngIf="camButton" (click)="video()">{{camButton}}</button>
     <button (click)="stopCall()">Stop call</button>
     <a md-button *ngIf="chat" [routerLink]="['/chat/'+chat._id]">Go to chat</a>
 </div>
