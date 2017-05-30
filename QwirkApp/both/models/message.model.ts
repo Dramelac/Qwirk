@@ -18,4 +18,5 @@ export interface Message extends CollectionObject {
     ownerName?: string;
     ownerPictureId?: string;
     readBy: string[];
+    isNew?: boolean;
 }

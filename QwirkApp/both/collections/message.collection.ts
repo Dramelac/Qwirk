@@ -1,8 +1,7 @@
 import {MongoObservable} from "meteor-rxjs";
 import {Message} from "../models/message.model";
-import * as _ from "underscore";
 import {Chats} from "./chat.collection";
-import {check} from "angular2-meteor/dist/utils";
+import * as _ from "underscore";
 
 export const Messages = new MongoObservable.Collection<Message>("messages");
 

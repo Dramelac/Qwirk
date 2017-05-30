@@ -120,6 +120,9 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))) {
                             this.wizz();
                         }
+                        if (!_.contains(message.readBy,Meteor.userId())){
+                            message.isNew = true;
+                        }
                         return message;
                     });
 
@@ -138,10 +141,15 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.loadingMessage = false;
+                //Messages.update({chatId:this.chatId, readBy:{$ne:Meteor.userId()}},{$push:{readyBy:Meteor.userId()}},{multi:true});
 
             });
 
         });
+    }
+
+    notifMesage(){
+
     }
 
     autoScroll(): MutationObserver {
