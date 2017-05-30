@@ -38,6 +38,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                     this.profile = Profiles.findOne({userId: Meteor.userId()});
                     if (this.profile) {
                         this.selectedStatus = this.profile.status;
+                        this.colorStatus(this.selectedStatus);
                         this.pictureId = "";
                         MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
                             MeteorObservable.autorun().subscribe(() => {
@@ -71,9 +72,35 @@ export class UserStatusComponent implements OnInit, OnDestroy {
 
     updateStatus(value): void {
         if (this.profile){
-            Profiles.update(this.profile._id, {$set: {status: parseInt(value)}});
+            value = parseInt(value);
+
+            Profiles.update(this.profile._id, {$set: {status: value}});
+
+            this.colorStatus(value);
+
         } else {
             console.log("Error no profile selected.");
         }
+    }
+
+    colorStatus(statusid): void {
+            switch(statusid) {
+                case 0:
+                    $('#statusbackground').css('background-color', 'gray');
+                    $('#statusbackground').css('border-right', 'gray');
+                break;
+                case 1:
+                    $('#statusbackground').css('background-color', 'green');
+                    $('#statusbackground').css('border-right', 'green');
+                break;
+                case 2:
+                    $('#statusbackground').css('background-color', 'orange');
+                    $('#statusbackground').css('border-right', 'orange');
+                break;
+                case 3:
+                    $('#statusbackground').css('background-color', 'red');
+                    $('#statusbackground').css('border-right', 'red');
+                break;
+            }
     }
 }
