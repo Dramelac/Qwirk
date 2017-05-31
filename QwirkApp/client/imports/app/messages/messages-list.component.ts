@@ -120,8 +120,9 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))) {
                             this.wizz();
                         }
-                        if (!_.contains(message.readBy,Meteor.userId())){
+                        if (!_.contains(message.readBy, Meteor.userId())) {
                             message.isNew = true;
+                            //this.checkAndUpdateReadStatus(message);
                         }
                         return message;
                     });
@@ -141,15 +142,21 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.loadingMessage = false;
-                //Messages.update({chatId:this.chatId, readBy:{$ne:Meteor.userId()}},{$push:{readyBy:Meteor.userId()}},{multi:true});
 
             });
 
         });
     }
 
-    notifMesage(){
+    notifMesage() {
 
+    }
+
+    checkAndUpdateReadStatus(msg: Message) {
+        if (!_.contains(msg.readBy, Meteor.userId())) {
+            console.log("Mark as read message", msg._id);
+            Messages.update(msg._id, {$push: {readBy: Meteor.userId()}});
+        }
     }
 
     autoScroll(): MutationObserver {
@@ -272,8 +279,8 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     }
 
     removeMessage(msg: Message): void {
-        if (msg.type === MessageType.PICTURE || msg.type === MessageType.FILE){
-            Files.remove({_id:msg.content});
+        if (msg.type === MessageType.PICTURE || msg.type === MessageType.FILE) {
+            Files.remove({_id: msg.content});
         }
         Messages.remove(msg._id);
     }
