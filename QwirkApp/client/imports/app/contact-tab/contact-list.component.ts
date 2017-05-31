@@ -1,16 +1,11 @@
 import {Component, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./contact-list.component.html";
-import {Observable} from "rxjs";
-import {Profile} from "../../../../both/models/profile.model";
-import {MeteorObservable} from "meteor-rxjs";
-import {Profiles} from "../../../../both/collections/profile.collection";
-import {Subscription} from "rxjs/Subscription";
-import {FriendRequest} from "../../../../both/models/friend-request.model";
-import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
 import {Router} from "@angular/router";
-import {Contacts} from "../../../../both/collections/contact.collection";
-import {Contact} from "../../../../both/models/contact.model";
 import {ContextMenuComponent} from "angular2-contextmenu";
+import {Observable, Subscription} from "rxjs";
+import {MeteorObservable} from "meteor-rxjs";
+import {Profile, FriendRequest, Contact, SessionKey} from "../../../../both/models";
+import {Profiles, FriendsRequest, Contacts} from "../../../../both/collections";
 
 @Component({
     selector: 'contact-list',
@@ -43,11 +38,11 @@ export class ContactListComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.dataloading();
         Tracker.autorun(() => {
-            let updateData = Session.get("dataUpdated");
+            let updateData = Session.get(SessionKey.DataUpdated.toString());
             if (updateData === true) {
                 console.log("detect update");
                 this.dataloading();
-                Session.set("dataUpdated", false);
+                Session.set(SessionKey.DataUpdated.toString(), false);
             }
         });
     }

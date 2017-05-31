@@ -1,0 +1,21 @@
+<div *ngIf="peerId" class="modal">
+
+    <div *ngIf="!isCallActive">
+        <span>Calling ...</span>
+    </div>
+    <span>You:</span>
+    <video [hidden]="!myVideoStream || !myVideoStream.enabled"  [src]="myVideo" class="myVideo" onloadedmetadata="this.muted = true" muted autoplay [poster]="myPicture | displayProfileImage"></video>
+    <img [hidden]="myVideoStream && myVideoStream.enabled" [src]="myPicture | displayProfileImage" alt="user picture" style="max-width: 300px">
+
+    <div *ngIf="isCallActive">
+        <div *ngFor="let user of userList">
+            <span>{{user.username}}</span>
+            <video [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL" class="theirVideo" autoplay [poster]="user.pictureId | displayProfileImage"></video>
+            <img [hidden]="user.videoStream && user.videoStream.enabled" [src]="user.pictureId | displayProfileImage" alt="user picture" style="max-width: 300px">
+        </div>
+    </div>
+    <button (click)="mute()">{{micButton}}</button>
+    <button *ngIf="camButton" (click)="video()">{{camButton}}</button>
+    <button (click)="stopCall()">Stop call</button>
+    <a md-button *ngIf="chat" [routerLink]="['/chat/'+chat._id]">Go to chat</a>
+</div>

@@ -24,7 +24,6 @@ export const FilesStore = new UploadFS.store.GridFS({
         }
     }),
     onRead(fileId, file, request, response) {
-        //TODO check chatId permission
         if (file.chatId) {
             return true;
             //response.writeHead(403);

@@ -16,7 +16,8 @@ import {AUTH_DECLARATIONS} from "./auth";
 import {USERS_DECLARATIONS} from "./user";
 import {CONTACT_DECLARATIONS} from "./contact-tab";
 import {MENU_DECLARATIONS} from "./menu";
-import {ContextMenuModule} from 'angular2-contextmenu';
+import {CALL_DECLARATIONS} from "./call";
+import {ContextMenuModule} from "angular2-contextmenu";
 import {GROUP_DECLARATIONS} from "./group/index";
 
 @NgModule({
@@ -29,7 +30,8 @@ import {GROUP_DECLARATIONS} from "./group/index";
         ...USERS_DECLARATIONS,
         ...CONTACT_DECLARATIONS,
         ...MENU_DECLARATIONS,
-        ...GROUP_DECLARATIONS
+        ...GROUP_DECLARATIONS,
+        ...CALL_DECLARATIONS
     ],
     // Entry Components
     entryComponents: [
