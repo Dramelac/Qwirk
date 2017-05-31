@@ -1,4 +1,4 @@
-import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
+import {Component, Input, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
 import {Chat, ChatType, Message} from "../../../../both/models";
@@ -7,6 +7,7 @@ import {MeteorObservable} from "meteor-rxjs";
 import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {MessagesListComponent} from "../messages/messages-list.component";
+import {ContextMenuComponent} from "angular2-contextmenu";
 
 @Component({
     selector: 'chat-list',
@@ -18,6 +19,9 @@ export class ChatsComponent implements OnInit, OnDestroy {
     profilesSub: Subscription[];
     chatSub: Subscription;
     contactSub: Subscription[];
+
+    @ViewChild(ContextMenuComponent) public chatMenu: ContextMenuComponent;
+
     ngOnInit(): void {
         if(!this.type){
             this.type = ChatType.CHAT;

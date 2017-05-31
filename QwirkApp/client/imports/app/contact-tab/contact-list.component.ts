@@ -151,26 +151,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     }
 
-    deleteContact(friendId: string) {
-        Meteor.call("removeContact", friendId, (error, result) => {
-
-        });
-    }
-
-    showProfile(friendId: string):void{
-        this.router.navigate(["/profile/" + friendId]);
-    }
-
-    blockContact(contact: Contact, bool : boolean):void{
-        if(bool){
-            //contact was block
-            Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
-        }else {
-            //unblock contact
-            Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
-        }
-    }
-
     ngOnDestroy(): void {
         this.profilesSub.unsubscribe();
         this.friendRequestsSub.unsubscribe();

@@ -1,0 +1,23 @@
+<context-menu class="angular2-contextmenu">
+    <div *ngIf="isContact">
+        <template contextMenuItem let-item [enabled]="false">
+            <span><button (click)="showProfile(item?.profileId)">Edit Profile</button></span>
+        </template>
+        <template contextMenuItem let-item [enabled]="false">
+            <button *ngIf="!item?.isBloqued" (click)="blockContact(item,true)">Bloquer</button>
+            <button *ngIf="item?.isBloqued" (click)="blockContact(item,false)">Debloquer</button>
+        </template>
+        <template contextMenuItem let-item [enabled]="false">
+            <span>
+                <button (click)="deleteContact(item?.profile.userId)">Delete</button>
+            </span>
+        </template>
+    </div>
+    <div *ngIf="type">
+        <template contextMenuItem let-item [enabled]="false">
+            <span>
+                <button (click)="deleteContact(item?.profile.userId)">ChatsMenu</button>
+            </span>
+        </template>
+    </div>
+</context-menu>
