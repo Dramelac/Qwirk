@@ -24,6 +24,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     contactFiltred: Contact[] = [];
     mySelection : Contact[] = [];
     selected: string[];
+    error : boolean;
 
     @ViewChild(ContextMenuComponent) public groupMenu: ContextMenuComponent;
     constructor(private router: Router) {
@@ -72,22 +73,27 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     }
 
     addGroup(){
-        let listUserId = this.mySelection.map((u)=>{return u.friendId});
-        listUserId.push(Meteor.userId());
-        let adminList = [];
-        adminList.push(Meteor.userId());
+       if(this.mySelection.length > 0){
+           let listUserId = this.mySelection.map((u)=>{return u.friendId});
+           listUserId.push(Meteor.userId());
+           let adminList = [];
+           adminList.push(Meteor.userId());
 
-        if(!this.groupTitle){
-            this.mySelection.map((u) => {
-                if(this.groupTitle){
-                    this.groupTitle = this.groupTitle + ", " + u.displayName;
-                }else{
-                    this.groupTitle = u.displayName;
-                }
-            });
-        }
+           let newOwnerId = Meteor.userId();
+           if(!this.groupTitle){
+               this.mySelection.map((u) => {
+                   if(this.groupTitle){
+                       this.groupTitle = this.groupTitle + ", " + u.displayName;
+                   }else{
+                       this.groupTitle = u.displayName;
+                   }
+               });
+           }
 
-        let chat = Chats.collection.insert({user : listUserId, admin : adminList, publicly : false, type : ChatType.GROUP, title : this.groupTitle});
-        this.router.navigate(["/group/" + chat]);
+           let chat = Chats.collection.insert({user : listUserId, admin : adminList, publicly : false, type : ChatType.GROUP, title : this.groupTitle, ownerId : newOwnerId});
+           this.router.navigate(["/group/" + chat]);
+       }else{
+           this.error = true;
+       }
     }
 }

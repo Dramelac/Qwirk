@@ -4,7 +4,6 @@ import {Contacts} from "../../../../both/collections/contact.collection";
 import {Contact} from "../../../../both/models/contact.model";
 import {Router} from "@angular/router";
 import {Chats} from "../../../../both/collections/chat.collection";
-import * as _ from "underscore";
 import {ChatType} from "../../../../both/models/chat.model";
 
 @Component({
@@ -31,28 +30,30 @@ export class ContextComponent implements OnInit, OnDestroy {
 
         });
     }
-    showProfile(friendId: string):void{
+
+    showProfile(friendId: string): void {
         this.router.navigate(["/profile/" + friendId]);
     }
 
-    blockContact(contact: Contact, bool : boolean):void{
-        if(bool){
+    blockContact(contact: Contact, bool: boolean): void {
+        if (bool) {
             //contact was block
-            Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
-        }else {
+            Contacts.update({_id: contact._id}, {$set: {isBloqued: bool}});
+        } else {
             //unblock contact
-            Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
+            Contacts.update({_id: contact._id}, {$set: {isBloqued: bool}});
         }
     }
 
-    leaveGroup(groupId: string, user: string[], admin : string[]){
-        if( _.contains(admin, Meteor.userId())){
-            Chats.remove({_id : groupId});
-        }else{
+    leaveGroup(groupId: string, user: string[]) {
+        let ownerId = Chats.findOne({_id: groupId}).ownerId;
+        if (ownerId == Meteor.userId()) {
+            Chats.remove({_id: groupId});
+        } else {
             let index = user.indexOf(Meteor.userId());
-            if(index > -1 ){
-                user.splice(index,1);
-                Chats.update({_id : groupId},{$set : {user : user}});
+            if (index > -1) {
+                user.splice(index, 1);
+                Chats.update({_id: groupId}, {$set: {user: user}});
             }
         }
     }
