@@ -5,6 +5,7 @@ import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CallRequest, CallUser, Chat, PeerUser, SessionKey} from "../../../../both/models";
 import {CallRequests, Chats, Profiles} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
+import * as _ from "underscore";
 
 @Component({
     selector: 'call-handler',
@@ -48,7 +49,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
         MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
-                let profile = Profiles.findOne({userId:Meteor.userId()});
+                let profile = Profiles.findOne({userId: Meteor.userId()});
                 MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
                         this.myPicture = profile.picture;
@@ -70,9 +71,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         let video = Session.get(SessionKey.CallVideo.toString());
         if (Session.equals(SessionKey.ActiveCall.toString(), true)) {
             /*console.log("activating call",
-                Session.get(SessionKey.ActiveCall.toString()),
-                "Video:", video,
-                "CallId:", Session.get(SessionKey.CallId.toString()));*/
+             Session.get(SessionKey.ActiveCall.toString()),
+             "Video:", video,
+             "CallId:", Session.get(SessionKey.CallId.toString()));*/
             if (Session.equals(SessionKey.IsHost.toString(), true)) {
                 this.chat = Session.get(SessionKey.LaunchCallChat.toString());
                 this.call(video);
@@ -90,50 +91,56 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.stopCall();
     }
 
+    initNavigator(stream) {
+        //display video
+
+        this.zone.run(() => {
+            this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
+        });
+        this.localStream = stream;
+    }
+
     initPeer(video: boolean, callback = null) {
         let execCallback = false;
-        // get audio/video
-        navigator.getUserMedia = ( navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia );
 
-        if (!navigator.getUserMedia) {
+        if (!navigator.mediaDevices.getUserMedia) {
             console.error("undefined user media");
         }
 
-        navigator.getUserMedia({audio: true, video: true}, (stream) => {
-                //display video
+        let loadVideo;
+        navigator.mediaDevices.enumerateDevices()
+            .then(function (devices) {
+                loadVideo = _.contains(devices.map((d) => {
+                    return d.kind
+                }), "videoinput");
 
-                this.zone.run(() => {
-                    this.myVideo = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream));
-                });
-                this.localStream = stream;
+                navigator.mediaDevices.getUserMedia({audio: true, video: loadVideo}).then((stream) => {
+                    this.initNavigator(stream);
 
-                if (!video) {
-                    this.video();
-                } else {
-                    this.camButton = "Hide video"
-                }
-                if (this.localStream.getVideoTracks().length === 0){
-                    this.camButton = null;
-                }
-                this.myVideoStream = this.localStream.getVideoTracks()[0];
-
-                if (execCallback) {
-                    //console.log("Test callback : ", callback);
-                    if (callback) {
-                        //console.log("exec callback");
-                        callback();
+                    if (loadVideo && !video) {
+                        this.video();
+                    } else if (!loadVideo) {
+                        this.camButton = null;
+                    } else {
+                        this.camButton = "Hide video"
                     }
-                } else {
-                    execCallback = true;
-                }
 
-            }, function (error) {
-                console.log(error);
-            }
-        );
+                    this.myVideoStream = this.localStream.getVideoTracks()[0];
+
+                    if (execCallback && callback) {
+                        callback();
+                    } else {
+                        execCallback = true;
+                    }
+
+                }).catch((err) => {
+                    console.log("Second try:", err);
+                });
+            })
+            .catch(function (err) {
+                console.log(err.name + ": " + err.message);
+            });
+
         this.micButton = "Mute";
 
         this.peer = new Peer({

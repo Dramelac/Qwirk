@@ -4,7 +4,7 @@
         <span>Calling ...</span>
     </div>
     <span>You:</span>
-    <video [hidden]="!myVideoStream || !myVideoStream.enabled"  [src]="myVideo" muted="true" class="myVideo" autoplay [poster]="myPicture | displayProfileImage"></video>
+    <video [hidden]="!myVideoStream || !myVideoStream.enabled"  [src]="myVideo" class="myVideo" onloadedmetadata="this.muted = true" muted autoplay [poster]="myPicture | displayProfileImage"></video>
     <img [hidden]="myVideoStream && myVideoStream.enabled" [src]="myPicture | displayProfileImage" alt="user picture" style="max-width: 300px">
 
     <div *ngIf="isCallActive">
