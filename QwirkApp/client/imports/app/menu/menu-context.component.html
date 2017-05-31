@@ -13,10 +13,10 @@
             </span>
         </template>
     </div>
-    <div *ngIf="type">
+    <div *ngIf="type === 'Groups'">
         <template contextMenuItem let-item [enabled]="false">
             <span>
-                <button (click)="deleteContact(item?.profile.userId)">ChatsMenu</button>
+                <button (click)="leaveGroup(item?._id ,item?.user)">Leave Group</button>
             </span>
         </template>
     </div>

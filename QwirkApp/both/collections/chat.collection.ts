@@ -8,5 +8,7 @@ function loggedIn(){
 }
 
 Chats.allow({
-    insert: loggedIn
+    insert: loggedIn,
+    update: loggedIn,
+    remove: loggedIn
 });

@@ -3,6 +3,8 @@ import template from "./menu-context.component.html";
 import {Contacts} from "../../../../both/collections/contact.collection";
 import {Contact} from "../../../../both/models/contact.model";
 import {Router} from "@angular/router";
+import {Chats} from "../../../../both/collections/chat.collection";
+import * as _ from "underscore";
 
 @Component({
     selector: 'context',
@@ -18,7 +20,6 @@ export class ContextComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        console.log(this.isContact);
     }
 
     ngOnDestroy(): void {
@@ -40,6 +41,18 @@ export class ContextComponent implements OnInit, OnDestroy {
         }else {
             //unblock contact
             Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
+        }
+    }
+
+    leaveGroup(groupId: string, user: string[], admin : string[]){
+        if( _.contains(admin, Meteor.userId())){
+            Chats.remove({_id : groupId});
+        }else{
+            let index = user.indexOf(Meteor.userId());
+            if(index > -1 ){
+                user.splice(index,1);
+                Chats.update({_id : groupId},{$set : {user : user}});
+            }
         }
     }
 
