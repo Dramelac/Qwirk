@@ -327,21 +327,5 @@ Meteor.methods({
             createdAt: new Date(),
             type: MessageType.ANNOUNCE
         });
-    },
-
-    addGroup(usersId: string[], adminList: string[], groupeTitle:string): void {
-        if (!Meteor.userId()) {
-            throw new Meteor.Error('unauthorized',
-                'User must be logged-in to create a new chat');
-        }
-
-        const chat:Chat = {
-            user: usersId,
-            admin: adminList,
-            publicly: false,
-            type: ChatType.GROUP,
-            title: groupeTitle
-        };
-        Chats.insert(chat);
     }
 });

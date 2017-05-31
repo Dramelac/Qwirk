@@ -8,6 +8,7 @@ import {Subscription} from "rxjs/Subscription";
 import * as _ from "underscore";
 import {Chats} from "../../../../both/collections/chat.collection";
 import {ChatType} from "../../../../both/models/chat.model";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'add-group',
@@ -23,6 +24,9 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     mySelection : Contact[] = [];
     selected: string[];
 
+    constructor(private router: Router) {
+
+    }
 
     ngOnInit(): void {
         this.contactsSub = MeteorObservable.subscribe('myContacts').subscribe(() => {
@@ -69,6 +73,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
         listUserId.push(Meteor.userId());
         let adminList = [];
         adminList.push(Meteor.userId());
-        Meteor.call("addGroup",listUserId, adminList, this.groupTitle);
+        let chat = Chats.collection.insert({user : listUserId, admin : adminList, publicly : false, type : ChatType.GROUP, title : this.groupTitle});
+        this.router.navigate(["/group/" + chat]);
     }
 }
