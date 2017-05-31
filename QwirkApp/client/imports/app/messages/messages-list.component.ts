@@ -30,6 +30,8 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     messageLazyLoadingLevel: number = 0;
     loadingMessage: boolean;
 
+    waitForRead: string[] = [];
+
     constructor(private route: ActivatedRoute, private router: Router) {
     }
 
@@ -121,8 +123,13 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             this.wizz();
                         }
                         if (!_.contains(message.readBy, Meteor.userId())) {
-                            message.isNew = true;
-                            MessagesListComponent.notifMesage(message);
+                            if (Moment().isBefore(Moment(message.createdAt).add(5, "seconds"))) {
+                                message.isNew = true;
+                                if (!_.contains(this.waitForRead, message._id)){
+                                    this.updateReadStatus(message);
+                                    this.notifMesage();
+                                }
+                            }
                             //this.checkAndUpdateReadStatus(message);
                         }
                         return message;
@@ -149,42 +156,25 @@ export class MessagesListComponent implements OnInit, OnDestroy {
         });
     }
 
-    static notifMesage(message: Message) {  // Voyons si le navigateur supporte les notifications
-        if (!("Notification" in window)) {
-            alert("Ce navigateur ne supporte pas les notifications desktop");
-        }
-
-        // Voyons si l'utilisateur est OK pour recevoir des notifications
-        else if (Notification.permission === "granted") {
-            // Si c'est ok, créons une notification
-            var notification = new Notification("You receive a new message");
-        }
-
-        // Sinon, nous avons besoin de la permission de l'utilisateur
-        // Note : Chrome n'implémente pas la propriété statique permission
-        // Donc, nous devons vérifier s'il n'y a pas 'denied' à la place de 'default'
-        else if (Notification.permission !== 'denied') {
-            Notification.requestPermission(function (permission) {
-
-                // Quelque soit la réponse de l'utilisateur, nous nous assurons de stocker cette information
-                if (!('permission' in Notification)) {
-                    Notification.permission = permission;
-                }
-
-                // Si l'utilisateur est OK, on crée une notification
-                if (permission === "granted") {
-                    var notification = new Notification("You receive a new message");
-                }
-
+    notifMesage() {
+        if (Notification.permission === "granted") {
+            var notification = new Notification("Qwirk",{
+                icon: "favicon.png",
+                body: "You receive a new message"
             });
+            setTimeout(()=>{
+                notification.close();
+            }, 3500)
         }
+        //let audio = new Audio("/asset/wizz.wav");
+        //audio.play();
     }
 
-    checkAndUpdateReadStatus(msg: Message) {
-        if (!_.contains(msg.readBy, Meteor.userId())) {
-            console.log("Mark as read message", msg._id);
+    updateReadStatus(msg: Message) {
+        this.waitForRead.push(msg._id);
+        setTimeout(()=>{
             Messages.update(msg._id, {$push: {readBy: Meteor.userId()}});
-        }
+        },5000);
     }
 
     autoScroll(): MutationObserver {
