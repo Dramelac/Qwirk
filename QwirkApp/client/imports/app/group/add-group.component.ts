@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./add-group.component.html";
 import {Contact} from "../../../../both/models/contact.model";
 import {Contacts} from "../../../../both/collections/contact.collection";
@@ -9,6 +9,7 @@ import * as _ from "underscore";
 import {Chats} from "../../../../both/collections/chat.collection";
 import {ChatType} from "../../../../both/models/chat.model";
 import {Router} from "@angular/router";
+import {ContextMenuComponent} from "angular2-contextmenu";
 
 @Component({
     selector: 'add-group',
@@ -24,6 +25,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     mySelection : Contact[] = [];
     selected: string[];
 
+    @ViewChild(ContextMenuComponent) public groupMenu: ContextMenuComponent;
     constructor(private router: Router) {
 
     }
@@ -56,6 +58,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
         if(!_.contains(this.mySelection.map((u)=>{return u._id}), contact._id)){
             this.mySelection.push(contact);
             this.query ='';
+            this.contactFiltred = [];
         }
     }
 
@@ -73,6 +76,17 @@ export class AddGroupComponent implements OnInit, OnDestroy {
         listUserId.push(Meteor.userId());
         let adminList = [];
         adminList.push(Meteor.userId());
+
+        if(!this.groupTitle){
+            this.mySelection.map((u) => {
+                if(this.groupTitle){
+                    this.groupTitle = this.groupTitle + ", " + u.displayName;
+                }else{
+                    this.groupTitle = u.displayName;
+                }
+            });
+        }
+
         let chat = Chats.collection.insert({user : listUserId, admin : adminList, publicly : false, type : ChatType.GROUP, title : this.groupTitle});
         this.router.navigate(["/group/" + chat]);
     }
