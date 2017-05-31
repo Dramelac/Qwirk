@@ -6,7 +6,8 @@
         </p>
     </div>
 </div>
-<h4 *ngIf="chat">{{chat.title}}</h4>
+<h4 *ngIf="chat">Conversation avec {{chat.title}}</h4>
+
 <call-action *ngIf="distantUserId" [userCallingId]="distantUserId" [chatId]="chatId"></call-action>
 <div id="ChatList">
     <div *ngIf="loadingMessage">Loading messages ...</div>
