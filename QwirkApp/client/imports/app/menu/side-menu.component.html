@@ -20,21 +20,25 @@
             <img  class="col-md-12 button-sidenav" src="asset/img/users.png" >
         </button>
     </div>
+    <div class="row div-button-sidenav">
+        <button class="button-background" (click)="logout()">
+            <img  class="col-md-12 button-sidenav" src="asset/img/left_arrow.png" >
+        </button>
+    </div>
 </div>
+
 <div class="col-md-9" style="height:100%;border-right: #d1d1d1 3px solid;background-color: #e9e9e9">
     <div style="height: 240px;width: 100%;text-align: center;">
-        <img class="logo" src="favicon.png" >
+        <img class="logo" src="favicon.png" style="float: center;">
         <div id="statusbackground" style="height: 40px;width: 100%;position: absolute;background-color: #0baf02; border-right: #0baf02 3px solid;vertical-align: middle">
             <user-status ></user-status>
-            <div class="div-button-sidenav">
-                <button md-button (click)="logout()">Logout</button>
-            </div>
         </div>
     </div>
     <!--
     <button (click)="button(0)">Chat</button>
     <button (click)="button(1)">Contact</button>
     <button (click)="button(2)">Group</button>-->
+    <br/>
     <chat-list [hidden]="selected!==0" [type]="typeChat"></chat-list>
     <contact-list [hidden]="selected!==1"></contact-list>
     <chat-list [hidden]="selected!==2" [type]="typeGroup"></chat-list>
