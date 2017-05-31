@@ -219,6 +219,10 @@ body {
   overflow: auto;
 }
 
+.center-text {
+  text-align: center;
+}
+
 .button-sidenav{
 }
 
@@ -250,11 +254,6 @@ body {
   text-align: center;
   //text-shadow: #ffffff 1px 1px, #ffffff -1px 1px, #ffffff -1px -1px, #ffffff 1px -1px;
 }
-
-body{
-  overflow: hidden;
-}
-
 .div-info{
   font-size: 40px;
 

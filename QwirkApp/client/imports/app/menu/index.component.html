@@ -1,13 +1,10 @@
-<div class="col-md-12 div-color-logout" *ngIf="!hideIndex">
+<div class="col-md-12 div-color-logout">
     <img src="logoqwirk.png">
     <hr>
     <p class="div-info">Projet de 3ème année réalisé par 5 élèves de Supinfo</p>
     <div >
-        <button md-raised-button class="mat-primary" (click)="switchState()" [routerLink]="['/login']" >Login</button>
-        <button md-raised-button class="mat-primary" (click)="switchState()" [routerLink]="['/signup']">Sign up</button>
+        <button md-raised-button class="mat-primary" [routerLink]="['/login']" >Login</button>
+        <button md-raised-button class="mat-primary" [routerLink]="['/signup']">Sign up</button>
     </div>
 
-</div>
-<div *ngIf="hideIndex">
-    <button md-raised-button class="mat-primary" (click)="switchState()" [routerLink]="['/']">Go back</button>
 </div>

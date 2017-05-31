@@ -1,24 +1,12 @@
-import {Component, OnInit} from "@angular/core";
+import {Component} from "@angular/core";
 import template from "./index.component.html";
 
 @Component({
     selector: 'qwirk-index',
     template
 })
-export class IndexComponent implements OnInit {
-
-    hideIndex: boolean;
-
+export class IndexComponent {
     constructor() {
     }
-
-    ngOnInit(): void {
-        this.hideIndex = false;
-    }
-
-    switchState(){
-        this.hideIndex = !this.hideIndex;
-    }
-
 
 }
