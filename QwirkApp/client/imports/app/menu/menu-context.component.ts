@@ -5,6 +5,7 @@ import {Contact} from "../../../../both/models/contact.model";
 import {Router} from "@angular/router";
 import {Chats} from "../../../../both/collections/chat.collection";
 import * as _ from "underscore";
+import {ChatType} from "../../../../both/models/chat.model";
 
 @Component({
     selector: 'context',
@@ -13,7 +14,7 @@ import * as _ from "underscore";
 
 export class ContextComponent implements OnInit, OnDestroy {
 
-    @Input("type") type: boolean;
+    @Input("type") type: ChatType;
     @Input("isContact") isContact: boolean;
 
     constructor(private router: Router) {
