@@ -13,6 +13,9 @@ import "jquery-ui";
 import * as _ from "underscore";
 import {Observable, Subscriber} from "rxjs";
 
+//Remove typing false positive
+declare let Notification: any;
+
 @Component({
     selector: 'messages-list',
     template,

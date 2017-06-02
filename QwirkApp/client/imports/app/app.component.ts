@@ -6,6 +6,9 @@ import {Status} from "../../../both/models/status.enum";
 import {Profiles} from "../../../both/collections";
 import {Router} from "@angular/router";
 
+//Remove typing false positive
+declare let Notification: any;
+
 @Component({
     selector: "app",
     template,
