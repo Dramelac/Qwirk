@@ -7,7 +7,16 @@ Meteor.publish('files', function(chatId) {
     }
     let chat:Chat = Chats.findOne({_id:chatId,user:this.userId});
     if (chat){
-        return Files.collection.find({chatId: chatId});
+        return Files.collection.find({chatId: chatId}, {
+            fields: {
+                _id: 1,
+                name: 1,
+                uploadedAt: 1,
+                url: 1,
+                chatId: 1,
+                userId: 1
+            }
+        });
     }
     return null;
 });
@@ -17,5 +26,14 @@ Meteor.publish('file', function(fileId) {
         return null;
     }
 
-    return Files.collection.find(fileId);
+    return Files.collection.find(fileId, {
+        fields: {
+            _id: 1,
+            name: 1,
+            uploadedAt: 1,
+            url: 1,
+            chatId: 1,
+            userId: 1
+        }
+    });
 });
