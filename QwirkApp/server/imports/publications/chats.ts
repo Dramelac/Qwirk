@@ -11,7 +11,6 @@ Meteor.publishComposite('chats', function(): PublishCompositeConfig<Chat> {
         find: () => {
             return Chats.collection.find({ user: this.userId }, {
                 fields: {
-                    admin: 0,
                     ban: 0
                 }
             });
