@@ -24,7 +24,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         if(!this.type){
-            this.type = ChatType.CHAT;
+            this.type = null;
         }
         this.profilesSub = [];
         this.contactSub = [];

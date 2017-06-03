@@ -15,6 +15,7 @@ export class ContextComponent implements OnInit, OnDestroy {
 
     @Input("type") type: ChatType;
     @Input("isContact") isContact: boolean;
+    @Input("isMessagesChats") isMessagesChats: boolean = false;
 
     constructor(private router: Router) {
     }

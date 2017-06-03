@@ -13,14 +13,14 @@
             </span>
         </template>
     </div>
-    <div *ngIf="type === 'Groups'">
+    <div *ngIf="type === 'Groups' && isMessagesChats === false">
         <template contextMenuItem let-item [enabled]="false">
             <span>
                 <button (click)="leaveGroup(item?._id ,item?.user)">Leave Group</button>
             </span>
         </template>
     </div>
-    <div *ngIf="type === 'Chats'">
+    <div *ngIf=" type === 'Chats' && isMessagesChats === true">
         <template contextMenuItem let-item [enabled]="false">
             <span>
                 <button (click)="leaveGroup(item?._id ,item?.user)">Leave Chats</button>

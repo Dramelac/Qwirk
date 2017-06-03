@@ -1,4 +1,4 @@
-<h4 *ngIf="chat">{{chat.title}}</h4>
+<h4 *ngIf="chat" [contextMenu]="chatMenu" [contextMenuSubject]="chat">{{chat.title}}</h4>
 <call-action *ngIf="distantUserId" [userCallingId]="distantUserId" [chatId]="chatId"></call-action>
 <div id="ChatList">
     <div *ngIf="loadingMessage">Loading messages ...</div>
@@ -36,3 +36,4 @@
     </div>
 </div>
 <message-form *ngIf="chat" [chat]="chat"></message-form>
+<context [type]="type" [isMessagesChats] ="isMessageChats"></context>

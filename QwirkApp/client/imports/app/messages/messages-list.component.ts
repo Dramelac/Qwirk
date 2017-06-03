@@ -12,6 +12,7 @@ import "jquery";
 import "jquery-ui";
 import * as _ from "underscore";
 import {Observable, Subscriber} from "rxjs";
+import {ChatType} from "../../../../both/models/chat.model";
 
 @Component({
     selector: 'messages-list',
@@ -29,6 +30,8 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     autoScroller: MutationObserver;
     messageLazyLoadingLevel: number = 0;
     loadingMessage: boolean;
+    isMessageChats: boolean;
+    type : ChatType;
 
     constructor(private route: ActivatedRoute, private router: Router) {
     }
@@ -77,6 +80,12 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                 if (!this.chat) {
                     this.router.navigate(['/']);
                     return;
+                }
+                this.type = this.chat.type;
+                if(this.chat.type === ChatType.CHAT){
+                    this.isMessageChats = true;
+                } else {
+                    this.isMessageChats = false;
                 }
                 this.chat.isAdmin = _.contains(this.chat.admin, Meteor.userId());
                 if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
