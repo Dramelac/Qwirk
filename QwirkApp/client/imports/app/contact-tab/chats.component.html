@@ -11,11 +11,18 @@
                 <h2 class="chat-title">{{chat.title}}</h2>
                 <div *ngIf="chat.lastMessage">
                     <p>
-                    <span *ngIf="chat.lastMessage.type == 'text'"
+                    <span *ngIf="chat.lastMessage.type == 'text' || chat.lastMessage.type == 'announce'"
                           [innerHTML]="chat.lastMessage.content | slice:0:32"></span>
+                        <span *ngIf="chat.lastMessage.type == 'file' || chat.lastMessage.type == 'picture'">
+                            You receive a file.
+                        </span>
+                        <span *ngIf="chat.lastMessage.type == 'wizz'">
+                            You receive a wizz.
+                        </span>
                         <span *ngIf="chat.lastMessage.content.length > 32">...</span>
+                        <span *ngIf="chat.lastMessage.isNew" class="new-message-tag">*</span>
                     </p>
-                    <span class="last-message-timestamp">{{chat.lastMessage.createdAt }}</span>
+                    <span class="last-message-timestamp">{{chat.lastMessage.createdAt | amDateFormat: 'MM/DD HH:mm' }}</span>
                 </div>
             </div>
         </button>

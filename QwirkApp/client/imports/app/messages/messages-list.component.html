@@ -1,5 +1,6 @@
 <h4 *ngIf="chat" [contextMenu]="chatMenu" [contextMenuSubject]="chat">{{chat.title}}</h4>
 <call-action *ngIf="distantUserId" [userCallingId]="distantUserId" [chatId]="chatId"></call-action>
+
 <div id="ChatList">
     <div *ngIf="loadingMessage">Loading messages ...</div>
     <div *ngFor="let day of messagesDayGroups | async">
@@ -28,6 +29,7 @@
                 </div>
                 <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
                 <button *ngIf="message.ownership == 'mine'" (click)="removeMessage(message)">X</button>
+                <span *ngIf="message.isNew" class="new-message-tag">*</span>
             </div>
             <div *ngIf="message.type == 'announce'" class="message-announce">
                 <span [innerHTML]="message.content"></span>
