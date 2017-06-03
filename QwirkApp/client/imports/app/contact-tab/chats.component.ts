@@ -131,7 +131,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
         if (Notification.permission === "granted") {
             let notification = new Notification("Qwirk",{
                 icon: "favicon.png",
-                body: "You receive a new message from " + name
+                body: name + " send you a new message."
             });
             setTimeout(()=>{
                 notification.close();
