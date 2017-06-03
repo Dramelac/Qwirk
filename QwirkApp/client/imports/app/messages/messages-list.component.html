@@ -14,12 +14,14 @@
     <div *ngIf="loadingMessage">Loading messages ...</div>
     <div *ngFor="let day of messagesDayGroups | async">
         <div>{{day.timestamp}}</div>
-        <div *ngFor="let message of day.messages" >
-            <div *ngIf="message.type != 'announce'" [class]="'message message-' + message.ownership">
-                <div *ngIf="message.ownerName">
-                    <span>{{message.ownerName}}</span>
+        <div *ngFor="let message of day.messages" class="row">
+            <div *ngIf="message.ownerName && message.type != 'announce'" class="col-md-offset-1 col-md-1">
+                <div class="pull-right">
+                    <span class="center-text">{{message.ownerName}}</span>
                     <img [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture" alt="pic">
                 </div>
+            </div>
+            <div *ngIf="message.type != 'announce'" [class]="'col-md-9 message message-' + message.ownership">
                 <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
                 <div *ngIf="message.type == 'picture'">
                     <a target="_blank" href="{{message.content | displayMainImage}}">
@@ -42,8 +44,8 @@
                 <span *ngIf="message.isNew" class="new-message-tag">*</span>
 
             </div>
-            <div *ngIf="message.type == 'announce'" class="message-announce">
-                <span [innerHTML]="message.content"></span>
+            <div *ngIf="message.type == 'announce'" class="message-announce center-text">
+                <i [innerHTML]="message.content"></i>
             </div>
         </div>
     </div>
