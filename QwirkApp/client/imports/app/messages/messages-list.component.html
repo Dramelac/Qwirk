@@ -1,47 +1,54 @@
-<div class="div-titre-router" >
-    <div class="petite-div-titre-router">
-        <img class="icone-select" src="asset/img/comments.png" >
-        <p class="titre-routeur">
-            Message
-        </p>
+
+<div class="row div-titre-router">
+
+    <div class="col-md-9" >
+        <div class="col-md-offset-2 col-md-5" style="vertical-align: middle">
+            <img class="col-md-2" src="asset/img/user.png" >
+            <p class="titre-routeur" *ngIf="chat"> {{chat.title}}</p>
+        </div>
+    </div>
+    <div>
+        <call-action class="col-md-3" *ngIf="chat" [chat]="chat"></call-action>
     </div>
 </div>
-<h4 *ngIf="chat">Conversation avec {{chat.title}}</h4>
 
-<call-action *ngIf="chat" [chat]="chat"></call-action>
-<div id="ChatList">
-    <div *ngIf="loadingMessage">Loading messages ...</div>
-    <div *ngFor="let day of messagesDayGroups | async">
-        <div>{{day.timestamp}}</div>
-        <div *ngFor="let message of day.messages" >
-            <div *ngIf="message.type != 'announce'" [class]="'message message-' + message.ownership">
-                <div *ngIf="message.ownerName">
-                    <span>{{message.ownerName}}</span>
-                    <img [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture" alt="pic">
+<div class="row">
+    <div id="ChatList">
+        <div *ngIf="loadingMessage">Loading messages ...</div>
+        <div *ngFor="let day of messagesDayGroups | async">
+            <div>{{day.timestamp}}</div>
+            <div *ngFor="let message of day.messages" >
+                <div *ngIf="message.type != 'announce'" [class]="'message message-' + message.ownership">
+                    <div *ngIf="message.ownerName">
+                        <span>{{message.ownerName}}</span>
+                        <img [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture" alt="pic">
+                    </div>
+                    <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
+                    <div *ngIf="message.type == 'picture'">
+                        <a target="_blank" href="{{message.content | displayMainImage}}">
+                            <span>{{message.content | displayFileName}}</span><br>
+                            <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
+                        </a>
+                    </div>
+                    <div *ngIf="message.type == 'file'" class="file-preview">
+                        File upload<br>
+                        <a target="_blank" href="{{message.content | displayMainImage}}">
+                            <span>{{message.content | displayFileName}}</span>
+                        </a>
+                    </div>
+                    <div *ngIf="message.type == 'wizz'" class="wizz-message">
+                        WIZZZZZZ
+                    </div>
+                    <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+                    <button id="crossbutton" *ngIf="message.ownership == 'mine'" (click)="removeMessage(message)">X</button>
                 </div>
-                <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
-                <div *ngIf="message.type == 'picture'">
-                    <a target="_blank" href="{{message.content | displayMainImage}}">
-                        <span>{{message.content | displayFileName}}</span><br>
-                        <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
-                    </a>
+                <div *ngIf="message.type == 'announce'" class="message-announce">
+                    <span [innerHTML]="message.content"></span>
                 </div>
-                <div *ngIf="message.type == 'file'" class="file-preview">
-                    File upload<br>
-                    <a target="_blank" href="{{message.content | displayMainImage}}">
-                        <span>{{message.content | displayFileName}}</span>
-                    </a>
-                </div>
-                <div *ngIf="message.type == 'wizz'" class="wizz-message">
-                    WIZZZZZZ
-                </div>
-                <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
-                <button id="crossbutton" *ngIf="message.ownership == 'mine'" (click)="removeMessage(message)">X</button>
-            </div>
-            <div *ngIf="message.type == 'announce'" class="message-announce">
-                <span [innerHTML]="message.content"></span>
             </div>
         </div>
     </div>
+
 </div>
+
 <message-form *ngIf="chat" [chat]="chat"></message-form>

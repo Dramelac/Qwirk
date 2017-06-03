@@ -1,4 +1,15 @@
 <div *ngIf="!isCallActive">
-    <button (click)="call(false)">Vocal</button>
-    <button (click)="call(true)">Video</button>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <button class="button-menu-call" aria-label="login" (click)="call(false)">
+                <img class="col-md-7 button-call"  src="asset/img/phone.png" >
+            </button>
+        </div>
+        <div class="col-md-4">
+            <button class="button-menu-cam" aria-label="login" (click)="call(true)">
+                <img class="col-md-7 button-cam"  src="asset/img/video_camera.png" >
+            </button>
+
+        </div>
+    </div>
 </div>

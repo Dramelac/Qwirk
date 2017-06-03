@@ -48,21 +48,35 @@ body {
 .message-other {
   background-color: #949C94;
   position: relative;
-	background: #949C94;
-	border-radius: .4em;
+  background: #949C94;
+  border-radius: .4em;
 }
 
 .button-refuse{
-  background-color: #ff4f0b;
   float: right;
   margin-bottom: 10px;
   margin-right: 10%;
+  border: none;
 }
 
 .button-accept{
   float: left;
   margin-left: 10%;
   margin-bottom: 10px;
+  border: none;
+
+}
+.button-menu-call{
+  background-color: #e6e6e6;
+  float: right;
+  border: none;
+
+}
+
+.button-menu-cam{
+  background-color: #e6e6e6;
+  float: left;
+  border: none;
 
 }
 
@@ -232,6 +246,11 @@ body {
   padding-left: 0;
 
 }
+.col-md-4{
+  padding-right: 0;
+  padding-left: 0;
+
+}
 
 .nom-utilisateur{
   color: white;
@@ -262,6 +281,11 @@ body {
 
 }
 
+.col-md-6{
+  padding-right: 0;
+  padding-left: 0;
+
+}
 
 .logosignup{
   width: 300px;
@@ -289,9 +313,23 @@ body {
   text-align: center;
 }
 
-.button-sidenav{
+.button-call{
+  background-color: #e6e6e6;
+  border: none;
+  float: right;
 }
 
+.button-cam{
+  background-color: #e6e6e6;
+  border: none;
+  float: left;
+}
+
+
+.button-cam{
+  background-color: #e6e6e6;
+  border: none;
+}
 
 
 
@@ -331,28 +369,22 @@ body {
 }
 
 .div-titre-router{
-  width: 100%;
-  height: 200px;
   position: relative;
   background-color: #e6e6e6;
   text-align: center;
   padding-top:25px;
+  padding-bottom:25px;
+  vertical-align: middle;
   border-bottom: #d1d1d1 3px solid;
 }
 
-.petite-div-titre-router{
-  margin-right: auto;
-  margin:auto;
-  width:300px;
-  height: 150px;
-  padding-top: 35px;
-}
 
 .titre-routeur{
   font-size: 40px;
-  margin-left: 10px;
-  padding-top:15px;
-  display: block
+  display: block;
+  float: left;
+  margin-top: auto;
+  padding-left: 10px;
 }
 
 #crossbutton {
