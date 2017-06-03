@@ -13,9 +13,6 @@ import "jquery-ui";
 import * as _ from "underscore";
 import {Observable, Subscriber} from "rxjs";
 
-//Remove typing false positive
-declare let Notification: any;
-
 @Component({
     selector: 'messages-list',
     template,
@@ -126,14 +123,10 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             this.wizz();
                         }
                         if (!_.contains(message.readBy, Meteor.userId())) {
-                            if (Moment().isBefore(Moment(message.createdAt).add(5, "seconds"))) {
-                                message.isNew = true;
-                                if (!_.contains(this.waitForRead, message._id)){
-                                    this.updateReadStatus(message);
-                                    this.notifMesage();
-                                }
+                            message.isNew = true;
+                            if (!_.contains(this.waitForRead, message._id)){
+                                this.updateReadStatus(message);
                             }
-                            //this.checkAndUpdateReadStatus(message);
                         }
                         return message;
                     });
@@ -157,20 +150,6 @@ export class MessagesListComponent implements OnInit, OnDestroy {
             });
 
         });
-    }
-
-    notifMesage() {
-        if (Notification.permission === "granted") {
-            var notification = new Notification("Qwirk",{
-                icon: "favicon.png",
-                body: "You receive a new message"
-            });
-            setTimeout(()=>{
-                notification.close();
-            }, 3500)
-        }
-        //let audio = new Audio("/asset/wizz.wav");
-        //audio.play();
     }
 
     updateReadStatus(msg: Message) {
