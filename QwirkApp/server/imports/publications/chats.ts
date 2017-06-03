@@ -9,7 +9,12 @@ Meteor.publishComposite('chats', function(): PublishCompositeConfig<Chat> {
 
     return {
         find: () => {
-            return Chats.collection.find({ user: this.userId });
+            return Chats.collection.find({ user: this.userId }, {
+                fields: {
+                    admin: 0,
+                    ban: 0
+                }
+            });
         },
 
         children: [
