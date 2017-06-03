@@ -253,22 +253,17 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                         ownerUserId: Meteor.userId()
                     });
                     if (request && request.onlineUsers.length === 1 && request.targetUsersId.length === 0) {
-                        this.ownerStopCall();
+                        this.stopCall();
                     }
                 })
             });
         });
     }
 
-    ownerStopCall() {
-        CallRequests.remove({_id: this.requestId});
-        this.isHost = false;
-        this.stopCall();
-    }
-
     stopCall() {
         if (this.isHost) {
-            this.ownerStopCall();
+            CallRequests.remove({_id: this.requestId});
+            this.isHost = false;
             return;
         } else {
             CallRequests.update(this.requestId, {
