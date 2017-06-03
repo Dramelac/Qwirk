@@ -1,56 +1,63 @@
 <div class="mat-content" layout="row" layout-align="center start" layout-fill layout-margin>
-<div layout="column" flex flex-md="50" flex-lg="50" flex-gt-lg="33" class="mat-whiteframe-z2" layout-fill>
-    <div class="div-titre-router" >
-        <div class="petite-div-titre-router">
-            <img class="icone-select" src="asset/img/user.png" >
-            <p class="titre-routeur">
-                Profil
-            </p>
-        </div>
-    </div>
-
-    <div *ngIf="profileForm && profile" layout="column" layout-fill layout-margin layout-padding>
-
-        <p>Profile picture :
-            <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
-        </p>
-        <file-upload (onFile)="onPictureUpdate($event)"></file-upload>
-
-
-        <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
-              layout="column" layout-fill layout-padding layout-margin>
-
-            <md-input-container *ngIf="myProfile"><input mdInput formControlName="email" type="email" placeholder="E-Mail"></md-input-container>
-            <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name"></md-input-container>
-            <md-input-container *ngIf="myProfile"><input mdInput formControlName="firstname" type="text" placeholder="First name"></md-input-container>
-            <md-input-container *ngIf="myProfile"><input mdInput formControlName="lastname" type="text" placeholder="Last name"></md-input-container>
-            <md-input-container *ngIf="myProfile"><input mdInput formControlName="newPassword" type="password" placeholder="New Password"></md-input-container>
-            <md-input-container *ngIf="myProfile"><input mdInput formControlName="confirmPassword" type="password" placeholder="Confirm Password"></md-input-container>
-            <md-input-container *ngIf="myProfile"><input mdInput formControlName="oldPassword" type="password" placeholder="Old Password"></md-input-container>
-
-
-            <div layout="row" layout-align="space-between center">
-                <button md-raised-button class="mat-primary" type="submit" aria-label="profile">Edit Profile</button>
+    <div layout="column" flex flex-md="50" flex-lg="50" flex-gt-lg="33" class="mat-whiteframe-z2" layout-fill>
+        <div class="div-titre-router">
+            <div class="petite-div-titre-router">
+                <img class="icone-select" src="asset/img/user.png">
+                <p class="titre-routeur">
+                    Profil
+                </p>
             </div>
-        </form>
-
-        <div *ngIf="error !== ''">
-            <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
-                <p class="mat-body-1">{{ error }}</p>
-                <button (click)="error=''">X</button>
-            </md-toolbar>
         </div>
-        <div *ngIf="success !== ''">
-            <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
-                <p class="mat-body-1">{{ success }}</p>
-                <button (click)="success=''">X</button>
-            </md-toolbar>
-        </div>
-        <p>Debug UserId : {{ user._id }}</p>
 
+        <div *ngIf="profileForm && (profile || contact)" layout="column" layout-fill layout-margin layout-padding>
+
+            <p *ngIf="myProfile">Profile picture :
+                <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
+            </p>
+            <file-upload *ngIf="myProfile" (onFile)="onPictureUpdate($event)"></file-upload>
+
+
+            <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
+                  layout="column" layout-fill layout-padding layout-margin>
+
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="email" type="email"
+                                                             placeholder="E-Mail"></md-input-container>
+                <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name">
+                </md-input-container>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="firstname" type="text"
+                                                             placeholder="First name"></md-input-container>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="lastname" type="text"
+                                                             placeholder="Last name"></md-input-container>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="newPassword" type="password"
+                                                             placeholder="New Password"></md-input-container>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="confirmPassword" type="password"
+                                                             placeholder="Confirm Password"></md-input-container>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="oldPassword" type="password"
+                                                             placeholder="Old Password"></md-input-container>
+
+
+                <div layout="row" layout-align="space-between center">
+                    <button md-raised-button class="mat-primary" type="submit" aria-label="profile">Edit Profile
+                    </button>
+                </div>
+            </form>
+
+            <div *ngIf="error !== ''">
+                <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
+                    <p class="mat-body-1">{{ error }}</p>
+                    <button (click)="error=''">X</button>
+                </md-toolbar>
+            </div>
+            <div *ngIf="success !== ''">
+                <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
+                    <p class="mat-body-1">{{ success }}</p>
+                    <button (click)="success=''">X</button>
+                </md-toolbar>
+            </div>
+
+        </div>
+        <div *ngIf="!profileForm">
+            <p>Loading ...</p>
+        </div>
     </div>
-    <div *ngIf="!profileForm">
-        <p>Loading ...</p>
-    </div>
-</div>
 </div>

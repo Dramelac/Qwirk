@@ -50,11 +50,13 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 let profile = Profiles.findOne({userId: Meteor.userId()});
-                MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
-                    MeteorObservable.autorun().subscribe(() => {
-                        this.myPicture = profile.picture;
+                if (profile){
+                    MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                        MeteorObservable.autorun().subscribe(() => {
+                            this.myPicture = profile.picture;
+                        });
                     });
-                });
+                }
             });
         });
 
@@ -108,24 +110,24 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         }
 
         let loadVideo;
-        navigator.mediaDevices.enumerateDevices()
-            .then(function (devices) {
+        let self = this;
+        navigator.mediaDevices.enumerateDevices().then(function (devices) {
                 loadVideo = _.contains(devices.map((d) => {
                     return d.kind
                 }), "videoinput");
 
                 navigator.mediaDevices.getUserMedia({audio: true, video: loadVideo}).then((stream) => {
-                    this.initNavigator(stream);
+                    self.initNavigator(stream);
 
                     if (loadVideo && !video) {
-                        this.video();
+                        self.video();
                     } else if (!loadVideo) {
-                        this.camButton = null;
+                        self.camButton = null;
                     } else {
-                        this.camButton = "Hide video"
+                        self.camButton = "Hide video"
                     }
 
-                    this.myVideoStream = this.localStream.getVideoTracks()[0];
+                    self.myVideoStream = self.localStream.getVideoTracks()[0];
 
                     if (execCallback && callback) {
                         callback();
@@ -134,7 +136,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     }
 
                 }).catch((err) => {
-                    console.log("Second try:", err);
+                    console.log("Error on media loading :", err);
                 });
             })
             .catch(function (err) {
@@ -164,7 +166,10 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                             peerId: this.peer.id
                         }
                     },
-                    $pull: {targetUsersId: Meteor.userId()}
+                    $pull: {
+                        targetUsersId: Meteor.userId(),
+                        rejectUsers: Meteor.userId()
+                    }
                 });
             }
             if (execCallback) {
@@ -253,22 +258,17 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                         ownerUserId: Meteor.userId()
                     });
                     if (request && request.onlineUsers.length === 1 && request.targetUsersId.length === 0) {
-                        this.ownerStopCall();
+                        this.stopCall();
                     }
                 })
             });
         });
     }
 
-    ownerStopCall() {
-        CallRequests.remove({_id: this.requestId});
-        this.isHost = false;
-        this.stopCall();
-    }
-
     stopCall() {
         if (this.isHost) {
-            this.ownerStopCall();
+            CallRequests.remove({_id: this.requestId});
+            this.isHost = false;
             return;
         } else {
             CallRequests.update(this.requestId, {

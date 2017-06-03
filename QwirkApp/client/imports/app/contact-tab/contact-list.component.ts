@@ -40,7 +40,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
         Tracker.autorun(() => {
             let updateData = Session.get(SessionKey.DataUpdated.toString());
             if (updateData === true) {
-                console.log("detect update");
                 this.dataloading();
                 Session.set(SessionKey.DataUpdated.toString(), false);
             }
@@ -53,13 +52,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
         this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
-                console.log("refresh profile");
                 this.profiles = Profiles
                     .find({userId: {$ne: this.currentUserId}});
-                if (this.profiles) {
-                } else {
-                    console.log('no profile found.');
-                }
                 this.contactsSub = MeteorObservable.subscribe('myContacts').subscribe(() => {
                     this.contacts = Contacts.find();
                     if (this.contacts) {
@@ -109,7 +103,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
                 this.friendList.push(contact.profileId);
             }
         });
-        console.log("nb elem:",this.friendList.length);
         Meteor.call("searchUser", this.query, this.friendList, (error, result) => {
             if (error) {
                 console.log("erreur dans search")
@@ -133,7 +126,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
                 console.log("erreur requestSent");
                 return;
             }
-            console.log("exist", result);
             Session.set('exist', result);
         });
         return Session.get('exist');
@@ -152,26 +144,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
     showMessages(chatId: string): void {
         this.router.navigate(["/chat/" + chatId]);
 
-    }
-
-    deleteContact(friendId: string) {
-        Meteor.call("removeContact", friendId, (error, result) => {
-
-        });
-    }
-
-    showProfile(friendId: string):void{
-        this.router.navigate(["/profile/" + friendId]);
-    }
-
-    blockContact(contact: Contact, bool : boolean):void{
-        if(bool){
-            //contact was block
-            Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
-        }else {
-            //unblock contact
-            Contacts.update({_id : contact._id},{$set : {isBloqued : bool}});
-        }
     }
 
     ngOnDestroy(): void {

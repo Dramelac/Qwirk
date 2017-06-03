@@ -1,4 +1,4 @@
-import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
+import {Component, Input, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./chats.component.html";
 import {Observable} from "rxjs/Observable";
 import {Chat, ChatType, Message} from "../../../../both/models";
@@ -7,6 +7,12 @@ import {MeteorObservable} from "meteor-rxjs";
 import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {MessagesListComponent} from "../messages/messages-list.component";
+import {ContextMenuComponent} from "angular2-contextmenu";
+import * as _ from "underscore";
+import * as Moment from "moment";
+
+//Remove typing false positive
+declare let Notification: any;
 
 @Component({
     selector: 'chat-list',
@@ -18,9 +24,12 @@ export class ChatsComponent implements OnInit, OnDestroy {
     profilesSub: Subscription[];
     chatSub: Subscription;
     contactSub: Subscription[];
+
+    @ViewChild(ContextMenuComponent) public chatMenu: ContextMenuComponent;
+
     ngOnInit(): void {
         if(!this.type){
-            this.type = ChatType.CHAT;
+            this.type = null;
         }
         this.profilesSub = [];
         this.contactSub = [];
@@ -48,7 +57,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
     findChats(): Observable<Chat[]> {
         return Chats.find({type : this.type}).map(chats => {
             chats.forEach(chat => {
-                if (!chat.title && chat.user.length == 2 && chat.admin.length == 0) {
+                if (chat.type === ChatType.CHAT) {
                     const receiverId = chat.user.find(m => m !== Meteor.userId());
                     this.profilesSub.push(MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
@@ -81,6 +90,12 @@ export class ChatsComponent implements OnInit, OnDestroy {
                 this.findLastChatMessage(chat._id).subscribe((message) => {
                     message.content = MessagesListComponent.processMessage(message.content);
                     chat.lastMessage = message;
+                    if (!_.contains(message.readBy, Meteor.userId())) {
+                        message.isNew = true;
+                        if (Moment().isBefore(Moment(message.createdAt).add(5, "seconds"))) {
+                            this.notifMesage(chat.title);
+                        }
+                    }
                 });
             });
 
@@ -114,6 +129,20 @@ export class ChatsComponent implements OnInit, OnDestroy {
                 });
             });
         });
+    }
+
+    notifMesage(name: string) {
+        if (Notification.permission === "granted") {
+            let notification = new Notification("Qwirk",{
+                icon: "favicon.png",
+                body: name + " send you a message."
+            });
+            setTimeout(()=>{
+                notification.close();
+            }, 3500)
+        }
+        //let audio = new Audio("/asset/wizz.wav");
+        //audio.play();
     }
 
     showMessages(chat: string): void {
