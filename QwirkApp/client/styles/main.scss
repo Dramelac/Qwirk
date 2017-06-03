@@ -43,15 +43,67 @@ body {
   left: 50%;
   border-radius: .4em;
   border: 2px solid transparent;
-  border-color: #303030;
   z-index: 2;
 
 }
 .message-other {
   position: relative;
-  background-color: #949C94;
+  background-color: rgba(148, 156, 148);
   border-radius: .4em;
   margin-left: 0;
+}
+
+.message-other:after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-left-color: rgba(148, 156, 148);
+  border-right: 0;
+  border-bottom: 0;
+  margin-top: -10px;
+  margin-right: -20px;
+}
+
+.message-mine {
+  background-color: mat-color($app-primary);
+  position: relative;
+	border-radius: .4em;
+}
+
+.message-mine:after {
+  content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-right-color: mat-color($app-primary);
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -10px;
+	margin-left: -20px;
+}
+
+.message-announce {
+  margin: 10px;
+}
+
+.message-date {
+  float: right;
+  margin-right: 10px;
+}
+
+.message-raw {
+  margin: 10px;
+}
+
+.crossbutton {
+  color: rgba(230, 44, 1, 0.78) !important;
 }
 
 .button-refuse{
@@ -68,50 +120,13 @@ body {
 
 }
 
-.message-other:after {
-  content: '';
-	position: absolute;
-	right: 0;
-	top: 50%;
-	width: 0;
-	height: 0;
-	border: 20px solid transparent;
-	border-left-color: #949C94;
-	border-right: 0;
-	border-bottom: 0;
-	margin-top: -10px;
-	margin-right: -20px;
-}
-
-.message-mine {
-  background-color: #28AB21;
-  position: relative;
-	border-radius: .4em;
-}
-
-.message-mine:after {
-  content: '';
-	position: absolute;
-	left: 0;
-	top: 50%;
-	width: 0;
-	height: 0;
-	border: 20px solid transparent;
-	border-right-color: #28AB21;
-	border-left: 0;
-	border-bottom: 0;
-	margin-top: -10px;
-	margin-left: -20px;
-}
-
 
 .picture {
   max-width: 48px;
   max-height: 48px;
   float: left;
   position: relative;
-  margin: auto;
-  margin-top: 2px;
+  margin: 2px auto auto;
 }
 
 .info-button-contact{
@@ -353,8 +368,4 @@ body {
   margin-left: 10px;
   padding-top:15px;
   display: block
-}
-
-#crossbutton {
-  color: black;
 }

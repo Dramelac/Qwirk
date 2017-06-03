@@ -22,27 +22,36 @@
                 </div>
             </div>
             <div *ngIf="message.type != 'announce'" [class]="'col-md-9 message message-' + message.ownership">
-                <div *ngIf="message.type == 'text'" [innerHTML]="message.content"></div>
-                <div *ngIf="message.type == 'picture'">
-                    <a target="_blank" href="{{message.content | displayMainImage}}">
-                        <span>{{message.content | displayFileName}}</span><br>
-                        <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
-                    </a>
-                </div>
-                <div *ngIf="message.type == 'file'" class="file-preview">
-                    File upload<br>
-                    <a target="_blank" href="{{message.content | displayMainImage}}">
-                        <span>{{message.content | displayFileName}}</span>
-                    </a>
-                </div>
-                <div *ngIf="message.type == 'wizz'" class="wizz-message">
-                    WIZZZZZZ
-                </div>
-                <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+                <div class="row">
+                    <div *ngIf="message.type == 'text'" class="col-md-10 message-raw" [innerHTML]="message.content"></div>
+                    <div *ngIf="message.type == 'picture'" class="col-md-10">
+                        <a target="_blank" href="{{message.content | displayMainImage}}">
+                            <span>{{message.content | displayFileName}}</span><br>
+                            <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
+                        </a>
+                    </div>
+                    <div *ngIf="message.type == 'file'" class="file-preview col-md-01">
+                        File upload<br>
+                        <a target="_blank" href="{{message.content | displayMainImage}}">
+                            <span>{{message.content | displayFileName}}</span>
+                        </a>
+                    </div>
+                    <div *ngIf="message.type == 'wizz'" class="wizz-message col-md-10">
+                        WIZZZZZZ
+                    </div>
+                    <span class="message-date col-md-1">{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+                    <span *ngIf="message.isNew" class="new-message-tag">*</span>
 
-                <button id="crossbutton" *ngIf="message.ownership == 'mine'" (click)="removeMessage(message)">X</button>
-                <span *ngIf="message.isNew" class="new-message-tag">*</span>
-
+                </div>
+                <div class="row">
+                    <div class="message-action col-md-offset-10">
+                        <button md-button class="crossbutton"
+                                *ngIf="message.ownership == 'mine'"
+                                (click)="removeMessage(message)">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div *ngIf="message.type == 'announce'" class="message-announce center-text">
                 <i [innerHTML]="message.content"></i>
