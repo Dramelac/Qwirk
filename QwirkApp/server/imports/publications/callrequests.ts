@@ -7,17 +7,21 @@ Meteor.publish('callrequest', function(): Mongo.Cursor<CallRequest> {
     }
 
     return CallRequests.collection.find({
-        targetUserId: this.userId
+        $or: [
+            {targetUsersId: this.userId},
+            {"onlineUsers.userId": this.userId},
+            {rejectUsers: this.userId}
+    ]
     });
 });
 
 Meteor.publish('myCallRequest', function(id: string): Mongo.Cursor<CallRequest> {
-    if (!this.userId) {
+    if (!this.userId || !id) {
         return;
     }
 
     return CallRequests.collection.find({
         ownerUserId: this.userId,
-        _id: id
+        chatId: id
     });
 });

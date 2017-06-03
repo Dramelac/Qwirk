@@ -117,7 +117,8 @@ Meteor.methods({
                 ownerId: Meteor.userId(),
                 content: content,
                 createdAt: new Date(),
-                type: type
+                type: type,
+                readBy: [Meteor.userId()]
             })
         };
     },
@@ -325,7 +326,8 @@ Meteor.methods({
             ownerId: Meteor.userId(),
             content: message,
             createdAt: new Date(),
-            type: MessageType.ANNOUNCE
+            type: MessageType.ANNOUNCE,
+            readBy: [Meteor.userId()]
         });
     }
 });

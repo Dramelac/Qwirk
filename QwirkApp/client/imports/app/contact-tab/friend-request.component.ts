@@ -1,12 +1,9 @@
-import {Component, Input, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import template from "./friend-request.component.html";
-import {Observable} from "rxjs/Observable";
-import {Subscription} from "rxjs/Subscription";
-import {FriendRequest} from "../../../../both/models/friend-request.model";
+import {Observable, Subscription} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
-import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
-import {Profile} from "../../../../both/models/profile.model";
-import {Profiles} from "../../../../both/collections/profile.collection";
+import {FriendRequest, Profile, SessionKey} from "../../../../both/models";
+import {FriendsRequest, Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'friendRequest-list',
@@ -54,7 +51,7 @@ export class FriendRequestComponent implements OnInit, OnDestroy {
 
     addNexContact(initiator: string): void {
         Meteor.call("newContact", initiator);
-        Session.set("dataUpdated",true);
+        Session.set(SessionKey.DataUpdated.toString(),true);
     }
 
     deleteRequest(initiator: string): void {
