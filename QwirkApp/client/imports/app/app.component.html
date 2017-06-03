@@ -8,12 +8,13 @@
             <side-menu></side-menu>
         </div>
         <div class="div-max">
+
+            <div *ngIf="user">
+                <call-handler></call-handler>
+                <call-notif></call-notif>
+            </div>
             <router-outlet></router-outlet>
         </div>
     </div>
 
-    <div *ngIf="user">
-        <call-handler></call-handler>
-        <call-notif></call-notif>
-    </div>
 </div>
