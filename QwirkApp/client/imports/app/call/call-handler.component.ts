@@ -108,24 +108,24 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         }
 
         let loadVideo;
-        navigator.mediaDevices.enumerateDevices()
-            .then(function (devices) {
+        let self = this;
+        navigator.mediaDevices.enumerateDevices().then(function (devices) {
                 loadVideo = _.contains(devices.map((d) => {
                     return d.kind
                 }), "videoinput");
 
                 navigator.mediaDevices.getUserMedia({audio: true, video: loadVideo}).then((stream) => {
-                    this.initNavigator(stream);
+                    self.initNavigator(stream);
 
                     if (loadVideo && !video) {
-                        this.video();
+                        self.video();
                     } else if (!loadVideo) {
-                        this.camButton = null;
+                        self.camButton = null;
                     } else {
-                        this.camButton = "Hide video"
+                        self.camButton = "Hide video"
                     }
 
-                    this.myVideoStream = this.localStream.getVideoTracks()[0];
+                    self.myVideoStream = self.localStream.getVideoTracks()[0];
 
                     if (execCallback && callback) {
                         callback();
@@ -134,7 +134,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     }
 
                 }).catch((err) => {
-                    console.log("Second try:", err);
+                    console.log("Error on media loading :", err);
                 });
             })
             .catch(function (err) {
