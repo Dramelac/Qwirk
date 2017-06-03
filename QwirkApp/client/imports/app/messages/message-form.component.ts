@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, NgZone, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import template from "./message-form.component.html";
 import {Chat, ChatType, File, MessageType} from "../../../../both/models";
@@ -14,7 +14,7 @@ export class MessageFormComponent implements OnInit {
 
     error: string;
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder, private zone :NgZone) {
     }
 
     ngOnInit() {
@@ -124,7 +124,10 @@ export class MessageFormComponent implements OnInit {
                             console.error("Error:", error);
                         }
                         if (result){
-                            console.log("Result command :", result)
+                            console.log("Result command :", result);
+                            this.zone.run(()=>{
+                                this.error = result;
+                            });
                         }
                     });
 
@@ -152,6 +155,9 @@ export class MessageFormComponent implements OnInit {
             (error, result) => {
                 if (error) {
                     console.error("Error:", error);
+                }
+                if (result) {
+                    console.error("result:", result);
                 }
             });
     }

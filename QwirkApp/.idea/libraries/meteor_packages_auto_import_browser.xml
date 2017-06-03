@@ -386,14 +386,6 @@
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/index.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/bin/options.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/observe-sequence/1.0.16/web.browser/observe_sequence.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/update.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/remove.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/collection-hooks.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/insert.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/find.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/users-compat.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/upsert.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/findone.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs-gridfs/0.2.1/web.browser/ufs-gridfs.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs/0.7.4_1/web.browser/ufs-store.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs/0.7.4_1/web.browser/ufs.js" />
@@ -407,17 +399,17 @@
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs/0.7.4_1/web.browser/ufs-config.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs/0.7.4_1/web.browser/ufs-server.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/mrt_jquery-ui/1.9.2/web.browser/packages/mrt_jquery-ui.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/findone.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/upsert.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/users-compat.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/find.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/insert.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/collection-hooks.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/remove.js" />
+        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/update.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/update.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/remove.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/collection-hooks.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/insert.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/find.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/users-compat.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/upsert.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/findone.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/ejson/1.0.13/web.browser/stringify.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/ejson/1.0.13/web.browser/ejson.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/es5-shim/4.6.15/web.browser/export_globals.js" />
@@ -802,14 +794,6 @@
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/index.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/bin/options.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/observe-sequence/1.0.16/web.browser/observe_sequence.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/update.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/remove.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/collection-hooks.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/insert.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/find.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/users-compat.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/upsert.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/.build436413.0.8.4/web.browser/findone.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs-gridfs/0.2.1/web.browser/ufs-gridfs.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs/0.7.4_1/web.browser/ufs-store.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs/0.7.4_1/web.browser/ufs.js" />
@@ -823,6 +807,14 @@
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs/0.7.4_1/web.browser/ufs-config.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/jalik_ufs/0.7.4_1/web.browser/ufs-server.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/mrt_jquery-ui/1.9.2/web.browser/packages/mrt_jquery-ui.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/findone.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/upsert.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/users-compat.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/find.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/insert.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/collection-hooks.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/remove.js" />
+      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/matb33_collection-hooks/0.8.4/web.browser/update.js" />
     </CLASSES>
     <SOURCES />
   </library>

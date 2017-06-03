@@ -3,22 +3,36 @@
         <div class="petite-div-titre-router">
             <img class="icone-select" src="asset/img/users.png" >
             <p class="titre-routeur">
-                Group
+                New Group
             </p>
         </div>
     </div>
     <form>
 
-        <label>Group's Name
-            <input placeholder="Title"></input>
-        </label>
-        <label>Contacts
-            <input placeholder="list contacts name" (click)="listContact()"></md-input-container>
-            <select>
-                <option *ngFor="let contact of contacts | async" [value]="contact.displayName">{{x.name}}</option>
-            </select>
-        </label>
-
-        <button type="submit">Create</button>
-    </form>
+    <label>Group's Name
+        <input placeholder="Title" [(ngModel)] = "groupTitle"/>
+    </label>
+    <div *ngIf="mySelection.length > 0">
+        <div *ngFor="let selected of mySelection">
+            <div>
+                <span>{{selected.displayName}}</span>
+                <a (click)="remove(selected)">x</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>
+            <input id="contact" type="text" placeholder="Add contacts" [(ngModel)]="query" [ngModelOptions]="{standalone: true}" (keyup)=filter()>
+            <label for="contact">Contacts</label>
+        </div>
+        <div *ngIf="contactFiltred.length > 0">
+            <ul *ngFor="let contact of contactFiltred" >
+                <li >
+                    <a (click)="select(contact)">{{contact.displayName}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <button (click)="addGroup()">Create</button>
+    <p *ngIf="error">Please add user before ^^</p>
 </div>

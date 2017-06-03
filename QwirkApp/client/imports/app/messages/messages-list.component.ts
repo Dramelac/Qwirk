@@ -12,6 +12,7 @@ import "jquery";
 import "jquery-ui";
 import * as _ from "underscore";
 import {Observable, Subscriber} from "rxjs";
+import {ChatType} from "../../../../both/models/chat.model";
 
 @Component({
     selector: 'messages-list',
@@ -29,6 +30,10 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     autoScroller: MutationObserver;
     messageLazyLoadingLevel: number = 0;
     loadingMessage: boolean;
+    isMessageChats: boolean;
+    type : ChatType;
+
+    waitForRead: string[] = [];
 
     constructor(private route: ActivatedRoute, private router: Router) {
     }
@@ -78,6 +83,12 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/']);
                     return;
                 }
+                this.type = this.chat.type;
+                if(this.chat.type === ChatType.CHAT){
+                    this.isMessageChats = true;
+                } else {
+                    this.isMessageChats = false;
+                }
                 this.chat.isAdmin = _.contains(this.chat.admin, Meteor.userId());
                 if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
                     this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
@@ -120,6 +131,12 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))) {
                             this.wizz();
                         }
+                        if (!_.contains(message.readBy, Meteor.userId())) {
+                            message.isNew = true;
+                            if (!_.contains(this.waitForRead, message._id)){
+                                this.updateReadStatus(message);
+                            }
+                        }
                         return message;
                     });
 
@@ -142,6 +159,13 @@ export class MessagesListComponent implements OnInit, OnDestroy {
             });
 
         });
+    }
+
+    updateReadStatus(msg: Message) {
+        this.waitForRead.push(msg._id);
+        setTimeout(()=>{
+            Messages.update(msg._id, {$push: {readBy: Meteor.userId()}});
+        },5000);
     }
 
     autoScroll(): MutationObserver {
@@ -264,8 +288,8 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     }
 
     removeMessage(msg: Message): void {
-        if (msg.type === MessageType.PICTURE || msg.type === MessageType.FILE){
-            Files.remove({_id:msg.content});
+        if (msg.type === MessageType.PICTURE || msg.type === MessageType.FILE) {
+            Files.remove({_id: msg.content});
         }
         Messages.remove(msg._id);
     }

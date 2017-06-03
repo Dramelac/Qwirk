@@ -6,9 +6,10 @@
         </p>
     </div>
 </div>
-<h4 *ngIf="chat">Conversation avec {{chat.title}}</h4>
+<h4 *ngIf="chat" [contextMenu]="chatMenu" [contextMenuSubject]="chat">{{chat.title}}</h4>
 
 <call-action *ngIf="chat" [chat]="chat"></call-action>
+
 <div id="ChatList">
     <div *ngIf="loadingMessage">Loading messages ...</div>
     <div *ngFor="let day of messagesDayGroups | async">
@@ -36,7 +37,10 @@
                     WIZZZZZZ
                 </div>
                 <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+
                 <button id="crossbutton" *ngIf="message.ownership == 'mine'" (click)="removeMessage(message)">X</button>
+                <span *ngIf="message.isNew" class="new-message-tag">*</span>
+
             </div>
             <div *ngIf="message.type == 'announce'" class="message-announce">
                 <span [innerHTML]="message.content"></span>
@@ -45,3 +49,4 @@
     </div>
 </div>
 <message-form *ngIf="chat" [chat]="chat"></message-form>
+<context [type]="type" [isMessagesChats] ="isMessageChats"></context>

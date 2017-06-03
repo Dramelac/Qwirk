@@ -32,21 +32,23 @@ export class ProfileComponent implements OnInit {
         this.route.params.map(params => params["profileID"]).subscribe(profile => {
             if (profile) {
                 this.profileId = profile;
-                //TODO add contact sub (like bellow)
-                this.contact = Contacts.findOne({$and: [{ownerId: Meteor.userId()}, {profileId: this.profileId}]});
-                console.log(this.contact);
-                this.profileForm = this.formBuilder.group({
-                    username: [this.contact.displayName, Validators.required]
+                MeteorObservable.subscribe('myContacts').subscribe(() => {
+                    MeteorObservable.autorun().subscribe(() => {
+                        this.contact = Contacts.findOne({$and: [{ownerId: Meteor.userId()}, {profileId: this.profileId}]});
+                        console.log(this.contact);
+                        this.profileForm = this.formBuilder.group({
+                            username: [this.contact.displayName, Validators.required]
+                        });
+                        this.myProfile = false;
+                    });
                 });
-                this.myProfile = false;
             } else {
                 this.pictureId = "";
-
                 // This is working because client is already sub to his profile in user-status
                 MeteorObservable.subscribe('profile').subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
                         this.profile = Profiles.findOne({userId: Meteor.userId()});
-                        if (this.profile){
+                        if (this.profile) {
                             this.profileForm = this.formBuilder.group({
                                 username: [this.profile.username, Validators.required],
                                 firstname: [this.profile.firstname],

@@ -55,7 +55,7 @@ Meteor.methods({
                 'Chat already exists');
         }
 
-        const chat:Chat = {
+        const chat: Chat = {
             user: [Meteor.userId(), receiverId],
             admin: [],
             publicly: false,
@@ -117,7 +117,8 @@ Meteor.methods({
                 ownerId: Meteor.userId(),
                 content: content,
                 createdAt: new Date(),
-                type: type
+                type: type,
+                readBy: [Meteor.userId()]
             })
         };
     },
@@ -186,7 +187,7 @@ Meteor.methods({
 
     newContact(initiator: string): void{
         //On crée un chat pour les nouveux friendList
-        const chat:Chat = {
+        const chat: Chat = {
             user: [Meteor.userId(), initiator],
             admin: [],
             publicly: false,
@@ -233,25 +234,29 @@ Meteor.methods({
         }
     },
 
-    groupCommand(command: string, groupId: string, targetUserId: string, reason?: string, time?: number){
+    groupCommand(command: string, groupId: string, targetUserId: string, reason?: string, time?: number): string{
         //must be logged in
         if (!this.userId) {
-            return;
+            return "You must be log in";
         }
         //load chat
-        let chat = Chats.findOne({chatId: groupId, admin: this.userId, type: ChatType.GROUP});
+        let chat = Chats.findOne({_id: groupId, admin: this.userId, type: ChatType.GROUP});
 
-        //check existing chat | can't self target
-        if (!chat || this.userId === targetUserId) {
-            return;
+        //check existing chat
+        if (!chat) {
+            return "Group not found.";
+        }
+        //can't self target
+        if (this.userId === targetUserId) {
+            return "You can't target yourself.";
         }
         //check user admin
         if (!_.contains(chat.admin, this.userId)) {
-            return;
+            return "You are not admin on this group.";
         }
         //can't target group owner
         if (targetUserId === chat.ownerId) {
-            return;
+            return "You can't do this on group owner.";
         }
 
         let isBan: boolean = _.contains(chat.ban, targetUserId);
@@ -259,38 +264,47 @@ Meteor.methods({
         let isAdmin: boolean = _.contains(chat.admin, targetUserId);
         if (!isBan && !isUser) {
             //target user is not member of the group
-            return;
+            return "This user is not member of this group.";
         }
 
         let message: string;
         let user = Profiles.findOne({userId: targetUserId});
         //check existing user
         if (!user) {
-            return;
+            return "Can't find target user.";
         }
         //process command
         switch (command) {
             case "kick":
-                if (!time || !isUser) return;
+                if (!time || !isUser) return "Incorrect command arguments.";
                 Chats.update(chat._id, {
                     $pull: {
                         user: targetUserId,
                         admin: targetUserId
                     }
                 });
-                setTimeout(() => {
+                Meteor.setTimeout(() => {
                     Chats.update(chat._id, {
                         $push: {
                             user: targetUserId
                         }
                     });
+                    Messages.insert({
+                        chatId: groupId,
+                        ownerId: this.userId,
+                        content: user.username + " is now back in the conversation",
+                        createdAt: new Date(),
+                        type: MessageType.ANNOUNCE,
+                        readBy: [this.userId]
+                    });
                 }, time * 1000);
+                if (!reason) reason = ' ';
                 message = user.username + " was ejected from the group for " + time + " seconds for the reason : '" + reason + "'";
                 //TODO add reason message
                 break;
             case "ban":
                 //TODO add reason message
-                if (isBan) return;
+                if (isBan) return "This user is already ban.";
                 Chats.update(chat._id, {
                     $pull: {
                         user: targetUserId,
@@ -300,32 +314,42 @@ Meteor.methods({
                         ban: targetUserId
                     }
                 });
+                if (!reason) reason = ' ';
                 message = user.username + " was ban from the group for the reason : '" + reason + "'";
                 break;
             case "unban":
-                if (!isBan) return;
-                Chats.update(chat._id, {$pull: {ban: targetUserId}});
+                if (!isBan) return "This user is not ban.";
+                Chats.update(chat._id, {
+                    $pull: {
+                        ban: targetUserId
+                    },
+                    $push: {
+                        user: targetUserId
+                    }
+                });
                 message = user.username + " is now unban from the group";
                 break;
             case "promote":
-                if (isBan || isAdmin) return;
+                if (isBan) return "You can't promote this user.";
+                if (isAdmin) return "This user is already admin of this group.";
                 Chats.update(chat._id, {$push: {admin: targetUserId}});
                 message = user.username + " is now admin of the group";
                 break;
             case "demote":
-                if (!isAdmin) return;
+                if (!isAdmin) return "Target user is not admin.";
                 Chats.update(chat._id, {$pull: {admin: targetUserId}});
                 message = user.username + " is no longer admin of the group";
                 break;
             default:
-                return;
+                return "Command not found.";
         }
         Messages.insert({
             chatId: groupId,
             ownerId: Meteor.userId(),
             content: message,
             createdAt: new Date(),
-            type: MessageType.ANNOUNCE
+            type: MessageType.ANNOUNCE,
+            readBy: [Meteor.userId()]
         });
     }
 });

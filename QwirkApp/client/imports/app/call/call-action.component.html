@@ -1,4 +1,7 @@
-<div *ngIf="!isCallActive">
+<div *ngIf="!isCallActive && !pendingCallRequest">
     <button (click)="call(false)">Vocal</button>
     <button (click)="call(true)">Video</button>
+</div>
+<div *ngIf="pendingCallRequest">
+    <button (click)="join()">Join current call</button>
 </div>
