@@ -7,6 +7,7 @@ function loggedIn(){
     return !!Meteor.user();
 }
 
+//TODO add security to chat operation
 Chats.allow({
     insert: loggedIn,
     update: loggedIn,
