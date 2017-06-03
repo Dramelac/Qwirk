@@ -50,11 +50,13 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 let profile = Profiles.findOne({userId: Meteor.userId()});
-                MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
-                    MeteorObservable.autorun().subscribe(() => {
-                        this.myPicture = profile.picture;
+                if (profile){
+                    MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                        MeteorObservable.autorun().subscribe(() => {
+                            this.myPicture = profile.picture;
+                        });
                     });
-                });
+                }
             });
         });
 
