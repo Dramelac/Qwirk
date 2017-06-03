@@ -16,7 +16,13 @@ Meteor.publish('contact', function (profileId : string): Mongo.Cursor<Contact> {
         return;
     }
     return Contacts.collection.find({
+        ownerId: this.userId,
         profileId : profileId
+    }, {
+        fields: {
+            isBloqued: 1,
+            displayName: 1
+        }
     });
 
 });
