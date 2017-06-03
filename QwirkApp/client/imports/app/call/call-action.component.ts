@@ -1,6 +1,8 @@
-import {Component, Input, OnDestroy, OnInit, NgZone} from "@angular/core";
+import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-action.component.html";
-import {Chat, SessionKey} from "../../../../both/models";
+import {CallRequest, Chat, SessionKey} from "../../../../both/models";
+import {CallRequests} from "../../../../both/collections";
+import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
     selector: 'call-action',
@@ -10,6 +12,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
 
     @Input("chat") chat: Chat;
     isCallActive: boolean;
+    pendingCallRequest: CallRequest;
 
     constructor(private zone:NgZone) {
     }
@@ -22,7 +25,15 @@ export class CallActionComponent implements OnInit, OnDestroy {
                 this.isCallActive = isCall;
             });
         });
-        //TODO check group call already reject
+        MeteorObservable.subscribe('callrequest').subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                this.pendingCallRequest = CallRequests.findOne({rejectUsers: Meteor.userId(),chatId: this.chat._id});
+                if (this.pendingCallRequest){
+                    console.log("Detect reject call");
+                    this.isCallActive = true;
+                }
+            });
+        });
     }
 
     ngOnDestroy(): void {
@@ -35,6 +46,12 @@ export class CallActionComponent implements OnInit, OnDestroy {
         Session.set(SessionKey.IsHost.toString(), true);
 
         Session.set(SessionKey.ActiveCall.toString(), true);
+    }
+
+    join(){
+        Session.set(SessionKey.ActiveCall.toString(), true);
+        Session.set(SessionKey.CallId.toString(), this.pendingCallRequest._id);
+        Session.set(SessionKey.CallVideo.toString(), this.pendingCallRequest.video);
     }
 
 }

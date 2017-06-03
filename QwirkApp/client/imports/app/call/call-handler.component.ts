@@ -164,7 +164,10 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                             peerId: this.peer.id
                         }
                     },
-                    $pull: {targetUsersId: Meteor.userId()}
+                    $pull: {
+                        targetUsersId: Meteor.userId(),
+                        rejectUsers: Meteor.userId()
+                    }
                 });
             }
             if (execCallback) {
