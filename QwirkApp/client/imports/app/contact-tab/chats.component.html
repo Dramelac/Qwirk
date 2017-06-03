@@ -22,7 +22,7 @@
                         <span *ngIf="chat.lastMessage.content.length > 32">...</span>
                         <span *ngIf="chat.lastMessage.isNew" class="new-message-tag">*</span>
                     </p>
-                    <span class="last-message-timestamp">{{chat.lastMessage.createdAt | amDateFormat: 'MM/DD HH:mm' }}</span>
+                    <span class="last-message-timestamp">{{chat.lastMessage.createdAt | amTimeAgo }}</span>
                 </div>
             </div>
         </button>
