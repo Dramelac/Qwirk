@@ -57,7 +57,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
     findChats(): Observable<Chat[]> {
         return Chats.find({type : this.type}).map(chats => {
             chats.forEach(chat => {
-                if (!chat.title && chat.user.length == 2 && chat.admin.length == 0) {
+                if (chat.type === ChatType.CHAT) {
                     const receiverId = chat.user.find(m => m !== Meteor.userId());
                     this.profilesSub.push(MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
