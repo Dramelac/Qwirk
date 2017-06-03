@@ -7,6 +7,11 @@ import {MeteorObservable} from "meteor-rxjs";
 import {Subscriber, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {MessagesListComponent} from "../messages/messages-list.component";
+import * as _ from "underscore";
+import * as Moment from "moment";
+
+//Remove typing false positive
+declare let Notification: any;
 
 @Component({
     selector: 'chat-list',
@@ -81,6 +86,12 @@ export class ChatsComponent implements OnInit, OnDestroy {
                 this.findLastChatMessage(chat._id).subscribe((message) => {
                     message.content = MessagesListComponent.processMessage(message.content);
                     chat.lastMessage = message;
+                    if (!_.contains(message.readBy, Meteor.userId())) {
+                        message.isNew = true;
+                        if (Moment().isBefore(Moment(message.createdAt).add(5, "seconds"))) {
+                            this.notifMesage(chat.title);
+                        }
+                    }
                 });
             });
 
@@ -114,6 +125,20 @@ export class ChatsComponent implements OnInit, OnDestroy {
                 });
             });
         });
+    }
+
+    notifMesage(name: string) {
+        if (Notification.permission === "granted") {
+            let notification = new Notification("Qwirk",{
+                icon: "favicon.png",
+                body: name + " send you a message."
+            });
+            setTimeout(()=>{
+                notification.close();
+            }, 3500)
+        }
+        //let audio = new Audio("/asset/wizz.wav");
+        //audio.play();
     }
 
     showMessages(chat: string): void {

@@ -28,6 +28,7 @@
                 </div>
                 <span>{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
                 <button *ngIf="message.ownership == 'mine'" (click)="removeMessage(message)">X</button>
+                <span *ngIf="message.isNew" class="new-message-tag">*</span>
             </div>
             <div *ngIf="message.type == 'announce'" class="message-announce">
                 <span [innerHTML]="message.content"></span>

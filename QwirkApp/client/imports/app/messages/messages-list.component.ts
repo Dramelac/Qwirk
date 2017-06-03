@@ -30,6 +30,8 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     messageLazyLoadingLevel: number = 0;
     loadingMessage: boolean;
 
+    waitForRead: string[] = [];
+
     constructor(private route: ActivatedRoute, private router: Router) {
     }
 
@@ -120,6 +122,12 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             Moment().isBefore(Moment(message.createdAt).add(1, "seconds"))) {
                             this.wizz();
                         }
+                        if (!_.contains(message.readBy, Meteor.userId())) {
+                            message.isNew = true;
+                            if (!_.contains(this.waitForRead, message._id)){
+                                this.updateReadStatus(message);
+                            }
+                        }
                         return message;
                     });
 
@@ -142,6 +150,13 @@ export class MessagesListComponent implements OnInit, OnDestroy {
             });
 
         });
+    }
+
+    updateReadStatus(msg: Message) {
+        this.waitForRead.push(msg._id);
+        setTimeout(()=>{
+            Messages.update(msg._id, {$push: {readBy: Meteor.userId()}});
+        },5000);
     }
 
     autoScroll(): MutationObserver {
@@ -264,8 +279,8 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     }
 
     removeMessage(msg: Message): void {
-        if (msg.type === MessageType.PICTURE || msg.type === MessageType.FILE){
-            Files.remove({_id:msg.content});
+        if (msg.type === MessageType.PICTURE || msg.type === MessageType.FILE) {
+            Files.remove({_id: msg.content});
         }
         Messages.remove(msg._id);
     }
