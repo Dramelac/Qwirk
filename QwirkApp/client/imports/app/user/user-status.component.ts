@@ -90,16 +90,16 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                     $('#statusbackground').css('border-right', 'gray');
                 break;
                 case 1:
-                    $('#statusbackground').css('background-color', 'green');
-                    $('#statusbackground').css('border-right', 'green');
+                    $('#statusbackground').css('background-color', '#4caf50');
+                    $('#statusbackground').css('border-right', '#4caf50');
                 break;
                 case 2:
                     $('#statusbackground').css('background-color', 'orange');
                     $('#statusbackground').css('border-right', 'orange');
                 break;
                 case 3:
-                    $('#statusbackground').css('background-color', 'red');
-                    $('#statusbackground').css('border-right', 'red');
+                    $('#statusbackground').css('background-color', '#f44336');
+                    $('#statusbackground').css('border-right', '#f44336');
                 break;
             }
     }
