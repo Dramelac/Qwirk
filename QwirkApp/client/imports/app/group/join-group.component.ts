@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import template from "./join-group.component.html"
+import template from "./join-group.component.html";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Chat, ChatType} from "../../../../both/models/chat.model";
+import {Chat} from "../../../../both/models/chat.model";
 import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
 import {Chats} from "../../../../both/collections/chat.collection";
@@ -15,8 +15,9 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
 
     paramSub: Subscription;
     groupSub: Subscription;
-    group : Chat;
-    groupId : string;
+    group: Chat;
+    groupId: string;
+    isMember: boolean;
 
     constructor(private route: ActivatedRoute, private router: Router) {
 
@@ -27,15 +28,12 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
             .map(params => params["groupId"])
             .subscribe(group => {
                 this.groupId = group;
-                if(this.groupId){
+                if (this.groupId) {
                     this.groupSub = MeteorObservable.subscribe('chat', this.groupId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
-                            this.group = Chats.findOne({_id : this.groupId});
-                            if(!this.group.publicly){
-                                this.cancel();
-                            }
-                            if(_.contains(this.group.user,Meteor.userId())){
-                                this.router.navigate(["/group/" + this.groupId])
+                            this.group = Chats.findOne({_id: this.groupId});
+                            if (this.group) {
+                                this.isMember = !!this.group.user;
                             }
                         });
                     });
@@ -45,18 +43,17 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if(this.paramSub){
+        if (this.paramSub) {
             this.paramSub.unsubscribe();
         }
-        if(this.groupSub){
+        if (this.groupSub) {
             this.groupSub.unsubscribe();
         }
     }
 
     joinGroup() {
-        this.group.user.push(Meteor.userId());
-        Chats.update({_id : this.groupId}, {$set : {user : this.group.user}});
-        this.router.navigate(["/group/"+ this.groupId]);
+        Chats.update({_id: this.groupId}, {$push: {user: Meteor.userId()}});
+        this.router.navigate(["/group/" + this.groupId]);
     }
 
     cancel() {

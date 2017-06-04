@@ -34,6 +34,11 @@ Meteor.publish('chat', function(chatId : string): Mongo.Cursor<Chat> {
     }
 
     return Chats.collection.find({
-        _id : chatId
+        _id : chatId,
+        publicly: true
+    }, {
+        fields: {
+            title: 1
+        }
     });
 });
