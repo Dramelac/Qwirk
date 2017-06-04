@@ -35,6 +35,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     camButton: string;
 
     chat: Chat;
+    isHide : boolean;
 
     constructor(private zone: NgZone, private sanitizer: DomSanitizer) {
     }
@@ -48,6 +49,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.userList = [];
         this.currentCall = [];
         this.isHost = false;
+        this.isHide = true;
 
         MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
@@ -106,6 +108,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
     initPeer(video: boolean, callback = null) {
         let execCallback = false;
+        this.isHide = false;
 
         if (!navigator.mediaDevices.getUserMedia) {
             console.error("undefined user media");
@@ -271,7 +274,6 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         if (this.isHost) {
             CallRequests.remove({_id: this.requestId});
             this.isHost = false;
-            return;
         } else {
             CallRequests.update(this.requestId, {
                 $pull: {
@@ -301,6 +303,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             this.myVideo = "";
             this.userList = [];
             this.peerId = "";
+            this.isHide = true;
         });
         Session.set(SessionKey.ActiveCall.toString(), null);
         Session.set(SessionKey.CallId.toString(), null);
