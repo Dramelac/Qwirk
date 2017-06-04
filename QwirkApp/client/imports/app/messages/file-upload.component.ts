@@ -46,6 +46,7 @@ export class FileUploadComponent implements OnInit {
     }
 
     onFileSelectChange(){
+        this.uploading = true;
         let file:File = $(".file-input").prop("files")[0];
 
         this.upload(file)
