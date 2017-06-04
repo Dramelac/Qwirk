@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, NgZone, OnInit, Output} from "@angular/core";
 import template from "./file-upload.component.html";
+import style from "./file-upload.component.scss";
 import {FilesStore} from "../../../../both/collections";
 import {UploadFS} from "meteor/jalik:ufs";
 import "jquery";
 
 @Component({
     selector: 'file-upload',
-    template
+    template,
+    styles: [style]
 })
 export class FileUploadComponent implements OnInit {
     fileIsOver: boolean = false;
