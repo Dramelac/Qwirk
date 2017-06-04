@@ -28,3 +28,12 @@ Meteor.publishComposite('chats', function(): PublishCompositeConfig<Chat> {
         ]
     };
 });
+Meteor.publish('chat', function(chatId : string): Mongo.Cursor<Chat> {
+    if (!this.userId) {
+        return;
+    }
+
+    return Chats.collection.find({
+        _id : chatId
+    });
+});

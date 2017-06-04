@@ -32,6 +32,7 @@
             </ul>
         </div>
     </div>
+    <input type="checkbox" [(ngModel)] = "publicly">Publicly</input><br>
     <button *ngIf="!groupId" (click)="addGroup()">Create</button>
     <button *ngIf="groupId" (click)="updateGroup()">Update</button>
     <p *ngIf="error">Please add user before ^^</p>

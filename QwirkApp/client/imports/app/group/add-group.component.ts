@@ -26,6 +26,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     mySelection: Contact[] = [];
     selected: string[];
     error: boolean;
+    publicly:boolean = false;
 
     constructor(private route: ActivatedRoute, private router: Router) {
 
@@ -44,6 +45,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
                 this.group = Chats.collection.findOne({_id : this.groupId});
                 if(this.group){
                     this.groupTitle = this.group.title;
+                    this.publicly = this.group.publicly;
                 }
             });
     }
@@ -118,7 +120,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
             let chat = Chats.collection.insert({
                 user: listUserId,
                 admin: adminList,
-                publicly: false,
+                publicly: this.publicly,
                 type: ChatType.GROUP,
                 title: this.groupTitle,
                 ownerId: newOwnerId
@@ -138,6 +140,9 @@ export class AddGroupComponent implements OnInit, OnDestroy {
         }
         if(this.groupTitle !== this.group.title){
            Chats.update({_id : this.group._id},{$set : {title : this.groupTitle}});
+        }
+        if(this.publicly !== this.group.publicly){
+            Chats.update({_id : this.group._id},{$set : {publicly : this.publicly}});
         }
         this.router.navigate(["/group/" + this.groupId]);
     }
