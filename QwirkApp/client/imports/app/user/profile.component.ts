@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
                 MeteorObservable.subscribe('myContacts').subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
                         this.contact = Contacts.findOne({$and: [{ownerId: Meteor.userId()}, {profileId: this.profileId}]});
-                        console.log(this.contact);
+                        //console.log(this.contact);
                         this.profileForm = this.formBuilder.group({
                             username: [this.contact.displayName, Validators.required]
                         });

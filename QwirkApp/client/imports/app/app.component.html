@@ -1,20 +1,13 @@
 <div class="container-fluid" >
-    <div class="row" *ngIf="!user">
-        <qwirk-index></qwirk-index>
-    </div>
+    <div class="row div-max">
+        <qwirk-index *ngIf="!user"></qwirk-index>
 
-    <div class="row div-max" >
         <div class="col-md-2 div-max" *ngIf="user">
             <side-menu></side-menu>
         </div>
-        <div class="div-max">
-
-            <div *ngIf="user">
-                <call-handler></call-handler>
-                <call-notif></call-notif>
-            </div>
+        <div>
             <router-outlet></router-outlet>
         </div>
+        <call-notif *ngIf="user"></call-notif>
     </div>
-
 </div>

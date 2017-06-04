@@ -1,0 +1,29 @@
+.sidemenu {
+  height: 100%;
+  background-color: #303030;
+  flex-flow: column;
+  display: flex;
+}
+
+.sidemenu-void {
+  flex: 1 1 auto;
+}
+
+.div-button-sidenav {
+  padding-top: 10px;
+}
+
+.appmenu {
+  height: 100%;
+  border-right: #d1d1d1 3px solid;
+  background-color: #e9e9e9
+}
+
+#statusbackground {
+  height: 40px;
+  width: 100%;
+  position: absolute;
+  background-color: #0baf02;
+  border-right: #0baf02 3px solid;
+  vertical-align: middle
+}
