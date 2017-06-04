@@ -1,5 +1,6 @@
 import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-handler.component.html";
+import style from "./call-handler.component.scss";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CallRequest, CallUser, Chat, PeerUser, SessionKey} from "../../../../both/models";
@@ -9,7 +10,8 @@ import * as _ from "underscore";
 
 @Component({
     selector: 'call-handler',
-    template
+    template,
+    styles: [style]
 })
 export class CallHandlerComponent implements OnInit, OnDestroy {
 

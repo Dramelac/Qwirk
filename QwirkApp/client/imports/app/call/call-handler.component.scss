@@ -1,0 +1,22 @@
+.show-call {
+  background-color: rgb(19, 150, 47);
+  border-radius: 50px;
+  color: white;
+  text-align: center;
+  font-size: 5px;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  position: relative; /* If you want text inside of it */
+}
+
+.text {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.div-button-sidenav {
+  padding-top: 10px;
+}

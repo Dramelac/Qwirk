@@ -2,8 +2,8 @@
 
 @include mat-core();
 $app-primary: mat-palette($mat-green, 500, 100, 700);
-$app-accent:  mat-palette($mat-grey, A200, A100, A400);
-$app-warn:    mat-palette($mat-red);
+$app-accent: mat-palette($mat-grey, A200, A100, A400);
+$app-warn: mat-palette($mat-red);
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 @include angular-material-theme($app-theme);
 
@@ -11,7 +11,11 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
   flex: 1 1 auto;
 }
 
-html,body { height: 100%; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   background-color: #e6e6e6;
@@ -25,7 +29,7 @@ body {
   height: 450px;
 }
 
-.message {
+.message  {
   margin-left: 30px;
   margin-right: 30px;
   margin-bottom: 10px;
@@ -34,7 +38,7 @@ body {
   color: white;
 }
 
-.call-div{
+.call-div {
   background-color: #d1d1d1;
   position: absolute;
   text-align: center;
@@ -46,6 +50,7 @@ body {
   z-index: 2;
 
 }
+
 .message-other {
   position: relative;
   background-color: rgb(148, 156, 148);
@@ -71,22 +76,22 @@ body {
 .message-mine {
   background-color: mat-color($app-primary);
   position: relative;
-	border-radius: .4em;
+  border-radius: .4em;
 }
 
 .message-mine:after {
   content: '';
-	position: absolute;
-	left: 0;
-	top: 50%;
-	width: 0;
-	height: 0;
-	border: 20px solid transparent;
-	border-right-color: mat-color($app-primary);
-	border-left: 0;
-	border-bottom: 0;
-	margin-top: -10px;
-	margin-left: -20px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-right-color: mat-color($app-primary);
+  border-left: 0;
+  border-bottom: 0;
+  margin-top: -10px;
+  margin-left: -20px;
 }
 
 .message-announce {
@@ -106,20 +111,19 @@ body {
   color: rgba(230, 44, 1, 0.78) !important;
 }
 
-.button-refuse{
+.button-refuse {
   background-color: #ff4f0b;
   float: right;
   margin-bottom: 10px;
   margin-right: 10%;
 }
 
-.button-accept{
+.button-accept {
   float: left;
   margin-left: 10%;
   margin-bottom: 10px;
 
 }
-
 
 .picture {
   max-width: 48px;
@@ -129,7 +133,7 @@ body {
   margin: 2px auto auto;
 }
 
-.info-button-contact{
+.info-button-contact {
   margin-left: 10px;
   margin-top: 15px;
 }
@@ -138,11 +142,12 @@ body {
   max-width: 30px;
   max-height: 30px;
 }
-.icone-select{
+
+.icone-select {
   width: 80px;
   height: 80px;
   float: left;
-  display:block ;
+  display: block;
 }
 
 .picture-thumbs {
@@ -164,7 +169,7 @@ body {
   visibility: visible;
 }
 
-.file-drop{
+.file-drop {
   width: 100%;
   height: 100%;
   float: left;
@@ -180,38 +185,45 @@ body {
   width: 100%;
   height: 100%;
 }
+
 //test
 .angular2-contextmenu .dropdown-menu {
   border: solid 1px black;
   background-color: white;
   padding: 0;
 }
+
 .angular2-contextmenu li {
   display: block;
   border-top: solid 1px black;
   text-transform: uppercase;
   text-align: center;
 }
+
 .angular2-contextmenu li:first-child {
-  border-top:none;
+  border-top: none;
 }
+
 .angular2-contextmenu a {
-  color:black;
+  color: black;
   display: block;
   padding: 0.5em 1em;
   text-decoration: none;
 }
+
 .angular2-contextmenu a:hover {
-  color:black;
-  background-color:white;
+  color: black;
+  background-color: white;
 }
-.angular2-contextmenu button{
+
+.angular2-contextmenu button {
   border: none;
   background: none;
   margin: -20 0 0 0;
 }
+
 @-webkit-keyframes monlogo {
-  to{
+  to {
     -webkit-transform: rotate(360deg);
   }
 }
@@ -229,75 +241,76 @@ body {
   margin-left: 0;
 }
 
-.col-md-10{
-  padding-right: 0;
-  padding-left: 0;
-
-}
-.col-md-12{
+.col-md-10 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.row{
+.col-md-12 {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.row {
   margin-right: 0px;
   margin-left: 0px;
 }
-.col-md-7{
+
+.col-md-7 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.nom-utilisateur{
+.nom-utilisateur {
   color: white;
   font-size: 20px;
 }
 
-.col-md-3{
-  padding-right: 0;
-  padding-left: 0;
-
-}
-.col-md-2{
+.col-md-3 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-9{
+.col-md-2 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-
-.col-md-5{
+.col-md-9 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
+.col-md-5 {
+  padding-right: 0;
+  padding-left: 0;
 
-.logosignup{
+}
+
+.logosignup {
   width: 300px;
   height: 300px;
 }
 
-.logo{
+.logo {
   width: 100%;
   height: 100%;
 }
 
-.button-contact{
+.button-contact {
   padding-bottom: 15px;
   width: 95%;
   height: 60px;
 
 }
 
-.div-max{
+.div-max {
   height: 100%;
   overflow: auto;
 }
@@ -306,71 +319,60 @@ body {
   text-align: center;
 }
 
-.button-sidenav{
+.width-max {
+  width: 100%;
+  overflow: auto;
 }
 
+.button-background {
+  background-color: #303030;
+  border: none;
 
-
-
-.info-utilisateur{
   width: 100%;
 }
 
-.div-button-sidenav{
-  padding-top: 10px;
-}
-
-.button-background{
-  background-color: #303030 ;
-  border: none;
-}
-
-.mat-button{
+.mat-button {
   padding: 0px 0px;
 }
 
-.div-color-logout{
+.div-color-logout {
   width: 100%;
   color: #0bb401;
   vertical-align: middle;
   text-align: center;
   //text-shadow: #ffffff 1px 1px, #ffffff -1px 1px, #ffffff -1px -1px, #ffffff 1px -1px;
 }
-.div-info{
+
+.div-info {
   font-size: 40px;
 
 }
 
-.grand-logo{
+.grand-logo {
   width: 400px;
   height: 400px;
 }
 
-.div-titre-router{
+.div-titre-router {
   width: 100%;
   height: 200px;
   background-color: #e6e6e6;
   text-align: center;
-  padding-top:25px;
+  padding-top: 25px;
   border-bottom: #d1d1d1 3px solid;
 }
 
-.petite-div-titre-router{
+.petite-div-titre-router {
   margin-right: auto;
-  margin:auto;
-  width:300px;
+  margin: auto;
+  width: 300px;
   height: 150px;
   padding-top: 35px;
 }
 
-.titre-routeur{
+.titre-routeur {
   font-size: 40px;
   margin-left: 10px;
-  padding-top:15px;
+  padding-top: 15px;
   display: block
-}
-
-.show-call {
-  background-color: gray;
-  border-radius: 50px;
 }

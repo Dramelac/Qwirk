@@ -5,7 +5,7 @@
 </div>
 <div *ngFor="let chat of chats | async">
     <div [contextMenu]="chatMenu" [contextMenuSubject]="chat">
-        <button *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
+        <button class="width-max" *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
             <img [src]="chat.picture | displayProfileImage" class="picture">
             <div>
                 <h2 class="chat-title">{{chat.title}}</h2>
