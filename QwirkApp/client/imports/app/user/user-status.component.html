@@ -1,6 +1,6 @@
 <div class="width-max col-md-12 statusbackground" [style.background-color]="color">
     <a md-button [routerLink]="['/profile']" class="col-md-12 row">
-        <img [src]="pictureId | displayProfileImage" alt="profile" class="tiny-picture"/>
+        <img [src]="profile.picture | displayProfileImage" alt="profile" class="tiny-picture"/>
         <span class="nom-utilisateur" *ngIf="profile && profile.username">{{ profile.username }}</span>
     </a>
     <select class="col-md-12 row" [(ngModel)]="selectedStatus" (ngModelChange)="updateStatus($event)">
