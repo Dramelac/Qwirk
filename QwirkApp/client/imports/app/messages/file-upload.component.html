@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div *ngIf="uploading" class="upload-modal">
+<!--<div *ngIf="uploading" class="upload-modal">
     <div class="modal-popup">
         <h3>Uploading {{name}}</h3>
         <span>Progress {{progress}}%</span><br>
@@ -16,7 +16,33 @@
         <span>Time elapsed {{elapsed}} s</span><br>
         <span>Time remaining {{remaining}} s</span><br>
     </div>
+</div>-->
+
+<!-- TEST -->
+<!-- Modal -->
+<div *ngIf="uploading" class="modal fade in show" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Uploading {{name}}</h4>
+      </div>
+      <div class="modal-body">
+        <span>Progress {{progress}}%</span><br>
+        <span>Speed {{speed}} KB/s</span><br>
+        <span>Time elapsed {{elapsed}} s</span><br>
+        <span>Time remaining {{remaining}} s</span><br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
+<!-- TEST -->
+
 
 <div *ngIf="error !== ''">
     <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
