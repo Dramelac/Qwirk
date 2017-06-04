@@ -378,7 +378,7 @@ a:hover, a:focus {
 
 .width-max {
   width: 100%;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .button-call {
@@ -463,6 +463,8 @@ a:hover, a:focus {
 .picture-head {
   width: 75%;
   max-width: 120px;
+  margin-left: 10px;
+  border-radius: 20px;
 }
 
 #crossbutton {
