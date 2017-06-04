@@ -31,6 +31,7 @@ export class FileUploadComponent implements OnInit {
 
     ngOnInit(): void {
         this.error = "";
+        
         $(document).ready(function () {
             $("body").bind('dragover', function () {
                 $(".modal-file-drop").addClass('modal-file-drop-dragover');
