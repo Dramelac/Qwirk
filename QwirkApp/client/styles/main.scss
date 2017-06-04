@@ -2,8 +2,8 @@
 
 @include mat-core();
 $app-primary: mat-palette($mat-green, 500, 100, 700);
-$app-accent:  mat-palette($mat-grey, A200, A100, A400);
-$app-warn:    mat-palette($mat-red);
+$app-accent: mat-palette($mat-grey, A200, A100, A400);
+$app-warn: mat-palette($mat-red);
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 @include angular-material-theme($app-theme);
 
@@ -37,7 +37,7 @@ a:hover, a:focus {
   height: 450px;
 }
 
-.message {
+.message  {
   margin-left: 30px;
   margin-right: 30px;
   margin-bottom: 10px;
@@ -46,7 +46,7 @@ a:hover, a:focus {
   color: white;
 }
 
-.call-div{
+.call-div {
   background-color: #d1d1d1;
   position: absolute;
   text-align: center;
@@ -59,6 +59,7 @@ a:hover, a:focus {
   z-index: 2;
 
 }
+
 .message-other {
   background-color: #949C94;
   position: relative;
@@ -66,28 +67,29 @@ a:hover, a:focus {
   border-radius: .4em;
 }
 
-.button-refuse{
+.button-refuse {
   float: right;
   margin-bottom: 10px;
   margin-right: 10%;
   border: none;
 }
 
-.button-accept{
+.button-accept {
   float: left;
   margin-left: 10%;
   margin-bottom: 10px;
   border: none;
 
 }
-.button-menu-call{
+
+.button-menu-call {
   background-color: #e6e6e6;
   float: right;
   border: none;
 
 }
 
-.button-menu-cam{
+.button-menu-cam {
   background-color: #e6e6e6;
   float: left;
   border: none;
@@ -96,38 +98,38 @@ a:hover, a:focus {
 
 .message-other:after {
   content: '';
-	position: absolute;
-	right: 0;
-	top: 50%;
-	width: 0;
-	height: 0;
-	border: 20px solid transparent;
-	border-left-color: #949C94;
-	border-right: 0;
-	border-bottom: 0;
-	margin-top: -10px;
-	margin-right: -20px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-left-color: #949C94;
+  border-right: 0;
+  border-bottom: 0;
+  margin-top: -10px;
+  margin-right: -20px;
 }
 
 .message-mine {
   background-color: #28AB21;
   position: relative;
-	border-radius: .4em;
+  border-radius: .4em;
 }
 
 .message-mine:after {
   content: '';
-	position: absolute;
-	left: 0;
-	top: 50%;
-	width: 0;
-	height: 0;
-	border: 20px solid transparent;
-	border-right-color: #28AB21;
-	border-left: 0;
-	border-bottom: 0;
-	margin-top: -10px;
-	margin-left: -20px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-right-color: #28AB21;
+  border-left: 0;
+  border-bottom: 0;
+  margin-top: -10px;
+  margin-left: -20px;
 }
 
 .message-announce {
@@ -170,7 +172,7 @@ a:hover, a:focus {
   margin-top: 2px;
 }
 
-.info-button-contact{
+.info-button-contact {
   margin-left: 10px;
   margin-top: 15px;
 }
@@ -179,11 +181,12 @@ a:hover, a:focus {
   max-width: 30px;
   max-height: 30px;
 }
-.icone-select{
+
+.icone-select {
   width: 80px;
   height: 80px;
   float: left;
-  display:block ;
+  display: block;
 }
 
 .picture-thumbs {
@@ -205,7 +208,7 @@ a:hover, a:focus {
   visibility: visible;
 }
 
-.file-drop{
+.file-drop {
   width: 100%;
   height: 100%;
   float: left;
@@ -221,38 +224,45 @@ a:hover, a:focus {
   width: 100%;
   height: 100%;
 }
+
 //test
 .angular2-contextmenu .dropdown-menu {
   border: solid 1px black;
   background-color: white;
   padding: 0;
 }
+
 .angular2-contextmenu li {
   display: block;
   border-top: solid 1px black;
   text-transform: uppercase;
   text-align: center;
 }
+
 .angular2-contextmenu li:first-child {
-  border-top:none;
+  border-top: none;
 }
+
 .angular2-contextmenu a {
-  color:black;
+  color: black;
   display: block;
   padding: 0.5em 1em;
   text-decoration: none;
 }
+
 .angular2-contextmenu a:hover {
-  color:black;
-  background-color:white;
+  color: black;
+  background-color: white;
 }
-.angular2-contextmenu button{
+
+.angular2-contextmenu button {
   border: none;
   background: none;
   margin: -20 0 0 0;
 }
+
 @-webkit-keyframes monlogo {
-  to{
+  to {
     -webkit-transform: rotate(360deg);
   }
 }
@@ -270,90 +280,94 @@ a:hover, a:focus {
   margin-left: 0;
 }
 
-.col-md-10{
-  padding-right: 0;
-  padding-left: 0;
-
-}
-.col-md-8{
-  padding-right: 0;
-  padding-left: 0;
-
-}
-.col-md-12{
+.col-md-10 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.row{
+.col-md-8 {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.col-md-12 {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.row {
   margin-right: 0px;
   margin-left: 0px;
 }
-.col-md-7{
+
+.col-md-7 {
   padding-right: 0;
   padding-left: 0;
 
 }
-.col-md-4{
+
+.col-md-4 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.nom-utilisateur{
+.nom-utilisateur {
   color: white;
   font-size: 20px;
 }
 
-.col-md-3{
-  padding-right: 0;
-  padding-left: 0;
-
-}
-.col-md-2{
+.col-md-3 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-9{
+.col-md-2 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-
-.col-md-5{
+.col-md-9 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-6{
+.col-md-5 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.logosignup{
+.col-md-6 {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.logosignup {
   width: 300px;
   height: 300px;
 }
 
-.logo{
+.logo {
   width: 100%;
   height: 100%;
 }
 
-.button-contact{
+.button-contact {
   padding-bottom: 15px;
   width: 95%;
   height: 60px;
 
 }
 
-.div-max{
+.div-max {
   height: 100%;
   overflow: auto;
 }
@@ -367,46 +381,43 @@ a:hover, a:focus {
   overflow: auto;
 }
 
-.button-call{
+.button-call {
   background-color: #e6e6e6;
   border: none;
   float: right;
 }
 
-.button-cam{
+.button-cam {
   background-color: #e6e6e6;
   border: none;
   float: left;
 }
 
-
-.button-cam{
+.button-cam {
   background-color: #e6e6e6;
   border: none;
 }
 
-
-
-.info-utilisateur{
+.info-utilisateur {
   width: 100%;
   padding-bottom: 10px;
 }
 
-.div-button-sidenav{
+.div-button-sidenav {
   padding-top: 10px;
 }
 
-.button-background{
-  background-color: #303030 ;
+.button-background {
+  background-color: #303030;
   border: none;
   width: 100%;
 }
 
-.mat-button{
+.mat-button {
   padding: 0px 0px;
 }
 
-.div-color-logout{
+.div-color-logout {
   width: 100%;
   height: 100%;
   color: #0bb401;
@@ -414,39 +425,44 @@ a:hover, a:focus {
   text-align: center;
   //text-shadow: #ffffff 1px 1px, #ffffff -1px 1px, #ffffff -1px -1px, #ffffff 1px -1px;
 }
-.div-info{
+
+.div-info {
   font-size: 40px;
 
 }
 
-.grand-logo{
+.grand-logo {
   width: 400px;
   height: 400px;
 }
 
-.div-titre-router{
+.div-titre-router {
   background-color: #e6e6e6;
-  text-align: center;
-  padding-bottom:25px;
+  padding-bottom: 15px;
   vertical-align: middle;
   border-bottom: #d1d1d1 3px solid;
 }
 
 .petite-div-titre-router {
-  margin: auto;
   height: 150px;
-  padding-top: 35px;
+  padding-top: 20px;
 }
 
-.titre-routeur{
+.titre-routeur {
   position: relative;
   margin-left: 10px;
   margin-top: auto;
   margin-bottom: auto;
-  font-size: 20px;
+  font-size: 40px;
   display: block;
-  float: left;
   text-align: left;
+  width: 100%;
+  overflow: hidden;
+}
+
+.picture-head {
+  width: 75%;
+  max-width: 120px;
 }
 
 #crossbutton {
@@ -454,64 +470,65 @@ a:hover, a:focus {
 }
 
 .drop-window {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba(0,86,132,.9);
-	z-index: 250000;
-	/*display: none;*/
-	text-align: center;
-	-webkit-transition: opacity 250ms;
-	transition: opacity 250ms;
-    pointer-events:none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 86, 132, .9);
+  z-index: 250000;
+  /*display: none;*/
+  text-align: center;
+  -webkit-transition: opacity 250ms;
+  transition: opacity 250ms;
+  pointer-events: none;
 }
 
 .drop-window-content {
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	right: 10px;
-	bottom: 10px;
-	border: 1px dashed #fff;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px dashed #fff;
 }
+
 .drop-window h3 {
-	margin: -.5em 0 0;
-	position: absolute;
-	top: 50%;
-	left: 0;
-	right: 0;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-	font-size: 40px;
-	color: #fff;
-	padding: 0;
+  margin: -.5em 0 0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #fff;
+  padding: 0;
 }
 
-.file-input{
+.file-input {
   display: inherit;
 }
 
-input[type="file"]{
+input[type="file"] {
   display: inherit;
 }
 
-.cancel{
+.cancel {
   border: none;
   color: black;
   float: right;
 }
 
-.success{
+.success {
   text-align: left;
 }
 
-.green{
+.green {
   background-color: #4caf50;
 }
 
-.red{
-  background-color:#f44336;
+.red {
+  background-color: #f44336;
 }

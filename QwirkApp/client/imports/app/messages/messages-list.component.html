@@ -1,13 +1,17 @@
 <div class="max-height global-flex">
     <div class="row div-titre-router">
         <div class="petite-div-titre-router">
-            <div class="col-md-8">
-                <img src="asset/img/user.png">
-                <p class="titre-routeur" *ngIf="chat" [contextMenu]="chatMenu"
+            <div class="col-md-2">
+                <img class="picture-head" src="asset/img/user.png">
+            </div>
+            <div class="col-md-7">
+                <p class="titre-routeur col-md-6" *ngIf="chat" [contextMenu]="chatMenu"
                    [contextMenuSubject]="chat">{{chat.title}}</p>
             </div>
-            <div class="col-md-2">
-                <call-action *ngIf="chat" [chat]="chat"></call-action>
+            <div class="col-md-3">
+                <div class="row pull-right">
+                    <call-action *ngIf="chat" [chat]="chat"></call-action>
+                </div>
             </div>
         </div>
     </div>
