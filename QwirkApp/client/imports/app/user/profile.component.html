@@ -1,92 +1,91 @@
-<div class="row div-titre-router">
-    <div class="col-md-12 center-block center-text">
-            <img class="col-md-2"  src="asset/img/user.png" >
+<div class="div-titre-router">
+    <div class="row petite-div-titre-router">
+        <div class="col-md-8">
+            <img src="asset/img/user.png">
             <p class="titre-routeur" *ngIf="profile && profile.username">{{ profile.username }}</p>
+        </div>
+        <div class="col-md-2">
+            <call-action *ngIf="chat" [chat]="chat"></call-action>
+        </div>
     </div>
 </div>
 
-<div class="col-md-12 center-block center-text">
-
+<div class="row col-md-12 center-lock center-text" style="position: relative">
     <br>
     <div *ngIf="profileForm && (profile || contact)" layout="column" layout-fill layout-margin layout-padding>
 
-        <div class="row">
-            <div class="col-md-12">
+        <div class="col-md-12">
 
-                <p *ngIf="myProfile">
-                    <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
-                    <br>
-                    <file-upload *ngIf="myProfile" (onFile)="onPictureUpdate($event)"></file-upload>
-                </p>
-
-
-                <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
-                      layout="column" layout-fill layout-padding layout-margin>
-
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="email" type="email"
-                                                                 placeholder="E-Mail"></md-input-container>
-                    <br>
-                    <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name">
-                    </md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="firstname" type="text"
-                                                                 placeholder="First name"></md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="lastname" type="text"
-                                                                 placeholder="Last name"></md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="newPassword" type="password"
-                                                                 placeholder="New Password"></md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="confirmPassword" type="password"
-                                                                 placeholder="Confirm Password"></md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="oldPassword" type="password"
-                                                                 placeholder="Old Password"></md-input-container>
+            <p *ngIf="myProfile">
+                <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
+                <br>
+                <file-upload *ngIf="myProfile" (onFile)="onPictureUpdate($event)"></file-upload>
+            </p>
 
 
-                    <div layout="row" layout-align="space-between center">
-                        <button md-raised-button class="mat-primary" type="submit" aria-label="profile">Edit Profile
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
+                  layout="column" layout-fill layout-padding layout-margin>
+
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="email" type="email"
+                                                             placeholder="E-Mail"></md-input-container>
+                <br>
+                <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name">
+                </md-input-container>
+                <br>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="firstname" type="text"
+                                                             placeholder="First name"></md-input-container>
+                <br>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="lastname" type="text"
+                                                             placeholder="Last name"></md-input-container>
+                <br>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="newPassword" type="password"
+                                                             placeholder="New Password"></md-input-container>
+                <br>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="confirmPassword" type="password"
+                                                             placeholder="Confirm Password"></md-input-container>
+                <br>
+                <md-input-container *ngIf="myProfile"><input mdInput formControlName="oldPassword" type="password"
+                                                             placeholder="Old Password"></md-input-container>
+
+
+                <div layout="row" layout-align="space-between center">
+                    <button md-raised-button class="mat-primary" type="submit" aria-label="profile">Edit Profile
+                    </button>
+                </div>
+            </form>
 
         </div>
         <br>
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8">
-                <div *ngIf="error !== ''">
-                    <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
-                        <div class="col-md-6">
-                            <p class="mat-body-1 success">{{ error }}</p>
-                        </div>
+        <div class="col-md-offset-2 col-md-8">
+            <div *ngIf="error !== ''">
+                <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
+                    <div class="col-md-6">
+                        <p class="mat-body-1 success">{{ error }}</p>
+                    </div>
 
-                        <div class="col-md-offset-6">
-                            <button class="cancel red" (click)="error=''">
-                                <img class="col-md-7"  src="asset/img/delete.png" >
-                            </button>
-                        </div>
-                    </md-toolbar>
-                </div>
-                <div *ngIf="success !== ''">
-                    <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
-                        <div class="col-md-6">
-                            <p class="mat-body-1 success">{{ success }}</p>
-                        </div>
+                    <div class="col-md-offset-6">
+                        <button class="cancel red" (click)="error=''">
+                            <img class="col-md-7" src="asset/img/delete.png">
+                        </button>
+                    </div>
+                </md-toolbar>
+            </div>
+            <div *ngIf="success !== ''">
+                <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
+                    <div class="col-md-6">
+                        <p class="mat-body-1 success">{{ success }}</p>
+                    </div>
 
-                        <div class="col-md-offset-6">
-                            <button class="cancel green" (click)="success=''">
-                                <img class="col-md-7"  src="asset/img/checkmark.png" >
-                            </button>
-                        </div>
-                    </md-toolbar>
-                </div>
-
+                    <div class="col-md-offset-6">
+                        <button class="cancel green" (click)="success=''">
+                            <img class="col-md-7" src="asset/img/checkmark.png">
+                        </button>
+                    </div>
+                </md-toolbar>
             </div>
 
-
         </div>
+
 
     </div>
     <div *ngIf="!profileForm">
