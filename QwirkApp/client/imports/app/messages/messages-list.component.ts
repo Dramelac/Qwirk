@@ -30,8 +30,6 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     autoScroller: MutationObserver;
     messageLazyLoadingLevel: number = 0;
     loadingMessage: boolean;
-    isMessageChats: boolean;
-    type : ChatType;
 
     waitForRead: string[] = [];
 
@@ -82,12 +80,6 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                 if (!this.chat) {
                     this.router.navigate(['/']);
                     return;
-                }
-                this.type = this.chat.type;
-                if(this.chat.type === ChatType.CHAT){
-                    this.isMessageChats = true;
-                } else {
-                    this.isMessageChats = false;
                 }
                 this.chat.isAdmin = _.contains(this.chat.admin, Meteor.userId());
                 if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {

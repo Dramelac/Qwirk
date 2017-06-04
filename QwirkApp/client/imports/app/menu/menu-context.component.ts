@@ -17,6 +17,10 @@ export class ContextComponent implements OnInit, OnDestroy {
     @Input("isContact") isContact: boolean;
     @Input("isMessagesChats") isMessagesChats: boolean = false;
 
+    isUpdate: boolean;
+    updateMembers : boolean;
+    updateTitle: boolean;
+    updateContact: boolean;
     constructor(private router: Router) {
     }
 
@@ -57,6 +61,10 @@ export class ContextComponent implements OnInit, OnDestroy {
                 Chats.update({_id: groupId}, {$set: {user: user}});
             }
         }
+    }
+    addMembers(){
+        this.isUpdate = true;
+        this.updateMembers = true;
     }
 
 }

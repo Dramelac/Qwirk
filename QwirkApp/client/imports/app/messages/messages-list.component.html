@@ -6,7 +6,7 @@
         </p>
     </div>
 </div>
-<h4 *ngIf="chat" [contextMenu]="chatMenu" [contextMenuSubject]="chat">{{chat.title}}</h4>
+<h4 *ngIf="chat">{{chat.title}}</h4>
 
 <call-action *ngIf="chat" [chat]="chat"></call-action>
 
@@ -49,4 +49,3 @@
     </div>
 </div>
 <message-form *ngIf="chat" [chat]="chat"></message-form>
-<context [type]="type" [isMessagesChats] ="isMessageChats"></context>

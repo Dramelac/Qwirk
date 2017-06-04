@@ -81,7 +81,7 @@ export class FileUploadComponent implements OnInit {
             let self = this;
             this.name = data.name;
 
-            // pick from an object only: name, type and size
+            // pick from an object only: name, typeChat and size
             const file = {
                 name: data.name,
                 type: data.type,

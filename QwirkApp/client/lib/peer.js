@@ -268,7 +268,7 @@ DataConnection.prototype.handleMessage = function(message) {
       Negotiator.handleCandidate(this, payload.candidate);
       break;
     default:
-      util.warn('Unrecognized message type:', message.type, 'from peer:', this.peer);
+      util.warn('Unrecognized message typeChat:', message.type, 'from peer:', this.peer);
       break;
   }
 }
@@ -342,7 +342,7 @@ MediaConnection.prototype.handleMessage = function(message) {
       Negotiator.handleCandidate(this, payload.candidate);
       break;
     default:
-      util.warn('Unrecognized message type:', message.type, 'from peer:', this.peer);
+      util.warn('Unrecognized message typeChat:', message.type, 'from peer:', this.peer);
       break;
   }
 }
@@ -397,7 +397,7 @@ var Negotiator = {
   pcs: {
     data: {},
     media: {}
-  }, // type => {peerId: {pc_id: pc}}.
+  }, // typeChat => {peerId: {pc_id: pc}}.
   //providers: {}, // provider's id => providers (there may be multiple providers/client.
   queue: [] // connections that are delayed due to a PC being in use.
 }
@@ -444,7 +444,7 @@ Negotiator.startConnection = function(connection, options) {
 
 Negotiator._getPeerConnection = function(connection, options) {
   if (!Negotiator.pcs[connection.type]) {
-    util.error(connection.type + ' is not a valid connection type. Maybe you overrode the `type` property somewhere.');
+    util.error(connection.type + ' is not a valid connection typeChat. Maybe you overrode the `typeChat` property somewhere.');
   }
 
   if (!Negotiator.pcs[connection.type][connection.peer]) {
@@ -967,7 +967,7 @@ Peer.prototype._handleMessage = function(message) {
           this._addConnection(peer, connection);
           this.emit('connection', connection);
         } else {
-          util.warn('Received malformed connection type:', payload.type);
+          util.warn('Received malformed connection typeChat:', payload.type);
           return;
         }
         // Find messages.
@@ -979,7 +979,7 @@ Peer.prototype._handleMessage = function(message) {
       break;
     default:
       if (!payload) {
-        util.warn('You received a malformed message from ' + peer + ' of type ' + type);
+        util.warn('You received a malformed message from ' + peer + ' of typeChat ' + type);
         return;
       }
 
@@ -1795,7 +1795,7 @@ function EventEmitter() { /* Nothing to set */ }
 /**
  * Holds the assigned EventEmitters by name.
  *
- * @type {Object}
+ * @typeChat {Object}
  * @private
  */
 EventEmitter.prototype._events = undefined;

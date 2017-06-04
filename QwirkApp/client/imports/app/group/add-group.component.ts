@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {Component, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./add-group.component.html";
 import {Contact} from "../../../../both/models/contact.model";
 import {Contacts} from "../../../../both/collections/contact.collection";
@@ -26,6 +26,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     selected: string[];
     error : boolean;
 
+    @Input("isUpdate") isUpdate : boolean;
     @ViewChild(ContextMenuComponent) public groupMenu: ContextMenuComponent;
     constructor(private router: Router) {
 
