@@ -8,10 +8,6 @@
         <div>
             <router-outlet></router-outlet>
         </div>
-    </div>
-
-    <div *ngIf="user">
-        <call-handler></call-handler>
-        <call-notif></call-notif>
+        <call-notif *ngIf="user"></call-notif>
     </div>
 </div>
