@@ -39,7 +39,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.autoScroller = this.autoScroll();
         this.paramsSub = this.route.params
-            .map(params => params["chatId"])
+                .map(params => params["chatId"])
             .subscribe(chat => {
                 this.chatId = chat;
 

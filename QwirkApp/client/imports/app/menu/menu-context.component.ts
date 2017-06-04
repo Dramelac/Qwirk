@@ -15,12 +15,10 @@ export class ContextComponent implements OnInit, OnDestroy {
 
     @Input("type") type: ChatType;
     @Input("isContact") isContact: boolean;
-    @Input("isMessagesChats") isMessagesChats: boolean = false;
 
     isUpdate: boolean;
-    updateMembers : boolean;
-    updateTitle: boolean;
-    updateContact: boolean;
+    updateMembers: boolean;
+
     constructor(private router: Router) {
     }
 
@@ -62,9 +60,9 @@ export class ContextComponent implements OnInit, OnDestroy {
             }
         }
     }
-    addMembers(){
-        this.isUpdate = true;
-        this.updateMembers = true;
+
+    editGroup(group: string) {
+        this.router.navigate(["/addGroup/" + group]);
     }
 
 }

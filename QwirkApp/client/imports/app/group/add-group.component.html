@@ -32,7 +32,7 @@
             </ul>
         </div>
     </div>
-    <button *ngIf="!isUpdate" (click)="addGroup()">Create</button>
-    <button *ngIf="isUpdate" (click)="updateGroup()">Update</button>
+    <button *ngIf="!groupId" (click)="addGroup()">Create</button>
+    <button *ngIf="groupId" (click)="updateGroup()">Update</button>
     <p *ngIf="error">Please add user before ^^</p>
 </div>

@@ -16,7 +16,7 @@
     <div *ngIf="type === 'Groups'">
         <template contextMenuItem let-item [enabled]="false">
             <span>
-                <button (click)="true">Edit Group</button>
+                <button (click)="editGroup(item?._id)">Edit Group</button>
             </span>
         </template>
         <template contextMenuItem let-item [enabled]="false">

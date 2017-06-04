@@ -20,6 +20,7 @@ export const routes: Route[] = [
     {path: 'verify-email/:token', component: VerifyMailComponent},
     {path: 'profile/:profileID', component: ProfileComponent},
     {path: 'profile', component: ProfileComponent, canActivate: ['canActivateForLoggedIn']},
+    {path: 'addGroup/:groupId', component: AddGroupComponent, canActivate: ['canActivateForLoggedIn']},
     {path: 'addGroup', component: AddGroupComponent, canActivate: ['canActivateForLoggedIn']}
 ];
 
