@@ -1,14 +1,15 @@
-<div class="div-titre-router" >
-    <div class="petite-div-titre-router">
-        <img class="icone-select" src="asset/img/comments.png" >
-        <p class="titre-routeur">
-            Message
-        </p>
+<div class="div-titre-router">
+    <div class="row petite-div-titre-router">
+        <div class="col-md-8">
+            <img src="asset/img/user.png">
+            <p class="titre-routeur" *ngIf="chat" [contextMenu]="chatMenu"
+               [contextMenuSubject]="chat">{{chat.title}}</p>
+        </div>
+        <div class="col-md-2">
+            <call-action *ngIf="chat" [chat]="chat"></call-action>
+        </div>
     </div>
 </div>
-<h4 *ngIf="chat" [contextMenu]="chatMenu" [contextMenuSubject]="chat">{{chat.title}}</h4>
-
-<call-action *ngIf="chat" [chat]="chat"></call-action>
 
 <div id="ChatList">
     <div *ngIf="loadingMessage">Loading messages ...</div>
@@ -23,7 +24,8 @@
             </div>
             <div *ngIf="message.type != 'announce'" [class]="'col-md-9 message message-' + message.ownership">
                 <div class="row">
-                    <div *ngIf="message.type == 'text'" class="col-md-10 message-raw" [innerHTML]="message.content"></div>
+                    <div *ngIf="message.type == 'text'" class="col-md-10 message-raw"
+                         [innerHTML]="message.content"></div>
                     <div *ngIf="message.type == 'picture'" class="col-md-10">
                         <a target="_blank" href="{{message.content | displayMainImage}}">
                             <span>{{message.content | displayFileName}}</span><br>
@@ -60,4 +62,4 @@
     </div>
 </div>
 <message-form *ngIf="chat" [chat]="chat"></message-form>
-<context [type]="type" [isMessagesChats] ="isMessageChats"></context>
+<context [type]="type" [isMessagesChats]="isMessageChats"></context>

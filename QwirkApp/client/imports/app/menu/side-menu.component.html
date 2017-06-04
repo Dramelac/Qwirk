@@ -33,12 +33,10 @@
     <div class="col-md-9 row appmenu">
         <div class="col-md-12 row">
             <img class="logo" src="logoqwirk.png">
-            <div id="statusbackground">
-                <user-status ></user-status>
-                <chat-list [hidden]="selected!==0" [type]="typeChat"></chat-list>
-                <contact-list [hidden]="selected!==1"></contact-list>
-                <chat-list [hidden]="selected!==2" [type]="typeGroup"></chat-list>
-            </div>
+            <user-status ></user-status>
+            <chat-list [hidden]="selected!==0" [type]="typeChat"></chat-list>
+            <contact-list [hidden]="selected!==1"></contact-list>
+            <chat-list [hidden]="selected!==2" [type]="typeGroup"></chat-list>
 
         </div>
     </div>
