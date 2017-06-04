@@ -6,7 +6,9 @@
             <side-menu></side-menu>
         </div>
         <div class="col-md-10">
-            <router-outlet></router-outlet>
+            <div class="row">
+                <router-outlet></router-outlet>
+            </div>
         </div>
         <call-notif *ngIf="user"></call-notif>
     </div>
