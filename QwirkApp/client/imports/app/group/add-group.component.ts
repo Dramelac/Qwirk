@@ -133,10 +133,10 @@ export class AddGroupComponent implements OnInit, OnDestroy {
 
     updateGroup(){
         if (this.mySelection.length > 0) {
-           this.mySelection.map((u) => {
-                this.group.user.push(u.friendId);
+            let listUserId = this.mySelection.map((u) => {
+                return u.friendId
             });
-            Chats.update({_id : this.group._id},{$set : {user : this.group.user}});
+            Chats.update({_id : this.group._id},{$push : {user : { $each: listUserId }}});
         }
         if(this.groupTitle !== this.group.title){
            Chats.update({_id : this.group._id},{$set : {title : this.groupTitle}});

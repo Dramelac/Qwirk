@@ -40,7 +40,6 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
                             } else {
                                 this.cancel();
                             }
-
                         });
                     });
                 }
