@@ -4,7 +4,7 @@ import style from "./call-handler.component.scss";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CallRequest, CallUser, Chat, PeerUser, SessionKey} from "../../../../both/models";
-import {CallRequests, Chats, Profiles} from "../../../../both/collections";
+import {CallRequests, Chats, Contacts, Profiles} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 import * as _ from "underscore";
 
@@ -353,14 +353,20 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         MeteorObservable.subscribe('profiles', user.userId).subscribe(() => {
             let profile = Profiles.findOne({_id: user.profileId});
             if (profile) {
-                //TODO update to contact name
                 tempUser = {
                     username: profile.username,
                     videoStream: stream.getVideoTracks().length >= 1 ? stream.getVideoTracks()[0] : null,
                     videoURL: this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream)),
                     peerId: user.peerId
-                }
-                ;
+                };
+                MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                    MeteorObservable.autorun().subscribe(() => {
+                        let contact = Contacts.findOne({profileId : profile._id});
+                        if (contact) {
+                            tempUser.username = contact.displayName;
+                        }
+                    });
+                });
                 MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
                         this.zone.run(() => {
@@ -381,7 +387,6 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.localStream.getAudioTracks().forEach((track) => {
             track.enabled = !track.enabled;
 
-            //TODO change to icon
             this.micButton = track.enabled;
         });
     }
@@ -390,7 +395,6 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.localStream.getVideoTracks().forEach((track) => {
             track.enabled = !track.enabled;
 
-            //TODO change to icon
             this.camButton = !track.enabled;
         });
     }
