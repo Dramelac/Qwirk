@@ -33,19 +33,13 @@ Meteor.publish('chat', function (chatId: string): Mongo.Cursor<Chat> {
     if (!this.userId) {
         return;
     }
-    let chat =  Chats.collection.findOne({_id: chatId});
-    if(_.contains(chat.user,Meteor.userId())){
-        return Chats.collection.find({
-            _id: chatId
-        }, {
-            fields: {
-                _id: 1,
-                title: 1,
-                publicly: 1,
-                user : 1
-            }
-        });
-    } else {
-       return null;
-    }
+
+    return Chats.collection.find({
+        _id : chatId,
+        publicly: true
+    }, {
+        fields: {
+            title: 1
+        }
+    });
 });

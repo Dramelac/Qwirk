@@ -1,6 +1,10 @@
-<div>
-    <h4 *ngIf="group">Welcome on the group's : {{group.title}}</h4>
+<div *ngIf="group && !isMember">
+    <h4>Welcome on the group's : {{group.title}}</h4>
 
-    <button (click)="joinGroup()">Join Group !</button>
-    <button (click)="cancel()">Cancel</button>
+    <button md-button class="mat-primary" (click)="joinGroup()">Join Group !</button>
+    <button md-button class="mat-primary" (click)="cancel()">Cancel</button>
+</div>
+<div *ngIf="!group || isMember">
+    <h4>You can't join this group.</h4>
+    <button md-button class="mat-primary" (click)="cancel()">Go to home</button>
 </div>
