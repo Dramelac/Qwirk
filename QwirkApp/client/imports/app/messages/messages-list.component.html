@@ -48,7 +48,7 @@
                             WIZZZZZZ
                         </div>
                         <span class="message-date col-md-1">{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
-                        <span *ngIf="message.isNew" class="new-message-tag"><i class="material-icons">error_outline</i></span>
+                        <span *ngIf="message.isNew" class="new-message-tag"><i style="color: #efff09" class="material-icons orange800">error_outline</i></span>
 
                     </div>
                     <div class="row">
@@ -70,5 +70,4 @@
     <div class="row">
         <message-form *ngIf="chat" [chat]="chat"></message-form>
     </div>
-    <context [type]="type" [isMessagesChats]="isMessageChats"></context>
 </div>

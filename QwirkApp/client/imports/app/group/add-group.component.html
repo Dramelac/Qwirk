@@ -1,9 +1,10 @@
 <div>
     <div class="div-titre-router" >
         <div class="petite-div-titre-router">
-            <img class="icone-select" src="asset/img/users.png" >
+            <img class="icone-select" *ngIf="group" [src]="groupPictureId | displayProfileImage" >
             <p class="titre-routeur">
-                New Group
+                <span *ngIf="!group">New Group</span>
+                <span *ngIf="group">Edit {{group.title}}</span>
             </p>
         </div>
     </div>
@@ -11,6 +12,7 @@
     <label>Group's Name
         <input placeholder="Title" [(ngModel)] = "groupTitle"/>
     </label>
+    <file-upload *ngIf="group" [chatId]="groupId" (onFile)="onPictureUpdate($event)"></file-upload>
     <div *ngIf="mySelection.length > 0">
         <div *ngFor="let selected of mySelection">
             <div>
@@ -32,6 +34,22 @@
             </ul>
         </div>
     </div>
-    <button (click)="addGroup()">Create</button>
+    <input type="checkbox" [(ngModel)] = "publicly">Publicly</input><br>
+    <button *ngIf="!groupId" (click)="addGroup()">Create</button>
+    <button *ngIf="groupId" (click)="updateGroup()">Update</button>
     <p *ngIf="error">Please add user before ^^</p>
+
+    <div *ngIf="errorMessage !== ''">
+        <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
+            <p class="mat-body-1">{{ errorMessage }}</p>
+            <button (click)="errorMessage=''">X</button>
+        </md-toolbar>
+    </div>
+
+    <div *ngIf="successMessage !== ''">
+        <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
+            <p class="mat-body-1">{{ successMessage }}</p>
+            <button (click)="successMessage=''">X</button>
+        </md-toolbar>
+    </div>
 </div>
