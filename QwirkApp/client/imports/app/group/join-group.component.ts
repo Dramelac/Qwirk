@@ -34,12 +34,17 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
                             this.group = Chats.findOne({_id: this.groupId});
                             if (this.group) {
                                 this.isMember = !!this.group.user;
+                                if (!this.group.publicly) {
+                                    this.cancel();
+                                }
+                            } else {
+                                this.cancel();
                             }
+
                         });
                     });
                 }
             });
-
     }
 
     ngOnDestroy(): void {
