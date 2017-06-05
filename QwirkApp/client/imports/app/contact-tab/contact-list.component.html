@@ -30,7 +30,6 @@
                 <img [src]="profile.picture | displayProfileImage" class="picture">
                 <div>
                     <p>{{profile.username}}</p>
-                    <p>{{profile.userId}}</p>
                     <div *ngIf="!requestSent(profile.userId)">
                         <button (click)="sendFriendRequest(profile.userId)">Add</button>
                     </div>
