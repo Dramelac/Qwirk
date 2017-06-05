@@ -84,6 +84,16 @@ export class ChatsComponent implements OnInit, OnDestroy {
 
                         });
                     }));
+                } else {
+                    let picId = chat.picture;
+                    chat.picture = "";
+                    MeteorObservable.subscribe("file", picId).subscribe(() => {
+                        MeteorObservable.autorun().subscribe(() => {
+                            this.zone.run(()=>{
+                                chat.picture = picId;
+                            });
+                        });
+                    });
                 }
 
                 // This will make the last message reactive
