@@ -152,6 +152,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
         this.micButton = true;
 
+        //TODO update debug level
         this.peer = new Peer({
             host: "qwirk-peerjs.herokuapp.com",
             port: 443,
