@@ -1,7 +1,7 @@
-<div class="max-height global-flex" >
+<div class="global-flex" >
     <div class="col-md-12">
         <input class="search-bar col-md-10" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
-        <div class="col-md-2" *ngIf="query" style="float: right;position: relative">
+        <div class="col-md-2 div-button-del" *ngIf="query">
             <button class="buttondel col-md-12" (click)="clearRequest()"><i class="col-md-12 material-icons">format_paint</i></button>
         </div>
     </div>
@@ -27,7 +27,7 @@
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
             <div class="row">
                 <button class="col-md-12 searchuser" type="submit">
-                    <p class="col-md-10 textesearch" >Search User</p>
+                    <p class="col-md-10 textesearch" >Search In Qwirk</p>
                     <div class="col-md-2">
                         <i class="material-icons col-md-12">search</i>
                     </div>
