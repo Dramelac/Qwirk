@@ -12,7 +12,7 @@
     <label>Group's Name
         <input placeholder="Title" [(ngModel)] = "groupTitle"/>
     </label>
-    <file-upload *ngIf="group" (onFile)="onPictureUpdate($event)"></file-upload>
+    <file-upload *ngIf="group" [chatId]="groupId" (onFile)="onPictureUpdate($event)"></file-upload>
     <div *ngIf="mySelection.length > 0">
         <div *ngFor="let selected of mySelection">
             <div>

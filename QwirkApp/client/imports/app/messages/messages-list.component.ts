@@ -82,14 +82,19 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                     return;
                 }
                 this.chat.isAdmin = _.contains(this.chat.admin, Meteor.userId());
-                if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
+                if (this.chat.type === ChatType.CHAT) {
                     this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
                     MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
                         let profile = Profiles.findOne({userId: this.distantUserId});
                         if (profile) {
                             this.chat.title = profile.username;
-                            this.chat.picture = profile.picture;
+                            this.chat.picture = "";
                             //TODO Add status user
+                            MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    this.chat.picture = profile.picture;
+                                });
+                            });
                         }
                     });
                 }
