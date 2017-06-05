@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import style from "./profile.component.scss";
 import template from "./profile.component.html";
 import {Contact, File, Profile} from "../../../../both/models";
 import {Contacts, Files, Profiles} from "../../../../both/collections";
@@ -9,7 +10,8 @@ import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
     selector: 'profile',
-    template
+    template,
+    styles: [style]
 })
 @InjectUser('user')
 export class ProfileComponent implements OnInit {

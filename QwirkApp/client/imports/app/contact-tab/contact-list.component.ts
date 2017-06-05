@@ -4,8 +4,8 @@ import {Router} from "@angular/router";
 import {ContextMenuComponent} from "angular2-contextmenu";
 import {Observable, Subscription} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
-import {Profile, FriendRequest, Contact, SessionKey} from "../../../../both/models";
-import {Profiles, FriendsRequest, Contacts} from "../../../../both/collections";
+import {Contact, FriendRequest, Profile, SessionKey} from "../../../../both/models";
+import {Contacts, FriendsRequest, Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'contact-list',
@@ -63,6 +63,17 @@ export class ContactListComponent implements OnInit, OnDestroy {
                                     this.zone.run(() => {
                                         for(let contact of result){
                                             contact.profile = Profiles.findOne({_id : contact.profileId});
+                                            if (contact.profile){
+                                                let picId:string = contact.profile.picture;
+                                                contact.profile.picture = "";
+                                                MeteorObservable.subscribe("file", picId).subscribe(() => {
+                                                    MeteorObservable.autorun().subscribe(() => {
+                                                        this.zone.run(()=>{
+                                                            contact.profile.picture = picId;
+                                                        });
+                                                    });
+                                                });
+                                            }
                                         }
                                     });
                                 }

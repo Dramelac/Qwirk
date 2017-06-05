@@ -18,7 +18,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     profilesub: Subscription;
     selectedStatus: number;
 
-    pictureId: string;
+    color: string;
 
     constructor(private zone: NgZone) {
     }
@@ -26,12 +26,12 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.loadingValue();
         //console.log("sub to profile :", Meteor.userId());
-        setTimeout(()=>{
+        setTimeout(() => {
             this.subAction();
-        },100);
+        }, 100);
     }
 
-    subAction(){
+    subAction() {
         this.profilesub = MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.zone.run(() => {
@@ -39,16 +39,14 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                     if (this.profile) {
                         this.selectedStatus = this.profile.status;
                         this.colorStatus(this.selectedStatus);
-                        this.pictureId = "";
                         MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
                             MeteorObservable.autorun().subscribe(() => {
-                                this.pictureId = this.profile.picture;
                             });
                         });
                         //this.status = StatusToString(this.profile.status);
                     } else {
                         //console.log("profile not found, debug info :", Meteor.userId(), this.profile, this.profilesub);
-                        if (Meteor.userId()){
+                        if (Meteor.userId()) {
                             console.log("Error loading profile");
                         } else {
                             this.loadingValue();
@@ -68,10 +66,11 @@ export class UserStatusComponent implements OnInit, OnDestroy {
         this.profile = {
             username: "Loading"
         };
+        this.color = "green";
     }
 
     updateStatus(value): void {
-        if (this.profile){
+        if (this.profile) {
             value = parseInt(value);
 
             Profiles.update(this.profile._id, {$set: {status: value}});
@@ -84,23 +83,23 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     }
 
     colorStatus(statusid): void {
-            switch(statusid) {
+        this.zone.run(()=>{
+            switch (statusid) {
                 case 0:
-                    $('#statusbackground').css('background-color', 'gray');
-                    $('#statusbackground').css('border-right', 'gray');
-                break;
+                    this.color = 'gray';
+                    break;
                 case 1:
-                    $('#statusbackground').css('background-color', 'green');
-                    $('#statusbackground').css('border-right', 'green');
-                break;
+                    this.color = '#4caf50';
+                    break;
                 case 2:
-                    $('#statusbackground').css('background-color', 'orange');
-                    $('#statusbackground').css('border-right', 'orange');
-                break;
+                    this.color = 'orange';
+                    break;
                 case 3:
-                    $('#statusbackground').css('background-color', 'red');
-                    $('#statusbackground').css('border-right', 'red');
-                break;
+                    this.color = '#f44336';
+                    break;
+                default:
+                    this.color = "gray";
             }
+        });
     }
 }

@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
-import {Chats, Files, Messages, Profiles} from "../../../../both/collections";
-import {Chat, Message, MessageType} from "../../../../both/models";
+import {Chats, Contacts, Files, Messages, Profiles} from "../../../../both/collections";
+import {Chat, ChatType, Message, MessageType} from "../../../../both/models";
 import template from "./messages-list.component.html";
 import style from "./messages-list.component.scss";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -12,7 +12,6 @@ import "jquery";
 import "jquery-ui";
 import * as _ from "underscore";
 import {Observable, Subscriber} from "rxjs";
-import {ChatType} from "../../../../both/models/chat.model";
 
 @Component({
     selector: 'messages-list',
@@ -82,14 +81,28 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                     return;
                 }
                 this.chat.isAdmin = _.contains(this.chat.admin, Meteor.userId());
-                if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
+                if (this.chat.type === ChatType.CHAT) {
                     this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
                     MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
                         let profile = Profiles.findOne({userId: this.distantUserId});
                         if (profile) {
                             this.chat.title = profile.username;
-                            this.chat.picture = profile.picture;
+                            this.chat.picture = "";
+
+                            MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    let contact = Contacts.findOne({profileId : profile._id});
+                                    if (contact) {
+                                        this.chat.title = contact.displayName;
+                                    }
+                                });
+                            });
                             //TODO Add status user
+                            MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    this.chat.picture = profile.picture;
+                                });
+                            });
                         }
                     });
                 }
@@ -106,12 +119,19 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             MeteorObservable.subscribe('profiles', message.ownerId).subscribe(() => {
                                 let profile = Profiles.findOne({userId: message.ownerId});
                                 if (profile) {
+                                    MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                                        MeteorObservable.autorun().subscribe(() => {
+                                            let contact = Contacts.findOne({profileId : profile._id});
+                                            if (contact) {
+                                                message.ownerName = contact.displayName;
+                                            }
+                                        });
+                                    });
                                     MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
                                         MeteorObservable.autorun().subscribe(() => {
                                             message.ownerPictureId = profile.picture;
                                         });
                                     });
-                                    //TODO update to contact name
                                     message.ownerName = profile.username;
                                 } else {
                                     console.log("Error loading distant profile");

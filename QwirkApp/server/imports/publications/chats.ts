@@ -43,3 +43,14 @@ Meteor.publish('chat', function (chatId: string): Mongo.Cursor<Chat> {
         }
     });
 });
+
+Meteor.publish('adminChat', function(chatId : string): Mongo.Cursor<Chat> {
+    if (!this.userId) {
+        return;
+    }
+
+    return Chats.collection.find({
+        _id : chatId,
+        admin: this.userId
+    });
+});

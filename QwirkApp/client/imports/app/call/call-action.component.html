@@ -1,6 +1,15 @@
 <div *ngIf="!isCallActive && !pendingCallRequest">
-    <button (click)="call(false)">Vocal</button>
-    <button (click)="call(true)">Video</button>
+    <div class="col-md-6">
+        <button class="button-menu-call" aria-label="login" (click)="call(false)">
+            <img class="col-md-7 button-call"  src="asset/img/phone.png" >
+        </button>
+    </div>
+    <div class="col-md-6">
+        <button class="button-menu-cam" aria-label="login" (click)="call(true)">
+            <img class="col-md-7 button-cam"  src="asset/img/video_camera.png" >
+        </button>
+
+    </div>
 </div>
 <div *ngIf="pendingCallRequest">
     <button (click)="join()">Join current call</button>
