@@ -1,12 +1,10 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import template from "./add-group.component.html";
-import {Contact} from "../../../../both/models/contact.model";
-import {Contacts} from "../../../../both/collections/contact.collection";
+import {Chat, ChatType, Contact, File} from "../../../../both/models";
+import {Chats, Contacts, Files} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 import {Subscription} from "rxjs/Subscription";
 import * as _ from "underscore";
-import {Chats} from "../../../../both/collections/chat.collection";
-import {Chat, ChatType} from "../../../../both/models/chat.model";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -19,6 +17,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     groupId: string;
     group: Chat;
     groupTitle: string = null;
+    groupPictureId: string;
     query: string = null;
     contactsSub: Subscription;
     paramSub: Subscription;
@@ -27,6 +26,9 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     selected: string[];
     error: boolean;
     publicly:boolean = false;
+
+    errorMessage: string;
+    successMessage: string;
 
     constructor(private route: ActivatedRoute, private router: Router) {
 
@@ -37,16 +39,27 @@ export class AddGroupComponent implements OnInit, OnDestroy {
             MeteorObservable.autorun().subscribe(() => {
             });
         });
+        this.errorMessage = "";
+        this.successMessage = "";
         this.paramSub = this.route.params
             .map(params => params["groupId"])
             .subscribe(group => {
                 this.groupId = group;
 
-                this.group = Chats.collection.findOne({_id : this.groupId});
-                if(this.group){
-                    this.groupTitle = this.group.title;
-                    this.publicly = this.group.publicly;
-                }
+                MeteorObservable.subscribe('adminChat', this.groupId).subscribe(() => {
+                    MeteorObservable.autorun().subscribe(() => {
+                        this.group = Chats.collection.findOne({_id : this.groupId});
+                        if(this.group){
+                            MeteorObservable.subscribe("file", this.group.picture).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    this.groupPictureId = this.group.picture;
+                                });
+                            });
+                            this.groupTitle = this.group.title;
+                            this.publicly = this.group.publicly;
+                        }
+                    });
+                });
             });
     }
 
@@ -75,6 +88,21 @@ export class AddGroupComponent implements OnInit, OnDestroy {
 
         } else {
             this.contactFiltred = [];
+        }
+    }
+
+    onPictureUpdate(file: File) {
+        if (/image\/.*/g.test(file.type)) {
+            if (this.group.picture) {
+                Files.remove({_id: this.group.picture});
+            }
+            Chats.update(this.group._id, {$set: {picture: file._id}});
+            this.successMessage = "Picture successfully updated";
+            this.errorMessage = "";
+        } else {
+            Files.remove(file._id);
+            this.successMessage = "";
+            this.errorMessage = "Error, only image are supported.";
         }
     }
 

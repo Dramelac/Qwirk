@@ -14,7 +14,8 @@ Meteor.publish('files', function(chatId) {
                 uploadedAt: 1,
                 url: 1,
                 chatId: 1,
-                userId: 1
+                userId: 1,
+                type: 1
             }
         });
     }
@@ -33,7 +34,8 @@ Meteor.publish('file', function(fileId) {
             uploadedAt: 1,
             url: 1,
             chatId: 1,
-            userId: 1
+            userId: 1,
+            type: 1
         }
     });
 });
