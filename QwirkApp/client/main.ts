@@ -1,9 +1,9 @@
 import "angular2-meteor-polyfills";
 import {platformBrowserDynamic} from "@angular/platform-browser-dynamic";
 import {AppModule} from "./imports/app";
+import {enableProdMode} from "@angular/core";
 
-//TODO add production environment (at the end)
-//enableProdMode();
+enableProdMode();
 
 Meteor.startup(() => {
    platformBrowserDynamic().bootstrapModule(AppModule);
