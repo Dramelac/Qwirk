@@ -1,14 +1,16 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import template from "./join-group.component.html";
+import style from "./join-group.component.scss";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Chats} from "../../../../both/collections/chat.collection";
 import {Chat} from "../../../../both/models/chat.model";
 import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
-import {Chats} from "../../../../both/collections/chat.collection";
-import _ = require("underscore");
+
 @Component({
     selector: 'join-group',
-    template
+    template,
+    styles: [style]
 })
 
 export class JoinGroupComponent implements OnInit, OnDestroy {
@@ -34,11 +36,6 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
                             this.group = Chats.findOne({_id: this.groupId});
                             if (this.group) {
                                 this.isMember = !!this.group.user;
-                                if (!this.group.publicly) {
-                                    this.cancel();
-                                }
-                            } else {
-                                this.cancel();
                             }
                         });
                     });
@@ -56,6 +53,7 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
     }
 
     joinGroup() {
+        console.log(this.groupId);
         Chats.update({_id: this.groupId}, {$push: {user: Meteor.userId()}});
         this.router.navigate(["/group/" + this.groupId]);
     }

@@ -6,9 +6,17 @@ export const Chats = new MongoObservable.Collection<Chat>("chats");
 
 function checkUser(modifier) : boolean{
     if(modifier.$push){
-        let schema = {$push : { user : {$each: modifier.$push.user.$each}}};
-        if(modifier == schema.toString){
-            return true;
+        if(modifier.$push.user.$each){
+            let schema = {$push : { user : {$each: modifier.$push.user.$each}}};
+            //TODO to test
+            if(modifier == schema.toString){
+                return true;
+            }
+        } else {
+            let schema = {$push : { user : modifier.$push.user}};
+            if(modifier.toString == schema.toString){
+                return true;
+            }
         }
     }
     return false;
