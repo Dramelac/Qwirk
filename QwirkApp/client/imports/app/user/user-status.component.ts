@@ -41,6 +41,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                         this.colorStatus(this.selectedStatus);
                         MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
                             MeteorObservable.autorun().subscribe(() => {
+                                this.profile.picture;
                             });
                         });
                         //this.status = StatusToString(this.profile.status);

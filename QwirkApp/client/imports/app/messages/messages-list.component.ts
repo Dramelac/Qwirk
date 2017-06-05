@@ -12,6 +12,7 @@ import "jquery";
 import "jquery-ui";
 import * as _ from "underscore";
 import {Observable, Subscriber} from "rxjs";
+import {StatusToString} from "../../../../both/models/status.enum";
 
 @Component({
     selector: 'messages-list',
@@ -84,26 +85,28 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                 if (this.chat.type === ChatType.CHAT) {
                     this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
                     MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
-                        let profile = Profiles.findOne({userId: this.distantUserId});
-                        if (profile) {
-                            this.chat.title = profile.username;
-                            this.chat.picture = "";
+                        MeteorObservable.autorun().subscribe(() => {
+                            let profile = Profiles.findOne({userId: this.distantUserId});
+                            if (profile) {
+                                this.chat.title = profile.username;
+                                this.chat.userStatus = StatusToString(profile.status);
 
-                            MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
-                                MeteorObservable.autorun().subscribe(() => {
-                                    let contact = Contacts.findOne({profileId : profile._id});
-                                    if (contact) {
-                                        this.chat.title = contact.displayName;
-                                    }
+                                MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                                    MeteorObservable.autorun().subscribe(() => {
+                                        let contact = Contacts.findOne({profileId : profile._id});
+                                        if (contact) {
+                                            this.chat.title = contact.displayName;
+                                        }
+                                    });
                                 });
-                            });
-                            //TODO Add status user
-                            MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
-                                MeteorObservable.autorun().subscribe(() => {
-                                    this.chat.picture = profile.picture;
+                                MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                                    MeteorObservable.autorun().subscribe(() => {
+                                        this.chat.picture = profile.picture;
+
+                                    });
                                 });
-                            });
-                        }
+                            }
+                        });
                     });
                 }
 
