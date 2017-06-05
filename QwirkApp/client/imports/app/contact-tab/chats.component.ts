@@ -1,5 +1,6 @@
 import {Component, Input, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./chats.component.html";
+import style from "./chats.component.scss";
 import {Observable} from "rxjs/Observable";
 import {Chat, ChatType, Message} from "../../../../both/models";
 import {Chats, Contacts, Messages, Profiles} from "../../../../both/collections";
@@ -16,7 +17,8 @@ declare let Notification: any;
 
 @Component({
     selector: 'chat-list',
-    template
+    template,
+    styles: [style]
 })
 export class ChatsComponent implements OnInit, OnDestroy {
     @Input("type") type: ChatType;
