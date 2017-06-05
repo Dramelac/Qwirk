@@ -1,6 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 
 import template from "./side-menu.component.html";
+import style from "./side-menu.component.scss";
 import {ChatType} from "../../../../both/models/chat.model";
 import {Status} from "../../../../both/models/status.enum";
 import {Profiles} from "../../../../both/collections/profile.collection";
@@ -8,7 +9,8 @@ import {Router} from "@angular/router";
 
 @Component({
     selector: 'side-menu',
-    template
+    template,
+    styles: [style]
 })
 export class SideMenuComponent implements OnInit {
 

@@ -1,16 +1,24 @@
-<file-upload #upload [chatId]="chat._id" (onFile)="onFileUploaded($event)"></file-upload>
 <div *ngIf="error !== ''">
     <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
         <p class="mat-body-1">{{ error }}</p>
         <button (click)="error=''">X</button>
     </md-toolbar>
 </div>
-<form [formGroup]="addForm" (ngSubmit)="addMessage()">
 
-    <label>Message
-        <textarea formControlName="content" (keydown.enter)="addMessage();false"></textarea>
-    </label>
+<div class="col-md-2">
+    <file-upload #upload [chatId]="chat._id" (onFile)="onFileUploaded($event)"></file-upload>
+</div>
+<div class="col-md-8">
+    <form [formGroup]="addForm" (ngSubmit)="addMessage()">
 
-    <button type="submit">Send</button>
-</form>
-<button (click)="sendWizz()">Send WIZZ</button>
+        <md-input-container class="message-input">
+            <textarea mdInput placeholder="Message" formControlName="content" (keydown.enter)="addMessage();false"></textarea>
+
+        </md-input-container>
+        <button type="submit" class="send">Send</button>
+
+    </form>
+</div>
+<div class="col-md-1">
+    <button (click)="sendWizz()">WIZZ</button>
+</div>

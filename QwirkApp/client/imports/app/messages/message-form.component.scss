@@ -1,0 +1,15 @@
+textarea {
+  resize: none;
+}
+
+.message-input {
+  box-shadow: 0 0 10px 2px #656565;
+  width: 100%;
+ }
+
+.send {
+  float: right;
+  position: relative;
+  top: -60px;
+  right: 0;
+}

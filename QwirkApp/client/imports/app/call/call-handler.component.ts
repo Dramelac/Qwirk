@@ -1,5 +1,6 @@
 import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-handler.component.html";
+import style from "./call-handler.component.scss";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CallRequest, CallUser, Chat, PeerUser, SessionKey} from "../../../../both/models";
@@ -9,7 +10,8 @@ import * as _ from "underscore";
 
 @Component({
     selector: 'call-handler',
-    template
+    template,
+    styles: [style]
 })
 export class CallHandlerComponent implements OnInit, OnDestroy {
 
@@ -29,10 +31,12 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     isCallActive: boolean;
     isHost: boolean;
 
-    micButton: string;
-    camButton: string;
+    micButton: boolean;
+    camButton: boolean;
+    hasCam: boolean;
 
     chat: Chat;
+    isHide : boolean;
 
     constructor(private zone: NgZone, private sanitizer: DomSanitizer) {
     }
@@ -40,12 +44,14 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.peerId = "";
         this.isCallActive = false;
-        this.micButton = "Mute";
-        this.camButton = "Video";
+        this.micButton = true;
+        this.camButton = true;
+        this.hasCam = true;
         this.remoteStream = [];
         this.userList = [];
         this.currentCall = [];
         this.isHost = false;
+        this.isHide = true;
 
         MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
@@ -104,6 +110,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
     initPeer(video: boolean, callback = null) {
         let execCallback = false;
+        this.isHide = false;
 
         if (!navigator.mediaDevices.getUserMedia) {
             console.error("undefined user media");
@@ -122,9 +129,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     if (loadVideo && !video) {
                         self.video();
                     } else if (!loadVideo) {
-                        self.camButton = null;
+                        self.hasCam = false;
                     } else {
-                        self.camButton = "Hide video"
+                        self.camButton = false
                     }
 
                     self.myVideoStream = self.localStream.getVideoTracks()[0];
@@ -143,7 +150,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 console.log(err.name + ": " + err.message);
             });
 
-        this.micButton = "Mute";
+        this.micButton = true;
 
         this.peer = new Peer({
             host: "qwirk-peerjs.herokuapp.com",
@@ -269,7 +276,6 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         if (this.isHost) {
             CallRequests.remove({_id: this.requestId});
             this.isHost = false;
-            return;
         } else {
             CallRequests.update(this.requestId, {
                 $pull: {
@@ -299,6 +305,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             this.myVideo = "";
             this.userList = [];
             this.peerId = "";
+            this.isHide = true;
         });
         Session.set(SessionKey.ActiveCall.toString(), null);
         Session.set(SessionKey.CallId.toString(), null);
@@ -375,11 +382,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             track.enabled = !track.enabled;
 
             //TODO change to icon
-            if (track.enabled) {
-                this.micButton = "Mute";
-            } else {
-                this.micButton = "Unmute";
-            }
+            this.micButton = track.enabled;
         });
     }
 
@@ -388,11 +391,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             track.enabled = !track.enabled;
 
             //TODO change to icon
-            if (track.enabled) {
-                this.camButton = "Hide video";
-            } else {
-                this.camButton = "Video";
-            }
+            this.camButton = !track.enabled;
         });
     }
 
