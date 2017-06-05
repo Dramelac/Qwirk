@@ -32,19 +32,19 @@
                     <div class="row">
                         <div *ngIf="message.type == 'text'" class="col-md-10 message-raw"
                              [innerHTML]="message.content"></div>
-                        <div *ngIf="message.type == 'picture'" class="col-md-10">
+                        <div *ngIf="message.type == 'picture'" class="col-md-10 message-raw">
                             <a target="_blank" href="{{message.content | displayMainImage}}">
                                 <span>{{message.content | displayFileName}}</span><br>
                                 <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
                             </a>
                         </div>
-                        <div *ngIf="message.type == 'file'" class="file-preview col-md-01">
+                        <div *ngIf="message.type == 'file'" class="file-preview col-md-10 message-raw">
                             File upload<br>
                             <a target="_blank" href="{{message.content | displayMainImage}}">
                                 <span>{{message.content | displayFileName}}</span>
                             </a>
                         </div>
-                        <div *ngIf="message.type == 'wizz'" class="wizz-message col-md-10">
+                        <div *ngIf="message.type == 'wizz'" class="wizz-message col-md-10 message-raw">
                             WIZZZZZZ
                         </div>
                         <span class="message-date col-md-1">{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
