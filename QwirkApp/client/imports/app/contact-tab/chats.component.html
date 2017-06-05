@@ -6,9 +6,9 @@
 <div *ngFor="let chat of chats | async">
     <div [contextMenu]="chatMenu" [contextMenuSubject]="chat">
         <button class="width-max" *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
-            <img [src]="chat.picture | displayProfileImage" class="picture">
+                <img [src]="chat.picture | displayProfileImage" class="picture">
+                <h3 style="display: inline">{{chat.title}}</h3>
             <div>
-                <h2 class="chat-title">{{chat.title}}</h2>
                 <div *ngIf="chat.lastMessage">
                     <p>
                     <span *ngIf="chat.lastMessage.type == 'text' || chat.lastMessage.type == 'announce'"
@@ -20,7 +20,7 @@
                             You receive a wizz.
                         </span>
                         <span *ngIf="chat.lastMessage.content.length > 32">...</span>
-                        <span *ngIf="chat.lastMessage.isNew" class="new-message-tag">*</span>
+                        <span *ngIf="chat.lastMessage.isNew" class="new-message-tag"><i class="material-icons">error_outline</i></span>
                     </p>
                     <span class="last-message-timestamp">{{chat.lastMessage.createdAt | amTimeAgo }}</span>
                 </div>
