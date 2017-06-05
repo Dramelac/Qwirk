@@ -99,8 +99,7 @@ Meteor.methods({
         if (!Meteor.userId()) throw new Meteor.Error('unauthorized',
             'User must be logged-in to create a new chat');
 
-        //TODO check non announce message
-        check(type, Match.OneOf(String, [MessageType.TEXT]));
+        check(type, Match.OneOf(MessageType.TEXT, MessageType.PICTURE, MessageType.FILE, MessageType.WIZZ));
         check(chatId, nonEmptyString);
         check(content, nonEmptyString);
 
