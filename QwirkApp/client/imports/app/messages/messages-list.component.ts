@@ -30,8 +30,6 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     autoScroller: MutationObserver;
     messageLazyLoadingLevel: number = 0;
     loadingMessage: boolean;
-    isMessageChats: boolean;
-    type : ChatType;
 
     waitForRead: string[] = [];
 
@@ -41,7 +39,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.autoScroller = this.autoScroll();
         this.paramsSub = this.route.params
-            .map(params => params["chatId"])
+                .map(params => params["chatId"])
             .subscribe(chat => {
                 this.chatId = chat;
 
@@ -83,21 +81,20 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/']);
                     return;
                 }
-                this.type = this.chat.type;
-                if(this.chat.type === ChatType.CHAT){
-                    this.isMessageChats = true;
-                } else {
-                    this.isMessageChats = false;
-                }
                 this.chat.isAdmin = _.contains(this.chat.admin, Meteor.userId());
-                if (!this.chat.title && this.chat.user.length == 2 && this.chat.admin.length == 0) {
+                if (this.chat.type === ChatType.CHAT) {
                     this.distantUserId = this.chat.user.find(m => m !== Meteor.userId());
                     MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
                         let profile = Profiles.findOne({userId: this.distantUserId});
                         if (profile) {
                             this.chat.title = profile.username;
-                            this.chat.picture = profile.picture;
+                            this.chat.picture = "";
                             //TODO Add status user
+                            MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    this.chat.picture = profile.picture;
+                                });
+                            });
                         }
                     });
                 }
