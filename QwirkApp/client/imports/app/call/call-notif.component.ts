@@ -5,10 +5,12 @@ import {Router} from "@angular/router";
 import {CallRequest, Chat, ChatType, Contact, Profile, SessionKey} from "../../../../both/models";
 import {CallRequests, Chats, Contacts, Profiles} from "../../../../both/collections";
 import template from "./call-notif.component.html";
+import style from "./call-notif.component.scss";
 
 @Component({
     selector: 'call-notif',
-    template
+    template,
+    styles: [style]
 })
 export class CallNotifComponent implements OnInit, OnDestroy {
 

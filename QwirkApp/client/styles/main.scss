@@ -55,40 +55,11 @@ button {
   color: white;
 }
 
-.call-div {
-  background-color: #d1d1d1;
-  position: absolute;
-  text-align: center;
-  margin: 10px;
-  top: 50%;
-  left: 50%;
-  border-radius: .4em;
-  border: 2px solid transparent;
-  border-color: #303030;
-  z-index: 2;
-
-}
-
 .message-other {
   background-color: #949C94;
   position: relative;
   background: #949C94;
   border-radius: .4em;
-}
-
-.button-refuse {
-  float: right;
-  margin-bottom: 10px;
-  margin-right: 10%;
-  border: none;
-}
-
-.button-accept {
-  float: left;
-  margin-left: 10%;
-  margin-bottom: 10px;
-  border: none;
-
 }
 
 .button-menu-call {
@@ -152,20 +123,6 @@ button {
 
 .crossbutton {
   color: rgba(230, 44, 1, 0.78) !important;
-}
-
-.button-refuse {
-  background-color: #ff4f0b;
-  float: right;
-  margin-bottom: 10px;
-  margin-right: 10%;
-}
-
-.button-accept {
-  float: left;
-  margin-left: 10%;
-  margin-bottom: 10px;
-
 }
 
 .picture {
