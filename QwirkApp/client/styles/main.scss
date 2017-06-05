@@ -27,6 +27,9 @@ body {
 a:hover, a:focus {
   text-decoration: none;
 }
+button {
+  outline: none;
+}
 
 .text {
   white-space: nowrap;
@@ -370,17 +373,6 @@ a:hover, a:focus {
   border-right: none;
   border-top: #d1d1d1 3px solid;
   background-color: #e9e9e9;
-}
-
-.buttondel{
-  border: none;
-  float: right;
-  background-color: #e9e9e9;
-}
-
-.div-button-del{
-  float: right;
-  position: relative;
 }
 
 .searchuser{
