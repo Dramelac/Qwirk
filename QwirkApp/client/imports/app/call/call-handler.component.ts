@@ -31,8 +31,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     isCallActive: boolean;
     isHost: boolean;
 
-    micButton: string;
-    camButton: string;
+    micButton: boolean;
+    camButton: boolean;
+    hasCam: boolean;
 
     chat: Chat;
     isHide : boolean;
@@ -43,8 +44,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.peerId = "";
         this.isCallActive = false;
-        this.micButton = "Mute";
-        this.camButton = "Video";
+        this.micButton = true;
+        this.camButton = true;
+        this.hasCam = true;
         this.remoteStream = [];
         this.userList = [];
         this.currentCall = [];
@@ -127,9 +129,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     if (loadVideo && !video) {
                         self.video();
                     } else if (!loadVideo) {
-                        self.camButton = null;
+                        self.hasCam = false;
                     } else {
-                        self.camButton = "Hide video"
+                        self.camButton = false
                     }
 
                     self.myVideoStream = self.localStream.getVideoTracks()[0];
@@ -148,7 +150,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 console.log(err.name + ": " + err.message);
             });
 
-        this.micButton = "Mute";
+        this.micButton = true;
 
         this.peer = new Peer({
             host: "qwirk-peerjs.herokuapp.com",
@@ -380,11 +382,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             track.enabled = !track.enabled;
 
             //TODO change to icon
-            if (track.enabled) {
-                this.micButton = "Mute";
-            } else {
-                this.micButton = "Unmute";
-            }
+            this.micButton = track.enabled;
         });
     }
 
@@ -393,11 +391,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             track.enabled = !track.enabled;
 
             //TODO change to icon
-            if (track.enabled) {
-                this.camButton = "Hide video";
-            } else {
-                this.camButton = "Video";
-            }
+            this.camButton = !track.enabled;
         });
     }
 

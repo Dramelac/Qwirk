@@ -1,4 +1,4 @@
-<div *ngIf="peerId">
+<div *ngIf="peerId || isCallActive">
     <div class="row div-button-sidenav">
         <button class="button-background" (click)="isHide = !isHide">
             <span class="col-md-12 show-call">
@@ -37,9 +37,18 @@
 
             <div class="row width-max">
                 <div class="action-buttons">
-                    <button (click)="mute()">{{micButton}}</button>
-                    <button *ngIf="camButton" (click)="video()">{{camButton}}</button>
-                    <button (click)="stopCall()">Stop call</button>
+                    <button class="mic" (click)="mute()">
+                        <i *ngIf="micButton" class="material-icons">mic</i>
+                        <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
+                    </button>
+                    <button class="cam" *ngIf="!hasCam" (click)="video()">
+                        <i *ngIf="camButton" class="material-icons">videocam</i>
+                        <i *ngIf="!camButton" class="material-icons">&#xE04C;</i>
+                    </button>
+
+                    <button class="stopCall" (click)="stopCall()">
+                        <i class="material-icons">call_end</i>
+                    </button>
                     <a md-button *ngIf="chat" [routerLink]="['/chat/'+chat._id]" (click)="isHide = true">Go to chat</a>
                 </div>
             </div>
