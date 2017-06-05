@@ -1,0 +1,74 @@
+<div class="max-height global-flex">
+    <div class="row div-titre-router">
+        <div class="petite-div-titre-router">
+            <div class="col-md-2">
+                <img class="picture-head" *ngIf="chat" [src]="chat.picture | displayProfileImage">
+                <p *ngIf="chat">{{chat.userStatus}}</p>
+            </div>
+            <div class="col-md-7">
+                <p class="titre-routeur col-md-6" *ngIf="chat" [contextMenu]="chatMenu"
+                   [contextMenuSubject]="chat">{{chat.title}}</p>
+            </div>
+            <div class="col-md-3">
+                <div class="row pull-right">
+                    <call-action *ngIf="chat" [chat]="chat"></call-action>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ChatList" class="row">
+        <div *ngIf="loadingMessage">Loading messages ...</div>
+        <div *ngFor="let day of messagesDayGroups | async">
+            <div>{{day.timestamp}}</div>
+            <div *ngFor="let message of day.messages" class="row">
+                <div *ngIf="message.ownerName && message.type != 'announce'" class="col-md-offset-1 col-md-1">
+                    <div class="pull-right">
+                        <span class="center-text">{{message.ownerName}}</span>
+                        <img [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture"
+                             alt="pic">
+                    </div>
+                </div>
+                <div *ngIf="message.type != 'announce'" [class]="'col-md-9 message message-' + message.ownership">
+                    <div class="row">
+                        <div *ngIf="message.type == 'text'" class="col-md-10 message-raw"
+                             [innerHTML]="message.content"></div>
+                        <div *ngIf="message.type == 'picture'" class="col-md-10 message-raw">
+                            <a target="_blank" href="{{message.content | displayMainImage}}">
+                                <span>{{message.content | displayFileName}}</span><br>
+                                <img alt="picture" [src]="message.content | displayMainImage" class="picture-thumbs">
+                            </a>
+                        </div>
+                        <div *ngIf="message.type == 'file'" class="file-preview col-md-10 message-raw">
+                            File upload<br>
+                            <a target="_blank" href="{{message.content | displayMainImage}}">
+                                <span>{{message.content | displayFileName}}</span>
+                            </a>
+                        </div>
+                        <div *ngIf="message.type == 'wizz'" class="wizz-message col-md-10 message-raw">
+                            WIZZZZZZ
+                        </div>
+                        <span class="message-date col-md-1">{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+                        <span *ngIf="message.isNew" class="new-message-tag"><i style="color: #efff09" class="material-icons orange800">error_outline</i></span>
+
+                    </div>
+                    <div class="row">
+                        <div class="message-action col-md-offset-10">
+                            <button md-button class="crossbutton"
+                                    *ngIf="message.ownership == 'mine'"
+                                    (click)="removeMessage(message)">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="message.type == 'announce'" class="message-announce center-text">
+                    <i [innerHTML]="message.content"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <message-form *ngIf="chat" [chat]="chat"></message-form>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<h5 *ngIf="type === 'Chats' || !type">List chats : </h5>
+<div *ngIf="type === 'Groups'">
+    <h5>List groups :</h5>
+    <button (click)="createGroup()">Create Group</button>
+</div>
+<div *ngFor="let chat of chats | async">
+    <div [contextMenu]="chatMenu" [contextMenuSubject]="chat" class="row">
+        <div class="chatsbtn" *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
+            <div class="row">
+                <img [src]="chat.picture | displayProfileImage" class="col-md-4">
+                <h3 class="text col-md-8 title">{{chat.title}}</h3>
+            </div>
+            <div class="row">
+                <div *ngIf="chat.lastMessage">
+                    <p class="text chat-list-message">
+                    <span *ngIf="chat.lastMessage.type == 'text' || chat.lastMessage.type == 'announce'"
+                          [innerHTML]="chat.lastMessage.content" class="test"></span>
+                        <span *ngIf="chat.lastMessage.type == 'file' || chat.lastMessage.type == 'picture'">
+                            You receive a file.
+                        </span>
+                        <span *ngIf="chat.lastMessage.type == 'wizz'">
+                            You receive a wizz.
+                        </span>
+                        <span *ngIf="chat.lastMessage.isNew" class="new-message-tag"><i class="material-icons">error_outline</i></span>
+                    </p>
+                    <span class="date-list-message">{{chat.lastMessage.createdAt | amTimeAgo }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<context [type]="type"></context>

@@ -1,0 +1,15 @@
+<div *ngFor="let notif of callRequest | async">
+    <div *ngIf="!notif.isReject">
+        <div class="col-md-2 call-div">
+            <p *ngIf="!notif.video">{{ notif.ownerName }} is calling you for audio</p>
+            <p *ngIf="notif.video">{{ notif.ownerName }} is calling you with video</p>
+            <button class="col-md-3 button-accept" aria-label="login" (click)="acceptCall(notif)">
+                <img class="col-md-12 button-sidenav"  src="asset/img/phone.png" >
+            </button>
+
+            <button class="col-md-3 button-refuse" aria-label="login" (click)="refuseCall(notif)">
+                <img class="col-md-12 button-sidenav"  src="asset/img/delete.png" >
+            </button>
+        </div>
+    </div>
+</div>

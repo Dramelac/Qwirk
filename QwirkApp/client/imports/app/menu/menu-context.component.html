@@ -1,0 +1,28 @@
+<context-menu class="angular2-contextmenu" *ngIf="type !== 'Chats'">
+    <div *ngIf="isContact">
+        <template contextMenuItem let-item [enabled]="false">
+            <span><button (click)="showProfile(item?.profileId)">Edit Profile</button></span>
+        </template>
+        <template contextMenuItem let-item [enabled]="false">
+            <button *ngIf="!item?.isBloqued" (click)="blockContact(item,true)">Bloquer</button>
+            <button *ngIf="item?.isBloqued" (click)="blockContact(item,false)">Debloquer</button>
+        </template>
+        <template contextMenuItem let-item [enabled]="false">
+            <span>
+                <button (click)="deleteContact(item?.profile.userId)">Delete</button>
+            </span>
+        </template>
+    </div>
+    <div *ngIf="type === 'Groups'">
+        <template contextMenuItem let-item [enabled]="false">
+            <span>
+                <button (click)="editGroup(item?._id)">Edit Group</button>
+            </span>
+        </template>
+        <template contextMenuItem let-item [enabled]="false">
+            <span>
+                <button (click)="leaveGroup(item?._id ,item?.user)">Leave Group</button>
+            </span>
+        </template>
+    </div>
+</context-menu>

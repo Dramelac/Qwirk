@@ -1,0 +1,60 @@
+<div>
+    <div class="div-titre-router">
+        <div class="petite-div-titre-router">
+            <img class="icone-select" *ngIf="group" [src]="groupPictureId | displayProfileImage">
+            <p class="titre-routeur">
+                <span *ngIf="!group">New Group</span>
+                <span *ngIf="group">Edit {{group.title}}</span>
+            </p>
+        </div>
+    </div>
+
+    <label *ngIf="isAdmin">Group's Name
+        <input placeholder="Title" [(ngModel)]="groupTitle"/>
+    </label>
+    <file-upload *ngIf="group && isAdmin" [chatId]="groupId" (onFile)="onPictureUpdate($event)"></file-upload>
+    <div *ngIf="mySelection.length > 0">
+        <div *ngFor="let selected of mySelection">
+            <div>
+                <span>{{selected.displayName}}</span>
+                <a (click)="remove(selected)">x</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>
+            <label for="contact">Contacts
+                <input id="contact" type="text" placeholder="Add contacts" [(ngModel)]="query"
+                       [ngModelOptions]="{standalone: true}" (keyup)=filter()>
+            </label>
+        </div>
+        <div *ngIf="contactFiltred.length > 0">
+            <ul *ngFor="let contact of contactFiltred">
+                <li>
+                    <a (click)="select(contact)">{{contact.displayName}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <label *ngIf="isAdmin">Publicly
+        <input type="checkbox" [(ngModel)]="publicly">
+    </label><br>
+
+    <button *ngIf="!groupId" (click)="addGroup()">Create</button>
+    <button *ngIf="groupId" (click)="updateGroup()">Update</button>
+    <p *ngIf="error">Please add user before ^^</p>
+
+    <div *ngIf="errorMessage !== ''">
+        <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
+            <p class="mat-body-1">{{ errorMessage }}</p>
+            <button (click)="errorMessage=''">X</button>
+        </md-toolbar>
+    </div>
+
+    <div *ngIf="successMessage !== ''">
+        <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
+            <p class="mat-body-1">{{ successMessage }}</p>
+            <button (click)="successMessage=''">X</button>
+        </md-toolbar>
+    </div>
+</div>

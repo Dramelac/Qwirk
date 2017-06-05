@@ -1,0 +1,28 @@
+<div class="mat-content container-fluid">
+    <div class="row">
+        <div class="col-md-12 center-block center-text">
+            <form [formGroup]="recoverForm" #f="ngForm" (ngSubmit)="recover()">
+
+                <md-input-container>
+                    <input mdInput formControlName="email" type="email" placeholder="Email">
+                </md-input-container>
+
+                <div layout="row" layout-align="space-between center">
+                    <button md-raised-button class="mat-primary" type="submit" aria-label="Recover">Recover</button>
+                </div>
+            </form>
+
+            <div [hidden]="error == ''">
+                <md-toolbar class="mat-warn">
+                    <p class="mat-body-1">{{ error }}</p>
+                </md-toolbar>
+            </div>
+
+            <md-divider></md-divider>
+
+            <div layout="row" layout-align="center">
+                <a md-button [routerLink]="['/login']">Remember your password?</a>
+            </div>
+        </div>
+    </div>
+</div>
