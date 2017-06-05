@@ -25,7 +25,15 @@
             </div>
         </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
-            <button type="submit">Search In Qwirk</button>
+            <div class="row">
+                <button class="col-md-12 searchuser" type="submit">
+                    <p class="col-md-10 textesearch" >Search User</p>
+                    <div class="col-md-2">
+                        <i class="material-icons col-md-12">search</i>
+                    </div>
+                </button>
+            </div>
+
         </form>
     </div>
     <div *ngIf="profilesFind">
