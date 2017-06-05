@@ -31,17 +31,17 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
                     this.groupSub = MeteorObservable.subscribe('chat', this.groupId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
                             this.group = Chats.findOne({_id : this.groupId});
-                            if(!this.group.publicly){
+                            if(this.group){
+                                if(!this.group.publicly){
+                                    this.cancel();
+                                }
+                            }else {
                                 this.cancel();
-                            }
-                            if(_.contains(this.group.user,Meteor.userId())){
-                                this.router.navigate(["/group/" + this.groupId])
                             }
                         });
                     });
                 }
             });
-
     }
 
     ngOnDestroy(): void {
@@ -54,8 +54,7 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
     }
 
     joinGroup() {
-        this.group.user.push(Meteor.userId());
-        Chats.update({_id : this.groupId}, {$set : {user : this.group.user}});
+        Chats.update({_id : this.groupId}, {$push : {user : Meteor.userId()}});
         this.router.navigate(["/group/"+ this.groupId]);
     }
 
