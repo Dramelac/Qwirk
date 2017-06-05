@@ -49,7 +49,9 @@
                     <button class="stopCall" (click)="stopCall()">
                         <i class="material-icons">call_end</i>
                     </button>
-                    <a md-button *ngIf="chat" [routerLink]="['/chat/'+chat._id]" (click)="isHide = true">Go to chat</a>
+                    <a *ngIf="chat" [routerLink]="['/chat/'+chat._id]" (click)="isHide = true" class="goto pull-right">
+                        <i class="material-icons">message</i>
+                    </a>
                 </div>
             </div>
         </div>
