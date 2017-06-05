@@ -26,6 +26,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     selected: string[];
     error: boolean;
     publicly:boolean = false;
+    isAdmin: boolean;
 
     errorMessage: string;
     successMessage: string;
@@ -57,6 +58,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
                             });
                             this.groupTitle = this.group.title;
                             this.publicly = this.group.publicly;
+                            this.isAdmin = _.contains(this.group.admin, Meteor.userId());
                         }
                     });
                 });
