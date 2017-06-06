@@ -1,14 +1,17 @@
 <div *ngIf="numberRequest!=null && numberRequest !=0">
-    <h2>Friend Requests ({{numberRequest}})</h2>
+    <span class="title">You have ({{numberRequest}}) Friend Requests</span>
     <div *ngFor="let request of (friendsRequests | async)">
-        <div>
-            <p>{{getUsernameFormId(request.initiator)}}</p>
-            <p>{{request.message}}</p>
-            <span>
-                <button (click)="addNexContact(request.initiator)">Accept</button>
-                <button (click)="deleteRequest(request.initiator)">Refuse</button>
-            </span>
-
+        <div class="row friendRequest">
+            <span class="row col-md-12"><p class="username text" >{{getUsernameFormId(request.initiator)}}</p></span>
+            <div class="row col-md-12">
+                <button md-button class="mat-primary col-md-6" (click)="addNexContact(request.initiator)">
+                    <i class="material-icons">check</i>
+                </button>
+                <button md-button class="mat-warn col-md-6" (click)="deleteRequest(request.initiator)">
+                    <i class="material-icons">clear</i>
+                </button>
+            </div>
         </div>
+        <!--<span class="row">{{request.message}}</span>-->
     </div>
 </div>

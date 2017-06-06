@@ -25,7 +25,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     mySelection: Contact[] = [];
     selected: string[];
     error: boolean;
-    publicly:boolean = false;
+    publicly: boolean = false;
     isAdmin: boolean;
 
     errorMessage: string;
@@ -49,8 +49,8 @@ export class AddGroupComponent implements OnInit, OnDestroy {
 
                 MeteorObservable.subscribe('adminChat', this.groupId).subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
-                        this.group = Chats.collection.findOne({_id : this.groupId});
-                        if(this.group){
+                        this.group = Chats.collection.findOne({_id: this.groupId});
+                        if (this.group) {
                             MeteorObservable.subscribe("file", this.group.picture).subscribe(() => {
                                 MeteorObservable.autorun().subscribe(() => {
                                     this.groupPictureId = this.group.picture;
@@ -59,6 +59,8 @@ export class AddGroupComponent implements OnInit, OnDestroy {
                             this.groupTitle = this.group.title;
                             this.publicly = this.group.publicly;
                             this.isAdmin = _.contains(this.group.admin, Meteor.userId());
+                        } else {
+                            this.isAdmin = true;
                         }
                     });
                 });
@@ -69,7 +71,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
         if (this.contactsSub) {
             this.contactsSub.unsubscribe();
         }
-        if(this.paramSub){
+        if (this.paramSub) {
             this.paramSub.unsubscribe();
         }
     }
@@ -77,9 +79,9 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     filter() {
         if (this.query !== "") {
             Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}}).subscribe(contacts => {
-                if(this.group){
-                    for(let contact of contacts){
-                        if(!_.contains(this.group.user,contact.friendId)){
+                if (this.group) {
+                    for (let contact of contacts) {
+                        if (!_.contains(this.group.user, contact.friendId)) {
                             this.contactFiltred.push(contact);
                         }
                     }
@@ -161,18 +163,18 @@ export class AddGroupComponent implements OnInit, OnDestroy {
         }
     }
 
-    updateGroup(){
+    updateGroup() {
         if (this.mySelection.length > 0) {
             let listUserId = this.mySelection.map((u) => {
                 return u.friendId
             });
-            Chats.update({_id : this.group._id},{$push : {user : { $each: listUserId }}});
+            Chats.update({_id: this.group._id}, {$push: {user: {$each: listUserId}}});
         }
-        if(this.groupTitle !== this.group.title){
-           Chats.update({_id : this.group._id},{$set : {title : this.groupTitle}});
+        if (this.groupTitle !== this.group.title) {
+            Chats.update({_id: this.group._id}, {$set: {title: this.groupTitle}});
         }
-        if(this.publicly !== this.group.publicly){
-            Chats.update({_id : this.group._id},{$set : {publicly : this.publicly}});
+        if (this.publicly !== this.group.publicly) {
+            Chats.update({_id: this.group._id}, {$set: {publicly: this.publicly}});
         }
         this.router.navigate(["/group/" + this.groupId]);
     }

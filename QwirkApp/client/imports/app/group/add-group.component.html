@@ -1,18 +1,24 @@
-<div>
+<div class="max-height global-flex">
     <div class="div-titre-router">
-        <div class="petite-div-titre-router">
-            <img class="icone-select" *ngIf="group" [src]="groupPictureId | displayProfileImage">
-            <p class="titre-routeur">
-                <span *ngIf="!group">New Group</span>
-                <span *ngIf="group">Edit {{group.title}}</span>
-            </p>
+        <div class="row petite-div-titre-router">
+            <div class="col-md-2">
+                <img class="picture-head" [src]="groupPictureId | displayProfileImage">
+            </div>
+            <div class="col-md-offset-1 col-md-5">
+                <p class="titre-routeur">
+                    <span *ngIf="!group">New Group</span>
+                    <span *ngIf="group">Edit {{group.title}}</span>
+                </p>
+            </div>
         </div>
     </div>
 
+    <div *ngIf="group && isAdmin">Change group's picture :
+        <file-upload [chatId]="groupId" (onFile)="onPictureUpdate($event)"></file-upload>
+    </div>
     <label *ngIf="isAdmin">Group's Name
         <input placeholder="Title" [(ngModel)]="groupTitle"/>
     </label>
-    <file-upload *ngIf="group && isAdmin" [chatId]="groupId" (onFile)="onPictureUpdate($event)"></file-upload>
     <div *ngIf="mySelection.length > 0">
         <div *ngFor="let selected of mySelection">
             <div>

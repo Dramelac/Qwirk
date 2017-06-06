@@ -27,14 +27,31 @@ body {
 a:hover, a:focus {
   text-decoration: none;
 }
+button {
+  outline: none;
+}
+
+.text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .max-height {
   height: 100vh;
 }
 
+.new-message-tag {
+  color: #ff792d;
+}
+
 .sebm-google-map-container {
   width: 450px;
   height: 450px;
+}
+
+.padding-right-20 {
+  padding-right: 20px !important;
 }
 
 .message  {
@@ -46,54 +63,11 @@ a:hover, a:focus {
   color: white;
 }
 
-.call-div {
-  background-color: #d1d1d1;
-  position: absolute;
-  text-align: center;
-  margin: 10px;
-  top: 50%;
-  left: 50%;
-  border-radius: .4em;
-  border: 2px solid transparent;
-  border-color: #303030;
-  z-index: 2;
-
-}
-
 .message-other {
   background-color: #949C94;
   position: relative;
   background: #949C94;
   border-radius: .4em;
-}
-
-.button-refuse {
-  float: right;
-  margin-bottom: 10px;
-  margin-right: 10%;
-  border: none;
-}
-
-.button-accept {
-  float: left;
-  margin-left: 10%;
-  margin-bottom: 10px;
-  border: none;
-
-}
-
-.button-menu-call {
-  background-color: #e6e6e6;
-  float: right;
-  border: none;
-
-}
-
-.button-menu-cam {
-  background-color: #e6e6e6;
-  float: left;
-  border: none;
-
 }
 
 .message-other:after {
@@ -142,21 +116,8 @@ a:hover, a:focus {
 }
 
 .crossbutton {
-  color: rgba(230, 44, 1, 0.78) !important;
-}
-
-.button-refuse {
-  background-color: #ff4f0b;
+  color: #303030!important;
   float: right;
-  margin-bottom: 10px;
-  margin-right: 10%;
-}
-
-.button-accept {
-  float: left;
-  margin-left: 10%;
-  margin-bottom: 10px;
-
 }
 
 .picture {
@@ -177,13 +138,6 @@ a:hover, a:focus {
 .emoticon {
   max-width: 30px;
   max-height: 30px;
-}
-
-.icone-select {
-  width: 80px;
-  height: 80px;
-  float: left;
-  display: block;
 }
 
 .picture-thumbs {
@@ -359,22 +313,11 @@ a:hover, a:focus {
 
 .button-contact {
   width: 100%;
-  border-bottom: none;
+  border-bottom: #d1d1d1 1.5px solid;
   border-left: none;
   border-right: none;
-  border-top: #d1d1d1 3px solid;
+  border-top: #d1d1d1 1.5px solid;
   background-color: #e9e9e9;
-}
-
-.buttondel{
-  border: none;
-  float: right;
-  background-color: #e9e9e9;
-}
-
-.div-button-del{
-  float: right;
-  position: relative;
 }
 
 .searchuser{
@@ -569,4 +512,8 @@ input[type="file"] {
   color: green;
   margin-left: 10%;
   margin-top: 10%;
+}
+
+#people {
+  
 }

@@ -41,6 +41,7 @@ export class ProfileComponent implements OnInit {
                         this.profileForm = this.formBuilder.group({
                             username: [this.contact.displayName, Validators.required]
                         });
+                        this.profile = {username:this.contact.displayName};
                         this.myProfile = false;
                     });
                 });

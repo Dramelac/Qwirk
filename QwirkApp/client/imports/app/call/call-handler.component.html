@@ -7,21 +7,23 @@
         </button>
     </div>
 
-    <div id="call-modal" [hidden]="isHide">
+    <div id="call-modal" class="col-md-12" [hidden]="isHide">
         <div class="row call-section">
+            <button class="btn btn-success" (click)="isHide = true">Hide</button>
             <div *ngIf="!isCallActive" class="row width-max">
                 <p class="center-text action-text">Calling ...</p>
             </div>
-            <button class="hide-button" (click)="isHide = true">Hide</button>
-
-            <div class="row mid-section width-max">
+            
+            <div class="row">
                 <div *ngIf="isCallActive">
                     <div *ngFor="let user of userList">
-                        <span>{{user.username}}</span>
+                        <div class="col-md-2">
+                        <span style="margin-left: 35%;">{{user.username}}</span><br/>
                         <video [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
                                class="theirVideo" autoplay [poster]="user.pictureId | displayProfileImage"></video>
                         <img [hidden]="user.videoStream && user.videoStream.enabled"
-                             [src]="user.pictureId | displayProfileImage" alt="user picture" style="max-width: 300px">
+                             [src]="user.pictureId | displayProfileImage" alt="user picture" style="min-width: 200px; max-width: 200px;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,7 +33,7 @@
                     <video [hidden]="!myVideoStream || !myVideoStream.enabled" [src]="myVideo" class="myVideo"
                            onloadedmetadata="this.muted = true" muted autoplay [poster]="myPicture | displayProfileImage"></video>
                     <img [hidden]="myVideoStream && myVideoStream.enabled" [src]="myPicture | displayProfileImage"
-                         alt="user picture" style="max-width: 300px">
+                         alt="user picture" style="max-width: 75px; opacity: 0.8;">
                 </div>
             </div>
 
@@ -41,7 +43,7 @@
                         <i *ngIf="micButton" class="material-icons">mic</i>
                         <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
                     </button>
-                    <button class="cam" *ngIf="!hasCam" (click)="video()">
+                    <button class="cam" *ngIf="hasCam" (click)="video()">
                         <i *ngIf="camButton" class="material-icons">videocam</i>
                         <i *ngIf="!camButton" class="material-icons">&#xE04C;</i>
                     </button>

@@ -12,5 +12,8 @@
     </div>
 </div>
 <div *ngIf="pendingCallRequest">
-    <button (click)="join()">Join current call</button>
+    <button md-button class="row col-md-12 mat-primary" (click)="join()">
+        <span class="col-md-8 padding-right-20">Join call</span>
+        <i class="material-icons">call</i>
+    </button>
 </div>
