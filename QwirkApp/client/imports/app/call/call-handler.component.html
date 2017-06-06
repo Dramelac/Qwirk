@@ -14,7 +14,7 @@
             </div>
             <button class="hide-button" (click)="isHide = true">Hide</button>
 
-            <div class="row mid-section width-max">
+            <div id="people" class="row mid-section width-max">
                 <div *ngIf="isCallActive">
                     <div *ngFor="let user of userList">
                         <span>{{user.username}}</span>
