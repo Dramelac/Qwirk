@@ -154,10 +154,11 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
         //TODO update debug level
         this.peer = new Peer({
-            host: "qwirk-peerjs.herokuapp.com",
+            host: "peer.qwirk.eu",
             port: 443,
             secure: true,
-            debug: 3
+            debug: 3,
+            path: "/qwirk"
         });
 
         this.peer.on('open', () => {
