@@ -19,6 +19,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
     selectedStatus: number;
 
     color: string;
+    pictureId: string;
 
     constructor(private zone: NgZone) {
     }
@@ -41,7 +42,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                         this.colorStatus(this.selectedStatus);
                         MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
                             MeteorObservable.autorun().subscribe(() => {
-                                this.profile.picture;
+                                this.pictureId = this.profile.picture;
                             });
                         });
                         //this.status = StatusToString(this.profile.status);
@@ -68,6 +69,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
             username: "Loading"
         };
         this.color = "green";
+        this.pictureId = "";
     }
 
     updateStatus(value): void {
