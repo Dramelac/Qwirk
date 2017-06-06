@@ -20,7 +20,7 @@ export class FriendRequestComponent implements OnInit, OnDestroy {
     numberRequest: number;
 
     ngOnInit(): void {
-        this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe( () => {
+        this.friendRequestsSub = MeteorObservable.subscribe('friendRequest',Meteor.userId()).subscribe( () => {
             this.friendsRequests = FriendsRequest
                 .find({destinator: Meteor.userId()});
             if (this.friendsRequests) {
