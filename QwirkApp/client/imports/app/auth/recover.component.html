@@ -12,17 +12,25 @@
                 </div>
             </form>
 
-            <div [hidden]="error == ''">
-                <md-toolbar class="mat-warn">
-                    <p class="mat-body-1">{{ error }}</p>
-                </md-toolbar>
-            </div>
-
             <md-divider></md-divider>
 
             <div layout="row" layout-align="center">
                 <a md-button [routerLink]="['/login']">Remember your password?</a>
             </div>
+
+            <div *ngIf="error !== ''">
+                <md-toolbar class="mat-warn">
+                    <p class="mat-body-1">{{ error }}</p>
+                    <button (click)="error = ''">x</button>
+                </md-toolbar>
+            </div>
+            <div *ngIf="success !== ''">
+                <md-toolbar class="mat-primary">
+                    <p class="mat-body-1">{{ success }}</p>
+                    <button (click)="success = ''">x</button>
+                </md-toolbar>
+            </div>
+
         </div>
     </div>
 </div>

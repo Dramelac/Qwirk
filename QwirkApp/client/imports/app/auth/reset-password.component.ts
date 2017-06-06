@@ -37,7 +37,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
                 (err) => {
                     if (err) {
                         this.zone.run(() => {
-                            this.error = err;
+                            this.error = err.reason;
                         });
                     } else {
                         this.router.navigate(['/']);
