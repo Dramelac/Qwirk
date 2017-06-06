@@ -148,7 +148,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
                 {initiator: Meteor.userId()},
                 {destinator: friendId}
             ]
-        }).count();
+        }).count() || !!Contacts.collection.find({$and : [{ownerId : Meteor.userId()} , {friendId : friendId}]}).count();
     }
 
     clearRequest(): void {
