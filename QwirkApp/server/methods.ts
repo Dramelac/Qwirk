@@ -110,16 +110,14 @@ Meteor.methods({
                 'Chat doesn\'t exist');
         }
 
-        return {
-            messageId: Messages.collection.insert({
-                chatId: chatId,
-                ownerId: Meteor.userId(),
-                content: content,
-                createdAt: new Date(),
-                type: type,
-                readBy: [Meteor.userId()]
-            })
-        };
+        Messages.collection.insert({
+            chatId: chatId,
+            ownerId: Meteor.userId(),
+            content: content,
+            createdAt: new Date(),
+            type: type,
+            readBy: [Meteor.userId()]
+        });
     },
 
     countMessages(chatId): number {

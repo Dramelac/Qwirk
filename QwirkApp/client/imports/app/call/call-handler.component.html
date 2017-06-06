@@ -41,7 +41,7 @@
                         <i *ngIf="micButton" class="material-icons">mic</i>
                         <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
                     </button>
-                    <button class="cam" *ngIf="!hasCam" (click)="video()">
+                    <button class="cam" *ngIf="hasCam" (click)="video()">
                         <i *ngIf="camButton" class="material-icons">videocam</i>
                         <i *ngIf="!camButton" class="material-icons">&#xE04C;</i>
                     </button>

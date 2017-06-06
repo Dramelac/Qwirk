@@ -1,5 +1,6 @@
 import {Component, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./contact-list.component.html";
+import style from "./contact-list.component.scss";
 import {Router} from "@angular/router";
 import {ContextMenuComponent} from "angular2-contextmenu";
 import {Observable, Subscription} from "rxjs";
@@ -9,7 +10,8 @@ import {Contacts, FriendsRequest, Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'contact-list',
-    template
+    template,
+    styles: [style]
 })
 export class ContactListComponent implements OnInit, OnDestroy {
 

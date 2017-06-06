@@ -21,7 +21,7 @@
                         <span *ngIf="chat.lastMessage.type == 'wizz'">
                             You receive a wizz.
                         </span>
-                        <span *ngIf="chat.lastMessage.isNew" class="new-message-tag"><i class="material-icons">error_outline</i></span>
+                        <span *ngIf="chat.lastMessage.isNew" class="new-message-tag"><i class="material-icons">markunread</i></span>
                     </p>
                     <span class="date-list-message">{{chat.lastMessage.createdAt | amTimeAgo }}</span>
                 </div>

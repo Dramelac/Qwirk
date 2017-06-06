@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import template from "./friend-request.component.html";
+import style from "./friend-request.component.scss";
 import {Observable, Subscription} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
 import {FriendRequest, Profile, SessionKey} from "../../../../both/models";
@@ -7,7 +8,8 @@ import {FriendsRequest, Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'friendRequest-list',
-    template
+    template,
+    styles: [style]
 })
 export class FriendRequestComponent implements OnInit, OnDestroy {
 
@@ -35,18 +37,13 @@ export class FriendRequestComponent implements OnInit, OnDestroy {
 
         });
 
-
-
     }
+
     getUsernameFormId(id:string):string{
         let profile = Profiles.findOne({userId : id});
-        console.log("Id :",id);
         if(profile){
             return profile.username;
-        }else{
-            return "error";
         }
-
     }
 
     addNexContact(initiator: string): void {

@@ -1,12 +1,14 @@
 import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-action.component.html";
+import style from "./call-action.component.scss";
 import {CallRequest, Chat, SessionKey} from "../../../../both/models";
 import {CallRequests} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
     selector: 'call-action',
-    template
+    template,
+    styles: [style]
 })
 export class CallActionComponent implements OnInit, OnDestroy {
 

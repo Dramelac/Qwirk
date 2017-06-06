@@ -5,15 +5,19 @@ import {Router} from "@angular/router";
 import {CallRequest, Chat, ChatType, Contact, Profile, SessionKey} from "../../../../both/models";
 import {CallRequests, Chats, Contacts, Profiles} from "../../../../both/collections";
 import template from "./call-notif.component.html";
+import style from "./call-notif.component.scss";
 
 @Component({
     selector: 'call-notif',
-    template
+    template,
+    styles: [style]
 })
 export class CallNotifComponent implements OnInit, OnDestroy {
 
     callRequestSub: Subscription;
     callRequest: Observable<CallRequest[]>;
+
+    tempCleanSub: Subscription;
 
     constructor(private router: Router) {
     }
@@ -42,6 +46,21 @@ export class CallNotifComponent implements OnInit, OnDestroy {
                     return notifs;
                 });
             });
+        });
+        this.cleanOwnOldRequest();
+    }
+
+    cleanOwnOldRequest() {
+        this.tempCleanSub = MeteorObservable.subscribe('ownCallRequest').subscribe(() => {
+            let requestList = CallRequests.find({ownerUserId: Meteor.userId()}).fetch();
+            requestList.forEach((req) => {
+                if (req.onlineUsers.length === 1 && req.onlineUsers[0].userId === Meteor.userId()) {
+                    //console.log("Detect call request to clean :", req._id);
+                    CallRequests.remove(req._id);
+                }
+            });
+
+            this.tempCleanSub.unsubscribe();
         });
     }
 
