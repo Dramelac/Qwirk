@@ -1,11 +1,13 @@
 <div class="max-height global-flex" >
     <div class="div-titre-router">
-        <div class="row petite-div-titre-router">
-            <div class="col-md-2 profile-ico" >
-                <img src="asset/img/user.png">
-            </div>
-            <div class="col-md-offset-1 col-md-5">
-                <p class="titre-routeur" *ngIf="profile && profile.username">{{ profile.username }}</p>
+        <div class=" row petite-div-titre-router">
+            <div class="col-md-10 profile-ico" >
+                <div class="col-md-4">
+                    <img src="asset/img/user.png">
+                </div>
+                <div class="col-md-6">
+                    <p class="titre-routeur" style="float: left" *ngIf="profile && profile.username">{{ profile.username }}</p>
+                </div>
             </div>
         </div>
     </div>
