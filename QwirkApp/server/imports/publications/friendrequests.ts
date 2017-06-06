@@ -1,11 +1,18 @@
 import {FriendsRequest} from "../../../both/collections/friend-request.collection";
 import {FriendRequest} from "../../../both/models/friend-request.model";
-Meteor.publish('friendRequest', function (): Mongo.Cursor<FriendRequest> {
+Meteor.publish('friendRequest', function (destinator?:string): Mongo.Cursor<FriendRequest> {
     if (!this.userId) {
         return;
     }
-
-    return FriendsRequest.collection.find({
-        destinator: this.userId
+    if(destinator){
+        return FriendsRequest.collection.find({
+            destinator: this.userId
+        });
+    }
+    return FriendsRequest.collection.find({$or : [
+        {initiator : this.userId},
+        {destinator: this.userId}
+    ]
     });
+
 });

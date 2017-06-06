@@ -1,0 +1,33 @@
+.button-accept {
+  margin-bottom: 10px;
+  border: none;
+
+}
+
+.button-refuse {
+  margin-bottom: 10px;
+  border: none;
+}
+
+.call-div {
+  background-color: rgba(209, 209, 209, 0.75);
+  width: 70vh;
+  position: absolute;
+  text-align: center;
+  margin: 10px;
+  top: 50%;
+  left: 30%;
+  border-radius: .4em;
+  border: 2px solid #303030;
+  z-index: 2;
+}
+
+.mat-button {
+  min-width: 1%;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+}

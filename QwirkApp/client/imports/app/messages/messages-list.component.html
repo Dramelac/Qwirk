@@ -1,7 +1,7 @@
 <div class="max-height global-flex">
     <div class="row div-titre-router">
         <div class="petite-div-titre-router">
-            <div class="col-md-2">
+            <div class="col-md-2 imagestatut" >
                 <img class="picture-head" *ngIf="chat" [src]="chat.picture | displayProfileImage">
                 <p *ngIf="chat">{{chat.userStatus}}</p>
             </div>
@@ -49,11 +49,11 @@
                             WIZZZZZZ
                         </div>
                         <span class="message-date col-md-1">{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
-                        <span *ngIf="message.isNew" class="new-message-tag"><i style="color: #efff09" class="material-icons orange800">error_outline</i></span>
+                        <span *ngIf="message.isNew" class="new-message-tag"><i class="material-icons">markunread</i></span>
 
                     </div>
                     <div class="row">
-                        <div class="message-action col-md-offset-10">
+                        <div class="message-action col-md-12">
                             <button md-button class="crossbutton"
                                     *ngIf="message.ownership == 'mine'"
                                     (click)="removeMessage(message)">

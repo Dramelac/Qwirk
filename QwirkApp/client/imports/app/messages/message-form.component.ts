@@ -159,7 +159,7 @@ export class MessageFormComponent implements OnInit {
                     console.error("Error:", error);
                 }
                 if (result) {
-                    console.error("result:", result);
+                    console.log("result:", result);
                 }
             });
     }
