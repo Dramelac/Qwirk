@@ -39,16 +39,21 @@
 
             <div class="row width-max">
                 <div class="action-buttons">
-                    <button class="mic" (click)="mute()">
+
+                    <button style="background-color: green" md-button (click)="mute()" class="md-fab">
                         <i *ngIf="micButton" class="material-icons">mic</i>
                         <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
                     </button>
-                    <button class="cam" *ngIf="hasCam" (click)="video()">
+                    <!--<button class="mic" (click)="mute()">
+                        <i *ngIf="micButton" class="material-icons">mic</i>
+                        <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
+                    </button>-->
+                    <button md-button style="background-color: green" class="md-fab" *ngIf="hasCam" (click)="video()">
                         <i *ngIf="camButton" class="material-icons">videocam</i>
                         <i *ngIf="!camButton" class="material-icons">&#xE04C;</i>
                     </button>
 
-                    <button class="stopCall" (click)="stopCall()">
+                    <button md-button style="background-color: red" class="md-fab" (click)="stopCall()">
                         <i class="material-icons">call_end</i>
                     </button>
                     <a *ngIf="chat" [routerLink]="['/chat/'+chat._id]" (click)="isHide = true" class="goto pull-right">
