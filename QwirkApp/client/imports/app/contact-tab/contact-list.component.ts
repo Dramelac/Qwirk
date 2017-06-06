@@ -144,11 +144,11 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     requestSent(friendId: string): boolean {
         return !!FriendsRequest.collection.find({
-            $and: [
-                {initiator: Meteor.userId()},
-                {destinator: friendId}
-            ]
-        }).count() || !!Contacts.collection.find({$and : [{ownerId : Meteor.userId()} , {friendId : friendId}]}).count();
+                $and: [
+                    {initiator: Meteor.userId()},
+                    {destinator: friendId}
+                ]
+            }).count() || !!Contacts.collection.find({$and: [{ownerId: Meteor.userId()}, {friendId: friendId}]}).count();
     }
 
     clearRequest(): void {
