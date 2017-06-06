@@ -59,6 +59,8 @@ export class AddGroupComponent implements OnInit, OnDestroy {
                             this.groupTitle = this.group.title;
                             this.publicly = this.group.publicly;
                             this.isAdmin = _.contains(this.group.admin, Meteor.userId());
+                        } else{
+                            this.isAdmin = true;
                         }
                     });
                 });

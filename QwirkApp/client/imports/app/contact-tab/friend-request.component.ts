@@ -29,14 +29,12 @@ export class FriendRequestComponent implements OnInit, OnDestroy {
             this.friendsRequests.subscribe((requests : FriendRequest[]) => {
                 for(let request of requests){
                     this.profileSub = MeteorObservable.subscribe('profiles', request.initiator).subscribe(() => {
-                        console.log("Id initaitor:",request.initiator);
                         this.profiles = Profiles.find({userId : request.initiator});
                     });
                 }
             });
 
         });
-
     }
 
     getUsernameFormId(id:string):string{

@@ -141,7 +141,7 @@ Meteor.methods({
                 {initiator: Meteor.userId()},
                 {destinator: friendId}
             ]
-        }).count();
+        }).count() || !!Contacts.collection.find({$and : [{ownerId : Meteor.userId()} , {friendId : friendId}]}).count();
 
         if (requestExist) {
             throw new Meteor.Error('friend-request-exist', 'Friend Request already exist');
