@@ -19,7 +19,7 @@
                     <div *ngFor="let user of userList">
                         <div class="col-md-2">
                         <span style="margin-left: 35%;">{{user.username}}</span><br/>
-                        <video style="min-width: 100px; max-width: 100px;" [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
+                        <video style="min-width: 200px; max-width: 200px;" [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
                                class="theirVideo" autoplay [poster]="user.pictureId | displayProfileImage"></video>
                         <img [hidden]="user.videoStream && user.videoStream.enabled"
                              [src]="user.pictureId | displayProfileImage" alt="user picture" style="min-width: 200px; max-width: 200px;">
