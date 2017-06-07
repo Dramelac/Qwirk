@@ -19,7 +19,7 @@
                     <div *ngFor="let user of userList">
                         <div class="col-md-2">
                         <span style="margin-left: 35%;">{{user.username}}</span><br/>
-                        <video [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
+                        <video style="min-width: 200px; max-width: 200px;" [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
                                class="theirVideo" autoplay [poster]="user.pictureId | displayProfileImage"></video>
                         <img [hidden]="user.videoStream && user.videoStream.enabled"
                              [src]="user.pictureId | displayProfileImage" alt="user picture" style="min-width: 200px; max-width: 200px;">
@@ -30,7 +30,7 @@
 
             <div id="me" class="row width-max">
                 <div class="col-md-offset-8 col-md-4">
-                    <video [hidden]="!myVideoStream || !myVideoStream.enabled" [src]="myVideo" class="myVideo"
+                    <video style="max-width: 75px; opacity: 0.8;" [hidden]="!myVideoStream || !myVideoStream.enabled" [src]="myVideo" class="myVideo"
                            onloadedmetadata="this.muted = true" muted autoplay [poster]="myPicture | displayProfileImage"></video>
                     <img [hidden]="myVideoStream && myVideoStream.enabled" [src]="myPicture | displayProfileImage"
                          alt="user picture" style="max-width: 75px; opacity: 0.8;">
