@@ -17,7 +17,7 @@
             <div id="people" class="row">
                 <div *ngIf="isCallActive">
                     <div *ngFor="let user of userList">
-                        <div id="calledusers" class="col-md-2">
+                        <div id="calledusers" class="col-md-5 col-md-offset-1">
                         <span>{{user.username}}</span><br/>
                         <video id="videocalleduser" [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
                                class="theirVideo" autoplay [poster]="user.pictureId | displayProfileImage"></video>
@@ -40,7 +40,7 @@
             <div class="row width-max">
                 <div class="action-buttons">
 
-                    <button class="mic" md-button (click)="mute()" class="md-fab">
+                    <button md-button (click)="mute()" class="md-fab mic">
                         <i *ngIf="micButton" class="material-icons">mic</i>
                         <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
                     </button>
@@ -48,12 +48,12 @@
                         <i *ngIf="micButton" class="material-icons">mic</i>
                         <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
                     </button>-->
-                    <button md-button class="cam" class="md-fab" *ngIf="hasCam" (click)="video()">
+                    <button md-button class="md-fab cam" *ngIf="hasCam" (click)="video()">
                         <i *ngIf="!camButton" class="material-icons">videocam</i>
                         <i *ngIf="camButton" class="material-icons">&#xE04C;</i>
                     </button>
 
-                    <button md-button class="stopCall" class="md-fab" (click)="stopCall()">
+                    <button md-button class="md-fab stopCall" (click)="stopCall()">
                         <i class="material-icons">call_end</i>
                     </button>
                     <a *ngIf="chat" [routerLink]="['/chat/'+chat._id]" (click)="isHide = true" class="goto pull-right">
