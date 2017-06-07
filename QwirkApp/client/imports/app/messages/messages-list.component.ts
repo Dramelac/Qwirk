@@ -227,6 +227,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
 
     wizz() {
         $("#ChatList").effect("shake", {times: 4, distance: 25, direction: "left"});
+        setTimeout(()=>{this.scrollDown()},800);
         let audio = new Audio("/asset/wizz.wav");
         audio.play();
     }
