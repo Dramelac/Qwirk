@@ -102,6 +102,8 @@
 
 #people {
   margin-left: 15px;
+  overflow: auto;
+  max-height: 600px;
 }
 
 #calledusers {
