@@ -228,8 +228,8 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         });
 
         this.peer.on('error', (err) => {
-            console.log("Peer custom error : ", err);
-            this.stopCall();
+            console.error("Peer custom error : ", err);
+            //this.stopCall();
         });
 
         this.peer.on('close', () => {
