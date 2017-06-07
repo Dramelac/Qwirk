@@ -6,7 +6,7 @@ export class Main {
 
     mailTemplates(): void {
         Accounts.emailTemplates.siteName = "Qwirk";
-        Accounts.emailTemplates.from     = "Qwirk <postmaster@noreply.qwirk.eu>";
+        Accounts.emailTemplates.from     = "Qwirk <noreply@qwirk.eu>";
 
         Accounts.emailTemplates.resetPassword.text = function (user, url) {
             url = url.replace('#/', '');
