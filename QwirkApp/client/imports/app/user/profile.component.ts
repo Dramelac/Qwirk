@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import style from "./profile.component.scss";
 import template from "./profile.component.html";
 import {Contact, File, Profile} from "../../../../both/models";
 import {Contacts, Files, Profiles} from "../../../../both/collections";
@@ -9,7 +10,8 @@ import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
     selector: 'profile',
-    template
+    template,
+    styles: [style]
 })
 @InjectUser('user')
 export class ProfileComponent implements OnInit {
@@ -32,14 +34,14 @@ export class ProfileComponent implements OnInit {
         this.route.params.map(params => params["profileID"]).subscribe(profile => {
             if (profile) {
                 this.profileId = profile;
-                //TODO add contact sub (like bellow)
                 MeteorObservable.subscribe('myContacts').subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
                         this.contact = Contacts.findOne({$and: [{ownerId: Meteor.userId()}, {profileId: this.profileId}]});
-                        console.log(this.contact);
+                        //console.log(this.contact);
                         this.profileForm = this.formBuilder.group({
                             username: [this.contact.displayName, Validators.required]
                         });
+                        this.profile = {username:this.contact.displayName};
                         this.myProfile = false;
                     });
                 });

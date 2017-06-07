@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, NgZone, OnInit, Output} from "@angular/core";
 import template from "./file-upload.component.html";
+import style from "./file-upload.component.scss";
 import {FilesStore} from "../../../../both/collections";
 import {UploadFS} from "meteor/jalik:ufs";
 import "jquery";
 
 @Component({
     selector: 'file-upload',
-    template
+    template,
+    styles: [style]
 })
 export class FileUploadComponent implements OnInit {
     fileIsOver: boolean = false;
@@ -29,6 +31,7 @@ export class FileUploadComponent implements OnInit {
 
     ngOnInit(): void {
         this.error = "";
+        
         $(document).ready(function () {
             $("body").bind('dragover', function () {
                 $(".modal-file-drop").addClass('modal-file-drop-dragover');
@@ -44,6 +47,7 @@ export class FileUploadComponent implements OnInit {
     }
 
     onFileSelectChange(){
+        this.uploading = true;
         let file:File = $(".file-input").prop("files")[0];
 
         this.upload(file)
@@ -81,7 +85,7 @@ export class FileUploadComponent implements OnInit {
             let self = this;
             this.name = data.name;
 
-            // pick from an object only: name, type and size
+            // pick from an object only: name, typeChat and size
             const file = {
                 name: data.name,
                 type: data.type,

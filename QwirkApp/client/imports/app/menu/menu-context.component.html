@@ -1,4 +1,4 @@
-<context-menu class="angular2-contextmenu">
+<context-menu class="angular2-contextmenu" *ngIf="type !== 'Chats'">
     <div *ngIf="isContact">
         <template contextMenuItem let-item [enabled]="false">
             <span><button (click)="showProfile(item?.profileId)">Edit Profile</button></span>
@@ -13,17 +13,15 @@
             </span>
         </template>
     </div>
-    <div *ngIf="type === 'Groups' && isMessagesChats === false">
+    <div *ngIf="type === 'Groups'">
+        <template contextMenuItem let-item [enabled]="false">
+            <span>
+                <button (click)="editGroup(item?._id)">Edit Group</button>
+            </span>
+        </template>
         <template contextMenuItem let-item [enabled]="false">
             <span>
                 <button (click)="leaveGroup(item?._id ,item?.user)">Leave Group</button>
-            </span>
-        </template>
-    </div>
-    <div *ngIf=" type === 'Chats' && isMessagesChats === true">
-        <template contextMenuItem let-item [enabled]="false">
-            <span>
-                <button (click)="leaveGroup(item?._id ,item?.user)">Leave Chats</button>
             </span>
         </template>
     </div>

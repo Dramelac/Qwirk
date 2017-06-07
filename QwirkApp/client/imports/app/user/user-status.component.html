@@ -1,10 +1,12 @@
-<a md-button [routerLink]="['/profile']">
-    <img [src]="pictureId | displayProfileImage" alt="profile" class="tiny-picture"/>
-    <span *ngIf="profile && profile.username">{{ profile.username }}</span>
-</a>
-<select [(ngModel)]="selectedStatus" (ngModelChange)="updateStatus($event)">
-    <option value="0">Invisible</option>
-    <option value="1">Online</option>
-    <option value="2">Away</option>
-    <option value="3">Busy</option>
-</select>
+<div class="width-max col-md-12 statusbackground" [style.background-color]="color">
+    <a md-button [routerLink]="['/profile']" class="col-md-12 row">
+        <img [src]="pictureId | displayProfileImage" alt="profile" class="tiny-picture"/>
+        <span class="nom-utilisateur" *ngIf="profile && profile.username">{{ profile.username }}</span>
+    </a>
+    <select class="col-md-12 row" [(ngModel)]="selectedStatus" (ngModelChange)="updateStatus($event)">
+        <option value="0">Invisible</option>
+        <option value="1">Online</option>
+        <option value="2">Away</option>
+        <option value="3">Busy</option>
+    </select>
+</div>

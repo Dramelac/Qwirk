@@ -99,8 +99,7 @@ Meteor.methods({
         if (!Meteor.userId()) throw new Meteor.Error('unauthorized',
             'User must be logged-in to create a new chat');
 
-        //TODO check non announce message
-        check(type, Match.OneOf(String, [MessageType.TEXT]));
+        check(type, Match.OneOf(MessageType.TEXT, MessageType.PICTURE, MessageType.FILE, MessageType.WIZZ));
         check(chatId, nonEmptyString);
         check(content, nonEmptyString);
 
@@ -111,16 +110,14 @@ Meteor.methods({
                 'Chat doesn\'t exist');
         }
 
-        return {
-            messageId: Messages.collection.insert({
-                chatId: chatId,
-                ownerId: Meteor.userId(),
-                content: content,
-                createdAt: new Date(),
-                type: type,
-                readBy: [Meteor.userId()]
-            })
-        };
+        Messages.collection.insert({
+            chatId: chatId,
+            ownerId: Meteor.userId(),
+            content: content,
+            createdAt: new Date(),
+            type: type,
+            readBy: [Meteor.userId()]
+        });
     },
 
     countMessages(chatId): number {
@@ -140,11 +137,12 @@ Meteor.methods({
         check(friendId, nonEmptyString);
 
         const requestExist = !!FriendsRequest.collection.find({
-            $and: [
-                {initiator: Meteor.userId()},
-                {destinator: friendId}
-            ]
-        }).count();
+                $and: [
+                    {initiator: Meteor.userId()},
+                    {destinator: friendId}
+                ]
+            }).count() ||
+            !!Contacts.collection.find({$and: [{ownerId: Meteor.userId()}, {friendId: friendId}]}).count();
 
         if (requestExist) {
             throw new Meteor.Error('friend-request-exist', 'Friend Request already exist');

@@ -1,0 +1,13 @@
+.content-div {
+  display: block;
+  background-color: rgba(128, 128, 128, 0.3);
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.vcenter {
+  min-height: 100vh;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}

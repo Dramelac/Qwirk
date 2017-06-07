@@ -1,5 +1,6 @@
 import {Component, Input, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./chats.component.html";
+import style from "./chats.component.scss";
 import {Observable} from "rxjs/Observable";
 import {Chat, ChatType, Message} from "../../../../both/models";
 import {Chats, Contacts, Messages, Profiles} from "../../../../both/collections";
@@ -16,7 +17,8 @@ declare let Notification: any;
 
 @Component({
     selector: 'chat-list',
-    template
+    template,
+    styles: [style]
 })
 export class ChatsComponent implements OnInit, OnDestroy {
     @Input("type") type: ChatType;
@@ -57,7 +59,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
     findChats(): Observable<Chat[]> {
         return Chats.find({type : this.type}).map(chats => {
             chats.forEach(chat => {
-                if (!chat.title && chat.user.length == 2 && chat.admin.length == 0) {
+                if (chat.type === ChatType.CHAT) {
                     const receiverId = chat.user.find(m => m !== Meteor.userId());
                     this.profilesSub.push(MeteorObservable.subscribe('profiles', receiverId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
@@ -84,6 +86,16 @@ export class ChatsComponent implements OnInit, OnDestroy {
 
                         });
                     }));
+                } else {
+                    let picId = chat.picture;
+                    chat.picture = "";
+                    MeteorObservable.subscribe("file", picId).subscribe(() => {
+                        MeteorObservable.autorun().subscribe(() => {
+                            this.zone.run(()=>{
+                                chat.picture = picId;
+                            });
+                        });
+                    });
                 }
 
                 // This will make the last message reactive

@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import template from "./friend-request.component.html";
+import style from "./friend-request.component.scss";
 import {Observable, Subscription} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
 import {FriendRequest, Profile, SessionKey} from "../../../../both/models";
@@ -7,7 +8,8 @@ import {FriendsRequest, Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'friendRequest-list',
-    template
+    template,
+    styles: [style]
 })
 export class FriendRequestComponent implements OnInit, OnDestroy {
 
@@ -18,7 +20,7 @@ export class FriendRequestComponent implements OnInit, OnDestroy {
     numberRequest: number;
 
     ngOnInit(): void {
-        this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe( () => {
+        this.friendRequestsSub = MeteorObservable.subscribe('friendRequest',Meteor.userId()).subscribe( () => {
             this.friendsRequests = FriendsRequest
                 .find({destinator: Meteor.userId()});
             if (this.friendsRequests) {
@@ -27,26 +29,19 @@ export class FriendRequestComponent implements OnInit, OnDestroy {
             this.friendsRequests.subscribe((requests : FriendRequest[]) => {
                 for(let request of requests){
                     this.profileSub = MeteorObservable.subscribe('profiles', request.initiator).subscribe(() => {
-                        console.log("Id initaitor:",request.initiator);
                         this.profiles = Profiles.find({userId : request.initiator});
                     });
                 }
             });
 
         });
-
-
-
     }
+
     getUsernameFormId(id:string):string{
         let profile = Profiles.findOne({userId : id});
-        console.log("Id :",id);
         if(profile){
             return profile.username;
-        }else{
-            return "error";
         }
-
     }
 
     addNexContact(initiator: string): void {

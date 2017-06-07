@@ -25,3 +25,13 @@ Meteor.publish('myCallRequest', function(id: string): Mongo.Cursor<CallRequest> 
         chatId: id
     });
 });
+
+Meteor.publish('ownCallRequest', function(): Mongo.Cursor<CallRequest> {
+    if (!this.userId) {
+        return;
+    }
+
+    return CallRequests.collection.find({
+        ownerUserId: this.userId
+    });
+});

@@ -1,24 +1,17 @@
-<md-toolbar color="primary">
-    <a routerLink="/" class="toolbar-title">Qwirk</a>
-    <span class="fill-remaining-space"></span>
-    <div *ngIf="!user">
-        <a md-button [routerLink]="['/login']" >Login</a>
-        <a md-button [routerLink]="['/signup']">Sign up</a>
+<div class="container-fluid" >
+    <div class="row max-height">
+        <div class="row">
+            <qwirk-index *ngIf="!user"></qwirk-index>
+        </div>
+
+        <div class="col-md-2" *ngIf="user">
+            <side-menu></side-menu>
+        </div>
+        <div>
+            <div class="row">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+        <call-notif *ngIf="user"></call-notif>
     </div>
-    <div *ngIf="user">
-        <user-status></user-status>
-        <button md-button (click)="logout()">Logout</button>
-    </div>
-</md-toolbar>
-
-<!-- App layout -->
-
-
-<div *ngIf="user">
-    <call-handler></call-handler>
-    <call-notif></call-notif>
-    <side-menu></side-menu>
 </div>
-
-<!-- Main page -->
-<router-outlet></router-outlet>

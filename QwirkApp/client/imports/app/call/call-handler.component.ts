@@ -1,15 +1,17 @@
 import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./call-handler.component.html";
+import style from "./call-handler.component.scss";
 import "../../../lib/peer.js";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CallRequest, CallUser, Chat, PeerUser, SessionKey} from "../../../../both/models";
-import {CallRequests, Chats, Profiles} from "../../../../both/collections";
+import {CallRequests, Chats, Contacts, Profiles} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
 import * as _ from "underscore";
 
 @Component({
     selector: 'call-handler',
-    template
+    template,
+    styles: [style]
 })
 export class CallHandlerComponent implements OnInit, OnDestroy {
 
@@ -29,10 +31,12 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     isCallActive: boolean;
     isHost: boolean;
 
-    micButton: string;
-    camButton: string;
+    micButton: boolean;
+    camButton: boolean;
+    hasCam: boolean;
 
     chat: Chat;
+    isHide : boolean;
 
     constructor(private zone: NgZone, private sanitizer: DomSanitizer) {
     }
@@ -40,21 +44,25 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.peerId = "";
         this.isCallActive = false;
-        this.micButton = "Mute";
-        this.camButton = "Video";
+        this.micButton = true;
+        this.camButton = true;
+        this.hasCam = true;
         this.remoteStream = [];
         this.userList = [];
         this.currentCall = [];
         this.isHost = false;
+        this.isHide = true;
 
         MeteorObservable.subscribe('profile').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 let profile = Profiles.findOne({userId: Meteor.userId()});
-                MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
-                    MeteorObservable.autorun().subscribe(() => {
-                        this.myPicture = profile.picture;
+                if (profile){
+                    MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
+                        MeteorObservable.autorun().subscribe(() => {
+                            this.myPicture = profile.picture;
+                        });
                     });
-                });
+                }
             });
         });
 
@@ -102,6 +110,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
     initPeer(video: boolean, callback = null) {
         let execCallback = false;
+        this.isHide = false;
 
         if (!navigator.mediaDevices.getUserMedia) {
             console.error("undefined user media");
@@ -120,9 +129,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     if (loadVideo && !video) {
                         self.video();
                     } else if (!loadVideo) {
-                        self.camButton = null;
+                        self.hasCam = false;
                     } else {
-                        self.camButton = "Hide video"
+                        self.camButton = false
                     }
 
                     self.myVideoStream = self.localStream.getVideoTracks()[0];
@@ -141,13 +150,15 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 console.log(err.name + ": " + err.message);
             });
 
-        this.micButton = "Mute";
+        this.micButton = true;
 
+        //TODO update debug level
         this.peer = new Peer({
-            host: "qwirk-peerjs.herokuapp.com",
+            host: "peer.qwirk.eu",
             port: 443,
             secure: true,
-            debug: 3
+            debug: 3,
+            path: "/qwirk"
         });
 
         this.peer.on('open', () => {
@@ -267,7 +278,6 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         if (this.isHost) {
             CallRequests.remove({_id: this.requestId});
             this.isHost = false;
-            return;
         } else {
             CallRequests.update(this.requestId, {
                 $pull: {
@@ -297,6 +307,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
             this.myVideo = "";
             this.userList = [];
             this.peerId = "";
+            this.isHide = true;
         });
         Session.set(SessionKey.ActiveCall.toString(), null);
         Session.set(SessionKey.CallId.toString(), null);
@@ -329,7 +340,10 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 if (user.peerId !== this.peerId) {
                     let currentCall = this.peer.call(user.peerId, this.localStream);
                     currentCall.on('stream', (remoteStream) => {
-                        this.remoteStream.push(remoteStream);
+                        console.log("[MANUAAL] Receive stream from", user.peerId);
+                        this.zone.run(()=>{
+                            this.remoteStream.push(remoteStream);
+                        });
                         this.addUserList(user, remoteStream);
 
                     });
@@ -344,14 +358,20 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         MeteorObservable.subscribe('profiles', user.userId).subscribe(() => {
             let profile = Profiles.findOne({_id: user.profileId});
             if (profile) {
-                //TODO update to contact name
                 tempUser = {
                     username: profile.username,
                     videoStream: stream.getVideoTracks().length >= 1 ? stream.getVideoTracks()[0] : null,
                     videoURL: this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(stream)),
                     peerId: user.peerId
-                }
-                ;
+                };
+                MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                    MeteorObservable.autorun().subscribe(() => {
+                        let contact = Contacts.findOne({profileId : profile._id});
+                        if (contact) {
+                            tempUser.username = contact.displayName;
+                        }
+                    });
+                });
                 MeteorObservable.subscribe("file", profile.picture).subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
                         this.zone.run(() => {
@@ -372,12 +392,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.localStream.getAudioTracks().forEach((track) => {
             track.enabled = !track.enabled;
 
-            //TODO change to icon
-            if (track.enabled) {
-                this.micButton = "Mute";
-            } else {
-                this.micButton = "Unmute";
-            }
+            this.micButton = track.enabled;
         });
     }
 
@@ -385,12 +400,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         this.localStream.getVideoTracks().forEach((track) => {
             track.enabled = !track.enabled;
 
-            //TODO change to icon
-            if (track.enabled) {
-                this.camButton = "Hide video";
-            } else {
-                this.camButton = "Video";
-            }
+            this.camButton = !track.enabled;
         });
     }
 

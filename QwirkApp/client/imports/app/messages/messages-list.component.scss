@@ -2,10 +2,25 @@
   position: relative;
   height: 500px;
   overflow-x: hidden;
+  flex-grow: 1;
 }
 
 .tiny-profile-picture {
   max-width: 40px;
   max-height: 40px;
   border-radius: 10px;
+}
+
+.global-flex {
+  display: flex;
+  flex-flow: column;
+}
+
+.message-raw {
+  margin: 10px;
+}
+
+
+.imagestatut {
+  text-align: center;
 }

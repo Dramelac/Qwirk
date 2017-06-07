@@ -1,7 +1,49 @@
-<h3>Side menu bar</h3>
-<button (click)="button(0)">Chat</button>
-<button (click)="button(1)">Contact</button>
-<button (click)="button(2)">Group</button>
-<chat-list [hidden]="selected!==0" [type]="typeChat"></chat-list>
-<contact-list [hidden]="selected!==1"></contact-list>
-<chat-list [hidden]="selected!==2" [type]="typeGroup"></chat-list>
+<div class="row max-height global-flex">
+    <div class="col-md-3 sidemenu">
+        <div class="row div-button-sidenav">
+            <button class="button-background" >
+                <img class="col-md-12" src="asset/img/home.png" >
+            </button>
+        </div>
+        <div class="row  div-button-sidenav">
+            <button class="button-background" (click)="button(0)"  >
+                <img class="col-md-12" src="asset/img/comments.png" >
+            </button>
+        </div>
+        <div class="row div-button-sidenav">
+            <button class="button-background" (click)="button(1)" >
+                <img class="col-md-12" src="asset/img/user.png" >
+            </button>
+        </div>
+        <div class="row div-button-sidenav">
+            <button class="button-background" (click)="button(2)">
+                <img  class="col-md-12" src="asset/img/users.png" >
+            </button>
+        </div>
+        <call-handler></call-handler>
+
+        <div class="sidemenu-void"></div>
+
+        <div class="row div-button-sidenav">
+            <button class="button-background" (click)="logout()">
+                <img  class="col-md-12" src="asset/img/left_arrow.png" >
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-9 row appmenu global-flex*">
+        <div class="col-md-12 row menudroite">
+            <div class="row">
+                <img class="logo" src="logoqwirk.png">
+            </div>
+            <div class="row">
+                <user-status ></user-status>
+            </div>
+            <div class="row">
+                <chat-list [hidden]="selected!==0" [type]="typeChat"></chat-list>
+                <contact-list [hidden]="selected!==1"></contact-list>
+                <chat-list [hidden]="selected!==2" [type]="typeGroup"></chat-list>
+            </div>
+        </div>
+    </div>
+</div>

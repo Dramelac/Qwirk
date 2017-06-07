@@ -1,15 +1,17 @@
 import {Component, NgZone, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import template from "./contact-list.component.html";
+import style from "./contact-list.component.scss";
 import {Router} from "@angular/router";
 import {ContextMenuComponent} from "angular2-contextmenu";
 import {Observable, Subscription} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
-import {Profile, FriendRequest, Contact, SessionKey} from "../../../../both/models";
-import {Profiles, FriendsRequest, Contacts} from "../../../../both/collections";
+import {Contact, FriendRequest, Profile, SessionKey} from "../../../../both/models";
+import {Contacts, FriendsRequest, Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'contact-list',
-    template
+    template,
+    styles: [style]
 })
 export class ContactListComponent implements OnInit, OnDestroy {
 
@@ -36,6 +38,11 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                //this.friendRequests = FriendsRequest.find();
+            });
+        });
         this.dataloading();
         Tracker.autorun(() => {
             let updateData = Session.get(SessionKey.DataUpdated.toString());
@@ -48,7 +55,11 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     dataloading(): void {
         this.currentUserId = Meteor.userId();
-        this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe();
+        this.friendRequestsSub = MeteorObservable.subscribe('friendRequest').subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                this.friendRequests = FriendsRequest.find();
+            });
+        });
 
         this.profilesSub = MeteorObservable.subscribe('profileContact').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
@@ -59,10 +70,21 @@ export class ContactListComponent implements OnInit, OnDestroy {
                     if (this.contacts) {
                         this.contacts.subscribe((result: Contact[]) => {
                             MeteorObservable.autorun().subscribe(() => {
-                                if(result){
+                                if (result) {
                                     this.zone.run(() => {
-                                        for(let contact of result){
-                                            contact.profile = Profiles.findOne({_id : contact.profileId});
+                                        for (let contact of result) {
+                                            contact.profile = Profiles.findOne({_id: contact.profileId});
+                                            if (contact.profile) {
+                                                let picId: string = contact.profile.picture;
+                                                contact.profile.picture = "";
+                                                MeteorObservable.subscribe("file", picId).subscribe(() => {
+                                                    MeteorObservable.autorun().subscribe(() => {
+                                                        this.zone.run(() => {
+                                                            contact.profile.picture = picId;
+                                                        });
+                                                    });
+                                                });
+                                            }
                                         }
                                     });
                                 }
@@ -84,7 +106,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
             if (this.moreSearch) {
                 this.searchInQwirk();
             } else {
-                this.contacts= Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}});
+                this.contacts = Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}});
                 this.inApp = true;
             }
         }
@@ -95,11 +117,11 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     searchInQwirk(): void {
-        this.contacts.subscribe((contactList : Contact[])=> {
-            if(this.friendList.length > 0){
+        this.contacts.subscribe((contactList: Contact[]) => {
+            if (this.friendList.length > 0) {
                 this.friendList = []
             }
-            for(let contact of contactList){
+            for (let contact of contactList) {
                 this.friendList.push(contact.profileId);
             }
         });
@@ -121,15 +143,12 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     requestSent(friendId: string): boolean {
-        Meteor.call("requestExist", friendId, (error, result) => {
-            if (error) {
-                console.log("erreur requestSent");
-                return;
-            }
-            Session.set('exist', result);
-        });
-        return Session.get('exist');
-
+        return !!FriendsRequest.collection.find({
+                $and: [
+                    {initiator: Meteor.userId()},
+                    {destinator: friendId}
+                ]
+            }).count() || !!Contacts.collection.find({$and: [{ownerId: Meteor.userId()}, {friendId: friendId}]}).count();
     }
 
     clearRequest(): void {
@@ -147,8 +166,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.profilesSub.unsubscribe();
-        this.friendRequestsSub.unsubscribe();
-        this.contactsSub.unsubscribe();
+        if (this.profilesSub) this.profilesSub.unsubscribe();
+        if (this.friendRequestsSub) this.friendRequestsSub.unsubscribe();
+        if (this.contactsSub) this.contactsSub.unsubscribe();
     }
 }

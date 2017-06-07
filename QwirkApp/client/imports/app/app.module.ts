@@ -6,6 +6,7 @@ import {AccountsModule} from "angular2-meteor-accounts-ui";
 import {MaterialModule} from "@angular/material";
 import {MomentModule} from "angular2-moment";
 import {FileDropModule} from "angular2-file-drop";
+import "jquery";
 import "hammerjs";
 import {AppComponent} from "./app.component";
 import {routes, ROUTES_PROVIDERS} from "./app.route";

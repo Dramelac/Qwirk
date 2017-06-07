@@ -1,12 +1,14 @@
 import {Component, Input, NgZone, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import template from "./message-form.component.html";
+import style from "./message-form.component.scss";
 import {Chat, ChatType, File, MessageType} from "../../../../both/models";
 import {Profiles} from "../../../../both/collections";
 
 @Component({
     selector: 'message-form',
-    template
+    template,
+    styles: [style]
 })
 export class MessageFormComponent implements OnInit {
     addForm: FormGroup;
@@ -157,7 +159,7 @@ export class MessageFormComponent implements OnInit {
                     console.error("Error:", error);
                 }
                 if (result) {
-                    console.error("result:", result);
+                    console.log("result:", result);
                 }
             });
     }

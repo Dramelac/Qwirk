@@ -18,4 +18,5 @@ export interface Chat extends CollectionObject {
     type:ChatType;
     isAdmin?:boolean;
     ownerId?:string;
+    userStatus?:string;
 }

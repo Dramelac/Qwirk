@@ -1,30 +1,41 @@
-<div>
-    <p>Search contact</p>
-    <div>
-        <input class="search-bar" placeholder="Search" [(ngModel)]="query" (keyup)="search()">
-        <div *ngIf="query">
-            <button (click)="clearRequest()">X</button>
+<div class="global-flex" >
+    <div class="col-md-12">
+        <md-input-container class="col-md-10">
+            <input mdInput placeholder="Search" [(ngModel)]="query" (keyup)="search()">
+        </md-input-container>
+        <div class="col-md-2 div-button-del">
+            <button class="buttondel col-md-12" (click)="clearRequest()"><i class="col-md-12 material-icons">format_paint</i></button>
         </div>
     </div>
+    <br>
     <friendRequest-list></friendRequest-list>
     <h2>Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let contact of (contacts | async)">
             <div [contextMenu]="basicMenu" [contextMenuSubject]="contact">
-                <button [disabled]="contact.isBloqued" (click)="showMessages(contact.chatId)" >
-                    <img *ngIf="contact.profile" [src]="contact.profile.picture | displayProfileImage" class="picture">
-                    <div>
-                        <p>{{contact.displayName}}</p>
-                        <status *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
-                        <div *ngIf="contact.isBloqued">
-                            <i>Blocked</i>
+                <button class="button-contact" [disabled]="contact.isBloqued" (click)="showMessages(contact.chatId)" >
+                    <div class="row">
+                        <img class=" col-md-4 info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture | displayProfileImage" class="picture">
+                        <div>
+                            <a class="info-button-contact" >{{contact.displayName}}</a>
+                            <br>
+                            <status class="info-button-contact"  *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
+                            <i *ngIf="contact.isBloqued" style="float: left" class="info-button-contact" >Blocked</i>
                         </div>
                     </div>
                 </button>
             </div>
         </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
-            <button type="submit">Search In Qwirk</button>
+            <div class="row">
+                <button class="col-md-12 searchuser" type="submit">
+                    <p class="col-md-10 textesearch" >Search In Qwirk</p>
+                    <div class="col-md-2">
+                        <i class="material-icons col-md-12">search</i>
+                    </div>
+                </button>
+            </div>
+
         </form>
     </div>
     <div *ngIf="profilesFind">
@@ -33,7 +44,6 @@
                 <img [src]="profile.picture | displayProfileImage" class="picture">
                 <div>
                     <p>{{profile.username}}</p>
-                    <p>{{profile.userId}}</p>
                     <div *ngIf="!requestSent(profile.userId)">
                         <button (click)="sendFriendRequest(profile.userId)">Add</button>
                     </div>

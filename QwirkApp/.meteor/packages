@@ -28,3 +28,4 @@ jalik:ufs
 jalik:ufs-gridfs
 jquery
 mrt:jquery-ui
+thelohoadmin:bootstrap@=3.3.7
