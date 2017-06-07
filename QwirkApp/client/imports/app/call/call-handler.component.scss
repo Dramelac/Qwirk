@@ -68,15 +68,11 @@
 }
 
 .mic, .cam {
-  background-color: #0baf02;
-  margin: 2px;
-  border-radius: 20px;
+  background-color: green
 }
 
 .stopCall {
   background-color: #ff3e3e;
-  margin: 2px;
-  border-radius: 20px;
 }
 
 .material-icons {
@@ -103,3 +99,32 @@
   height: 5.6rem;
   border-radius: 50%;
 }
+
+#people {
+  margin-left: 15px;
+}
+
+#calledusers {
+  text-align: center;
+}
+
+#videocalleduser {
+  min-width: 500px; 
+  max-width: 500px;
+}
+
+#imgcalleduser {
+  min-width: 200px; 
+  max-width: 200px;
+}
+
+#videocallme {
+  max-width: 150px; 
+  opacity: 0.8;
+}
+
+#imgcallme {
+  max-width: 150px; 
+  opacity: 0.8;
+}
+
