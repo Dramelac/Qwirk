@@ -220,7 +220,9 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     return u.peerId === incomingCall.peer;
                 });
                 if (user.length > 0) {
-                    this.addUserList(user[0], remoteStream);
+                    this.zone.run(()=>{
+                        this.addUserList(user[0], remoteStream);
+                    });
                 }
             });
         });
@@ -341,10 +343,10 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                     let currentCall = this.peer.call(user.peerId, this.localStream);
                     currentCall.on('stream', (remoteStream) => {
                         console.log("[MANUAAL] Receive stream from", user.peerId);
+                        this.remoteStream.push(remoteStream);
                         this.zone.run(()=>{
-                            this.remoteStream.push(remoteStream);
+                            this.addUserList(user, remoteStream);
                         });
-                        this.addUserList(user, remoteStream);
 
                     });
                     this.currentCall.push(currentCall);

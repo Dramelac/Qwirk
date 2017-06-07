@@ -49,8 +49,8 @@
                         <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
                     </button>-->
                     <button md-button style="background-color: green" class="md-fab" *ngIf="hasCam" (click)="video()">
-                        <i *ngIf="camButton" class="material-icons">videocam</i>
-                        <i *ngIf="!camButton" class="material-icons">&#xE04C;</i>
+                        <i *ngIf="!camButton" class="material-icons">videocam</i>
+                        <i *ngIf="camButton" class="material-icons">&#xE04C;</i>
                     </button>
 
                     <button md-button style="background-color: red" class="md-fab" (click)="stopCall()">
