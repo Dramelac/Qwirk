@@ -14,7 +14,11 @@
 }
 
 .appmenu {
-  height: 100%;
   border-right: #d1d1d1 3px solid;
-  background-color: #e9e9e9
+  background-color: #e9e9e9;
+  height: 100vh;
+}
+
+.menudroite{
+  height: 100vh;
 }

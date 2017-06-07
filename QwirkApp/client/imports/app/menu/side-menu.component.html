@@ -1,4 +1,4 @@
-<div class="row max-height">
+<div class="row max-height global-flex">
     <div class="col-md-3 sidemenu">
         <div class="row div-button-sidenav">
             <button class="button-background" >
@@ -31,14 +31,19 @@
         </div>
     </div>
 
-    <div class="col-md-9 row appmenu">
-        <div class="col-md-12 row">
-            <img class="logo" src="logoqwirk.png">
-            <user-status ></user-status>
-            <chat-list [hidden]="selected!==0" [type]="typeChat"></chat-list>
-            <contact-list [hidden]="selected!==1"></contact-list>
-            <chat-list [hidden]="selected!==2" [type]="typeGroup"></chat-list>
-
+    <div class="col-md-9 row appmenu global-flex*">
+        <div class="col-md-12 row menudroite">
+            <div class="row">
+                <img class="logo" src="logoqwirk.png">
+            </div>
+            <div class="row">
+                <user-status ></user-status>
+            </div>
+            <div class="row">
+                <chat-list [hidden]="selected!==0" [type]="typeChat"></chat-list>
+                <contact-list [hidden]="selected!==1"></contact-list>
+                <chat-list [hidden]="selected!==2" [type]="typeGroup"></chat-list>
+            </div>
         </div>
     </div>
 </div>
