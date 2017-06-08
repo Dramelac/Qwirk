@@ -1,0 +1,14 @@
+#GroupForm {
+  position: relative;
+  overflow-x: hidden;
+  flex-grow: 1;
+  text-align: center;
+}
+
+md-input-container, md-checkbox {
+  margin-left: 10px;
+}
+
+.validate {
+  margin-top: 20px;
+}

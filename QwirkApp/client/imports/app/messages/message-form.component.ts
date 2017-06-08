@@ -72,7 +72,7 @@ export class MessageFormComponent implements OnInit {
                 reason = regexResult[1];
                 user = arg[1];
                 time = Number(arg[2]);
-                console.log("detect kick user :", user, " , time :", time, " , reason :", reason);
+                //console.log("detect kick user :", user, " , time :", time, " , reason :", reason);
                 exec = true;
             }
             result = true;
@@ -89,7 +89,7 @@ export class MessageFormComponent implements OnInit {
                 reason = regexResult[1];
                 user = arg[1];
                 time = Number(arg[2]);
-                console.log("detect ban user :", user, " , reason :", reason);
+                //console.log("detect ban user :", user, " , reason :", reason);
                 exec = true;
             }
             result = true;
@@ -104,7 +104,7 @@ export class MessageFormComponent implements OnInit {
                 this.error = "Error syntax, command : /" + command + " \<user\>";
             } else {
                 user = arg[1];
-                console.log("detect ", command, ", user :", user);
+                //console.log("detect ", command, ", user :", user);
                 exec = true;
             }
             result = true;
@@ -126,7 +126,7 @@ export class MessageFormComponent implements OnInit {
                             console.error("Error:", error);
                         }
                         if (result){
-                            console.log("Result command :", result);
+                            //console.log("Result command :", result);
                             this.zone.run(()=>{
                                 this.error = result;
                             });

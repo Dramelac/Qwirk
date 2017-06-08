@@ -152,12 +152,11 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
         this.micButton = true;
 
-        //TODO update debug level
         this.peer = new Peer({
             host: "peer.qwirk.eu",
             port: 443,
             secure: true,
-            debug: 3,
+            debug: 0,
             path: "/qwirk"
         });
 
@@ -166,7 +165,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 this.peerId = this.peer.id;
             });
             if (!this.isHost) {
-                console.log("Add peer id", this.peer.id);
+                //console.log("Add peer id", this.peer.id);
                 CallRequests.update(this.requestId, {
                     $push: {
                         onlineUsers: {
@@ -194,14 +193,14 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
 
         // This event: remote peer receives a call
         this.peer.on('call', (incomingCall) => {
-            console.log("call received");
+            //console.log("call received");
             this.isCallActive = true;
 
             this.currentCall.push(incomingCall);
             incomingCall.answer(this.localStream);
 
             incomingCall.on('close', () => {
-                console.log("A peer disconnected");
+                //console.log("A peer disconnected");
                 let index = this.userList.indexOf(this.userList.filter((u) => {
                     return u.peerId === incomingCall.peer;
                 })[0]);
@@ -233,12 +232,12 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
         });
 
         this.peer.on('close', () => {
-            console.log("close received");
+            //console.log("close received");
             //this.stopCall();
         });
 
         this.peer.on('disconnect', () => {
-            console.log("disconnect received");
+            //console.log("disconnect received");
             //this.stopCall();
         });
     }
@@ -342,7 +341,7 @@ export class CallHandlerComponent implements OnInit, OnDestroy {
                 if (user.peerId !== this.peerId) {
                     let currentCall = this.peer.call(user.peerId, this.localStream);
                     currentCall.on('stream', (remoteStream) => {
-                        console.log("[MANUAAL] Receive stream from", user.peerId);
+                        //console.log("[MANUAL] Receive stream from", user.peerId);
                         this.remoteStream.push(remoteStream);
                         this.zone.run(()=>{
                             this.addUserList(user, remoteStream);

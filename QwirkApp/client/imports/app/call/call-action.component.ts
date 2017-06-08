@@ -31,7 +31,7 @@ export class CallActionComponent implements OnInit, OnDestroy {
             MeteorObservable.autorun().subscribe(() => {
                 this.pendingCallRequest = CallRequests.findOne({rejectUsers: Meteor.userId(),chatId: this.chat._id});
                 if (this.pendingCallRequest){
-                    console.log("Detect reject call");
+                    //console.log("Detect reject call");
                     this.isCallActive = true;
                 }
             });
