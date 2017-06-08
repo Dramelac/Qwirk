@@ -1,54 +1,67 @@
 <div *ngIf="peerId || isCallActive">
-    <div class="row div-button-sidenav">
+    <div class="row div-button-sidenav big-screen">
         <button class="button-background" (click)="isHide = !isHide">
-            <span class="col-md-12 show-call">
+            <span class="col-sm-12 show-call">
                 <i class="material-icons text">phone</i>
             </span>
         </button>
     </div>
+    <div class="row div-button-sidenav small-screen">
+        <button class="button-background" (click)="isHide = !isHide">
+            <span class="col-xs-offset-2 col-xs-3 show-call">
+                <i class="material-icons text">phone</i>
+            </span>
+            <span class="col-xs-7 nav-text">Call</span>
+        </button>
+    </div>
 
-    <div id="call-modal" class="col-md-12" [hidden]="isHide">
+    <div id="call-modal" class="col-xs-12" [hidden]="isHide">
         <div class="row call-section">
             <button class="btn btn-success" (click)="isHide = true">Hide</button>
             <div *ngIf="!isCallActive" class="row width-max">
                 <p class="center-text action-text">Calling ...</p>
             </div>
             
-            <div class="row">
+            <div id="people" class="row">
                 <div *ngIf="isCallActive">
                     <div *ngFor="let user of userList">
-                        <div class="col-md-2">
-                        <span style="margin-left: 35%;">{{user.username}}</span><br/>
-                        <video [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
+                        <div id="calledusers" class="col-xs-5 col-xs-offset-1">
+                        <span>{{user.username}}</span><br/>
+                        <video id="videocalleduser" [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
                                class="theirVideo" autoplay [poster]="user.pictureId | displayProfileImage"></video>
-                        <img [hidden]="user.videoStream && user.videoStream.enabled"
-                             [src]="user.pictureId | displayProfileImage" alt="user picture" style="min-width: 200px; max-width: 200px;">
+                        <img id="imgcalleduser" [hidden]="user.videoStream && user.videoStream.enabled"
+                             [src]="user.pictureId | displayProfileImage" alt="user picture">
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="me" class="row width-max">
-                <div class="col-md-offset-8 col-md-4">
-                    <video [hidden]="!myVideoStream || !myVideoStream.enabled" [src]="myVideo" class="myVideo"
+                <div id="me_row" class="col-xs-offset-9 col-xs-3">
+                    <video id="videocallme" [hidden]="!myVideoStream || !myVideoStream.enabled" [src]="myVideo" class="myVideo"
                            onloadedmetadata="this.muted = true" muted autoplay [poster]="myPicture | displayProfileImage"></video>
-                    <img [hidden]="myVideoStream && myVideoStream.enabled" [src]="myPicture | displayProfileImage"
-                         alt="user picture" style="max-width: 75px; opacity: 0.8;">
+                    <img id="imgcallme" [hidden]="myVideoStream && myVideoStream.enabled" [src]="myPicture | displayProfileImage"
+                         alt="user picture">
                 </div>
             </div>
 
             <div class="row width-max">
                 <div class="action-buttons">
-                    <button class="mic" (click)="mute()">
+
+                    <button md-button (click)="mute()" class="md-fab mic">
                         <i *ngIf="micButton" class="material-icons">mic</i>
                         <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
                     </button>
-                    <button class="cam" *ngIf="hasCam" (click)="video()">
-                        <i *ngIf="camButton" class="material-icons">videocam</i>
-                        <i *ngIf="!camButton" class="material-icons">&#xE04C;</i>
+                    <!--<button class="mic" (click)="mute()">
+                        <i *ngIf="micButton" class="material-icons">mic</i>
+                        <i *ngIf="!micButton" class="material-icons">&#xE02B;</i>
+                    </button>-->
+                    <button md-button class="md-fab cam" *ngIf="hasCam" (click)="video()">
+                        <i *ngIf="!camButton" class="material-icons">videocam</i>
+                        <i *ngIf="camButton" class="material-icons">&#xE04C;</i>
                     </button>
 
-                    <button class="stopCall" (click)="stopCall()">
+                    <button md-button class="md-fab stopCall" (click)="stopCall()">
                         <i class="material-icons">call_end</i>
                     </button>
                     <a *ngIf="chat" [routerLink]="['/chat/'+chat._id]" (click)="isHide = true" class="goto pull-right">

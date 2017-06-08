@@ -48,9 +48,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                         //this.status = StatusToString(this.profile.status);
                     } else {
                         //console.log("profile not found, debug info :", Meteor.userId(), this.profile, this.profilesub);
-                        if (Meteor.userId()) {
-                            console.log("Error loading profile");
-                        } else {
+                        if (!Meteor.userId()) {
                             this.loadingValue();
                         }
                     }

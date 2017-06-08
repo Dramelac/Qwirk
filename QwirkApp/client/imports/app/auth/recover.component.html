@@ -1,6 +1,6 @@
 <div class="mat-content container-fluid">
     <div class="row">
-        <div class="col-md-12 center-block center-text">
+        <div class="col-xs-12 center-block center-text">
             <form [formGroup]="recoverForm" #f="ngForm" (ngSubmit)="recover()">
 
                 <md-input-container>
@@ -19,15 +19,15 @@
             </div>
 
             <div *ngIf="error !== ''">
-                <md-toolbar class="mat-warn">
+                <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
+                    <button md-button (click)="error=''"><i class="material-icons">clear</i></button>
                     <p class="mat-body-1">{{ error }}</p>
-                    <button (click)="error = ''">x</button>
                 </md-toolbar>
             </div>
             <div *ngIf="success !== ''">
                 <md-toolbar class="mat-primary">
+                    <button md-button (click)="success=''"><i class="material-icons">clear</i></button>
                     <p class="mat-body-1">{{ success }}</p>
-                    <button (click)="success = ''">x</button>
                 </md-toolbar>
             </div>
 

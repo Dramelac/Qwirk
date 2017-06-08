@@ -4,6 +4,7 @@ import template from "./message-form.component.html";
 import style from "./message-form.component.scss";
 import {Chat, ChatType, File, MessageType} from "../../../../both/models";
 import {Profiles} from "../../../../both/collections";
+import * as Moment from "moment";
 
 @Component({
     selector: 'message-form',
@@ -15,6 +16,8 @@ export class MessageFormComponent implements OnInit {
     @Input('chat') chat: Chat;
 
     error: string;
+
+    lastWizz: Date;
 
     constructor(private formBuilder: FormBuilder, private zone :NgZone) {
     }
@@ -72,7 +75,7 @@ export class MessageFormComponent implements OnInit {
                 reason = regexResult[1];
                 user = arg[1];
                 time = Number(arg[2]);
-                console.log("detect kick user :", user, " , time :", time, " , reason :", reason);
+                //console.log("detect kick user :", user, " , time :", time, " , reason :", reason);
                 exec = true;
             }
             result = true;
@@ -89,7 +92,7 @@ export class MessageFormComponent implements OnInit {
                 reason = regexResult[1];
                 user = arg[1];
                 time = Number(arg[2]);
-                console.log("detect ban user :", user, " , reason :", reason);
+                //console.log("detect ban user :", user, " , reason :", reason);
                 exec = true;
             }
             result = true;
@@ -104,7 +107,7 @@ export class MessageFormComponent implements OnInit {
                 this.error = "Error syntax, command : /" + command + " \<user\>";
             } else {
                 user = arg[1];
-                console.log("detect ", command, ", user :", user);
+                //console.log("detect ", command, ", user :", user);
                 exec = true;
             }
             result = true;
@@ -126,7 +129,7 @@ export class MessageFormComponent implements OnInit {
                             console.error("Error:", error);
                         }
                         if (result){
-                            console.log("Result command :", result);
+                            //console.log("Result command :", result);
                             this.zone.run(()=>{
                                 this.error = result;
                             });
@@ -153,6 +156,13 @@ export class MessageFormComponent implements OnInit {
     }
 
     sendWizz() {
+        if(this.lastWizz){
+            if (Moment().isBefore(Moment(this.lastWizz).add(5, "seconds"))){
+                this.error = "You can't spam wizz";
+                return;
+            }
+        }
+        this.lastWizz = new Date();
         Meteor.call("addMessage", MessageType.WIZZ, this.chat._id, "wizz",
             (error, result) => {
                 if (error) {

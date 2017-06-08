@@ -1,23 +1,22 @@
 <div class="global-flex" >
-    <div class="col-md-12">
-        <md-input-container class="col-md-10">
+    <div class="col-xs-12">
+        <md-input-container class="col-xs-10">
             <input mdInput placeholder="Search" [(ngModel)]="query" (keyup)="search()">
         </md-input-container>
-        <div class="col-md-2 div-button-del">
-            <button class="buttondel col-md-12" (click)="clearRequest()"><i class="col-md-12 material-icons">format_paint</i></button>
+        <div class="col-xs-2 div-button-del">
+            <button class="buttondel col-xs-12" (click)="clearRequest()"><i class="col-xs-12 material-icons">format_paint</i></button>
         </div>
     </div>
-    <br>
     <friendRequest-list></friendRequest-list>
-    <h2>Contacts</h2>
+    <h2 class="text-auto-width-title">Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let contact of (contacts | async)">
             <div [contextMenu]="basicMenu" [contextMenuSubject]="contact">
                 <button class="button-contact" [disabled]="contact.isBloqued" (click)="showMessages(contact.chatId)" >
                     <div class="row">
-                        <img class=" col-md-4 info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture | displayProfileImage" class="picture">
+                        <img class=" col-xs-4 info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture | displayProfileImage" class="picture">
                         <div>
-                            <a class="info-button-contact" >{{contact.displayName}}</a>
+                            <a id="contactname" class="info-button-contact" >{{contact.displayName}}</a>
                             <br>
                             <status class="info-button-contact"  *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
                             <i *ngIf="contact.isBloqued" style="float: left" class="info-button-contact" >Blocked</i>
@@ -26,29 +25,27 @@
                 </button>
             </div>
         </div>
+        <div *ngIf="!inApp && !haveFriend">
+            <span class="transparency">You have no contact yet.</span>
+        </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
             <div class="row">
-                <button class="col-md-12 searchuser" type="submit">
-                    <p class="col-md-10 textesearch" >Search In Qwirk</p>
-                    <div class="col-md-2">
-                        <i class="material-icons col-md-12">search</i>
-                    </div>
-                </button>
+                <button md-button class="mat-primary add-button col-xs-12" (click)="createGroup()">Search in Qwirk <i class="material-icons">search</i></button>
             </div>
 
         </form>
     </div>
     <div *ngIf="profilesFind">
         <div *ngFor="let profile of profilesFind">
-            <div>
-                <img [src]="profile.picture | displayProfileImage" class="picture">
-                <div>
-                    <p>{{profile.username}}</p>
+            <div class="row button-contact">
+                <img class="col-md-4" [src]="profile.picture | displayProfileImage" class="picture">
+                <div class="div-titre-icone">
+                    <p id="request-contact-name">{{profile.username}}</p>
                     <div *ngIf="!requestSent(profile.userId)">
-                        <button (click)="sendFriendRequest(profile.userId)">Add</button>
+                        <button md-button class="mat-primary add-button" (click)="sendFriendRequest(profile.userId)">Add <i class="material-icons">add_circle_outline</i></button>
                     </div>
-                    <div *ngIf="requestSent(profile.userId)">
-                        <p>Envoyée</p>
+                    <div class="icon-done" *ngIf="requestSent(profile.userId)">
+                        <p><i class="material-icons">done_all</i></p>
                     </div>
                 </div>
             </div>

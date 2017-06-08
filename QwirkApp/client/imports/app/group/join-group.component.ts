@@ -53,7 +53,7 @@ export class JoinGroupComponent implements OnInit, OnDestroy {
     }
 
     joinGroup() {
-        console.log(this.groupId);
+        //console.log(this.groupId);
         Chats.update({_id: this.groupId}, {$push: {user: Meteor.userId()}});
         this.router.navigate(["/group/" + this.groupId]);
     }

@@ -31,6 +31,15 @@ button {
   outline: none;
 }
 
+.global-flex {
+  display: flex;
+  flex-flow: column;
+}
+
+.extend-flex {
+  flex-grow: 1;
+}
+
 .text {
   white-space: nowrap;
   overflow: hidden;
@@ -108,11 +117,6 @@ button {
 
 .message-announce {
   margin: 10px;
-}
-
-.message-date {
-  float: right;
-  margin-right: 10px;
 }
 
 .crossbutton {
@@ -217,6 +221,49 @@ button {
     -webkit-transform: rotate(360deg);
   }
 }
+@media (min-width: 768px) {
+  .text-auto-width-title {
+    font-size: 2vw;
+  }
+  .text-auto-width-small {
+    font-size: 1vw;
+  }
+  .big-screen {
+    visibility: visible;
+  }
+
+  .small-screen {
+    visibility: hidden;
+    height: 0;
+    padding: 0 !important;
+  }
+}
+@media (max-width: 768px) {
+  .text-auto-width-title {
+    font-size: 6vw;
+  }
+  .text-auto-width-small {
+    font-size: 3vw;
+  }
+
+  .big-screen {
+    visibility: hidden;
+    height: 0;
+    padding: 0 !important;
+  }
+
+  .small-screen {
+    visibility: visible;
+  }
+
+}
+
+.nav-text {
+  color: white;
+  font-size: 7vw;
+  vertical-align: middle;
+  padding-top: 5vw;
+}
 
 .monlogo {
   width: 300px;
@@ -231,19 +278,19 @@ button {
   margin-left: 0;
 }
 
-.col-md-10 {
+.col-xs-10 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-8 {
+.col-xs-8 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-12 {
+.col-xs-12 {
   padding-right: 0;
   padding-left: 0;
 
@@ -254,13 +301,13 @@ button {
   margin-left: 0px;
 }
 
-.col-md-7 {
+.col-xs-7 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-4 {
+.col-xs-4 {
   padding-right: 0;
   padding-left: 0;
 
@@ -271,31 +318,55 @@ button {
   font-size: 20px;
 }
 
-.col-md-3 {
+.col-xs-3 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-2 {
+.col-xs-2 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-9 {
+.col-xs-9 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-5 {
+.col-xs-5 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-6 {
+.col-xs-6 {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.col-sm-3 {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.col-sm-9 {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.col-xs-12 {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.col-sm-12 {
   padding-right: 0;
   padding-left: 0;
 
@@ -508,12 +579,3 @@ input[type="file"] {
   margin-top: 3%;
 }
 
-#wizzbutton {
-  color: green;
-  margin-left: 10%;
-  margin-top: 10%;
-}
-
-#people {
-  
-}

@@ -2,12 +2,12 @@
     <span class="title">You have ({{numberRequest}}) Friend Requests</span>
     <div *ngFor="let request of (friendsRequests | async)">
         <div class="row friendRequest">
-            <span class="row col-md-12"><p class="username text" >{{getUsernameFormId(request.initiator)}}</p></span>
-            <div class="row col-md-12">
-                <button md-button class="mat-primary col-md-6" (click)="addNexContact(request.initiator)">
+            <span class="row col-xs-12"><p class="username text" >{{getUsernameFormId(request.initiator)}}</p></span>
+            <div class="row col-xs-12">
+                <button md-button class="mat-primary col-xs-6" (click)="addNexContact(request.initiator)">
                     <i class="material-icons">check</i>
                 </button>
-                <button md-button class="mat-warn col-md-6" (click)="deleteRequest(request.initiator)">
+                <button md-button class="mat-warn col-xs-6" (click)="deleteRequest(request.initiator)">
                     <i class="material-icons">clear</i>
                 </button>
             </div>

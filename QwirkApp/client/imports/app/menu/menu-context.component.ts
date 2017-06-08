@@ -5,6 +5,7 @@ import {Contact} from "../../../../both/models/contact.model";
 import {Router} from "@angular/router";
 import {Chats} from "../../../../both/collections/chat.collection";
 import {ChatType} from "../../../../both/models/chat.model";
+import * as _ from "underscore";
 
 @Component({
     selector: 'context',
@@ -53,10 +54,11 @@ export class ContextComponent implements OnInit, OnDestroy {
         if (ownerId == Meteor.userId()) {
             Chats.remove({_id: groupId});
         } else {
-            let index = user.indexOf(Meteor.userId());
-            if (index > -1) {
-                user.splice(index, 1);
-                Chats.update({_id: groupId}, {$set: {user: user}});
+            let chat = Chats.findOne({_id:groupId});
+            if (chat && _.contains(chat.admin, Meteor.userId())){
+                Chats.update({_id: groupId}, {$pull: {user: Meteor.userId(), admin: Meteor.userId()}});
+            } else {
+                Chats.update({_id: groupId}, {$pull: {user: Meteor.userId()}});
             }
         }
     }

@@ -1,12 +1,25 @@
+@media (max-width: 768px) {
+  .show-call {
+    width: 25%;
+    padding-top: 25%; /* 1:1 Aspect Ratio */
+  }
+  .text {
+    font-size: 15vw;
+  }
+}
+@media (min-width: 768px) {
+  .show-call {
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+  }
+}
+
 .show-call {
   background-color: rgb(19, 150, 47);
-  border-radius: 50px;
+  border-radius: 200px;
   color: white;
   text-align: center;
-  font-size: 5px;
-  width: 100%;
-  padding-top: 100%; /* 1:1 Aspect Ratio */
-  position: relative; /* If you want text inside of it */
+  position: relative;
 }
 
 .text {
@@ -41,6 +54,10 @@
   display: flex;
 }
 
+.myVideo {
+  max-height: 200px;
+}
+
 .action-text {
   font-size: 30px;
   font-weight: bold;
@@ -64,15 +81,11 @@
 }
 
 .mic, .cam {
-  background-color: #0baf02;
-  margin: 2px;
-  border-radius: 20px;
+  background-color: green
 }
 
 .stopCall {
   background-color: #ff3e3e;
-  margin: 2px;
-  border-radius: 20px;
 }
 
 .material-icons {
@@ -88,6 +101,48 @@
 }
 
 #people {
-  float: center;
   overflow: auto;
+}
+
+.md-button.md-fab {
+  line-height: 5.6rem;
+  min-width: 0;
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
+}
+
+#people {
+  margin-left: 15px;
+  overflow: auto;
+  max-height: 600px;
+}
+
+#calledusers {
+  text-align: center;
+}
+
+#videocalleduser {
+  min-width: 500px;
+  max-width: 500px;
+}
+
+#imgcalleduser {
+  min-width: 200px;
+  max-width: 200px;
+}
+
+#videocallme {
+  margin-top: 20px;
+  max-width: 250px;
+  opacity: 0.8;
+}
+
+#imgcallme {
+  max-width: 150px;
+  opacity: 0.8;
+}
+
+#me_row {
+  width: 100%;
 }

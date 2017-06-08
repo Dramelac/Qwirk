@@ -1,16 +1,16 @@
 <div *ngIf="group && !isMember" class="row">
-    <div class="col-md-offset-3 col-md-6 vcenter">
+    <div class="col-xs-offset-3 col-xs-6 vcenter">
         <div class="content-div">
-            <h4 class="row col-md-12">Welcome on the group's : {{group.title}}</h4>
-            <div class="row col-md-12">
-                <button md-button class="mat-primary col-md-6" (click)="joinGroup()">Join Group !</button>
-                <button md-button class="mat-warn col-md-6" (click)="cancel()">Cancel</button>
+            <h4 class="row col-xs-12">Welcome on the group's : {{group.title}}</h4>
+            <div class="row col-xs-12">
+                <button md-button class="mat-primary col-xs-6" (click)="joinGroup()">Join Group !</button>
+                <button md-button class="mat-warn col-xs-6" (click)="cancel()">Cancel</button>
             </div>
         </div>
     </div>
 </div>
 <div *ngIf="!group || isMember" class="row">
-    <div class="col-md-offset-3 col-md-6 vcenter">
+    <div class="col-xs-offset-3 col-xs-6 vcenter">
         <div class="content-div">
             <h4>You can't join this group.</h4>
             <button md-button class="mat-primary" (click)="cancel()">Go to home</button>

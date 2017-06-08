@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import template from "./add-group.component.html";
+import style from "./add-group.component.scss";
 import {Chat, ChatType, Contact, File} from "../../../../both/models";
 import {Chats, Contacts, Files} from "../../../../both/collections";
 import {MeteorObservable} from "meteor-rxjs";
@@ -9,7 +10,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: 'add-group',
-    template
+    template,
+    styles: [style]
 })
 
 export class AddGroupComponent implements OnInit, OnDestroy {
@@ -24,7 +26,6 @@ export class AddGroupComponent implements OnInit, OnDestroy {
     contactFiltred: Contact[] = [];
     mySelection: Contact[] = [];
     selected: string[];
-    error: boolean;
     publicly: boolean = false;
     isAdmin: boolean;
 
@@ -78,20 +79,43 @@ export class AddGroupComponent implements OnInit, OnDestroy {
 
     filter() {
         if (this.query !== "") {
-            Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}}).subscribe(contacts => {
-                if (this.group) {
-                    for (let contact of contacts) {
-                        if (!_.contains(this.group.user, contact.friendId)) {
-                            this.contactFiltred.push(contact);
-                        }
-                    }
-                } else {
+            /*Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}}).subscribe(contacts => {
+             if (this.group) {
+             for (let contact of contacts) {
+             if (!_.contains(this.group.user, contact.friendId)) {
+             this.contactFiltred.push(contact);
+             }
+             }
+             } else {
+             this.contactFiltred = contacts;
+             }
+             });*/
+            let contacts = Contacts.collection.find({displayName: {$regex: ".*" + this.query + ".*"}}).map((c) => {
+                return c;
+            });
+            if(contacts){
+                if(this.group){
+                    this.filterGroup(contacts);
+                }else {
                     this.contactFiltred = contacts;
                 }
-            });
-
+            }
         } else {
             this.contactFiltred = [];
+        }
+
+    }
+    private filterGroup(contacts : Contact[]){
+        for(let contact of contacts){
+            if(!_.contains(this.group.user, contact.friendId)){
+               if(this.contactFiltred.length > 0){
+                   if(!_.contains(this.contactFiltred.map((c)=> {return c.friendId}),contact.friendId)){
+                       this.contactFiltred.push(contact);
+                   }
+               } else {
+                   this.contactFiltred.push(contact);
+               }
+            }
         }
     }
 
@@ -159,7 +183,7 @@ export class AddGroupComponent implements OnInit, OnDestroy {
             });
             this.router.navigate(["/group/" + chat]);
         } else {
-            this.error = true;
+            this.errorMessage = "Please add user";
         }
     }
 

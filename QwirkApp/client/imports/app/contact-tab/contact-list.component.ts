@@ -31,6 +31,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
     inApp: boolean = false;
     currentUserId: string;
     private exist: boolean = false;
+    haveFriend: boolean = false;
 
     @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
@@ -72,6 +73,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
                             MeteorObservable.autorun().subscribe(() => {
                                 if (result) {
                                     this.zone.run(() => {
+                                        this.haveFriend = false;
                                         for (let contact of result) {
                                             contact.profile = Profiles.findOne({_id: contact.profileId});
                                             if (contact.profile) {
@@ -85,6 +87,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
                                                     });
                                                 });
                                             }
+                                            this.haveFriend = true;
                                         }
                                     });
                                 }
@@ -109,10 +112,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
                 this.contacts = Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}});
                 this.inApp = true;
             }
-        }
-        if (this.query == "") {
-            this.clearRequest();
-
+        } else {
+            this.clearRequest(true);
         }
     }
 
@@ -151,7 +152,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
             }).count() || !!Contacts.collection.find({$and: [{ownerId: Meteor.userId()}, {friendId: friendId}]}).count();
     }
 
-    clearRequest(): void {
+    clearRequest(bypass?:boolean): void {
+        if (!this.query && !bypass) return;
         this.query = null;
         this.profilesFind = null;
         this.profiles = Profiles.find({userId: {$ne: this.currentUserId}});

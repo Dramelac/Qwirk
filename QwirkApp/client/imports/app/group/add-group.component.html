@@ -1,10 +1,10 @@
 <div class="max-height global-flex">
     <div class="div-titre-router">
         <div class="row petite-div-titre-router">
-            <div class="col-md-2">
+            <div class="col-xs-2">
                 <img class="picture-head" [src]="groupPictureId | displayProfileImage">
             </div>
-            <div class="col-md-offset-1 col-md-5">
+            <div class="col-xs-offset-1 col-xs-5">
                 <p class="titre-routeur">
                     <span *ngIf="!group">New Group</span>
                     <span *ngIf="group">Edit {{group.title}}</span>
@@ -13,54 +13,62 @@
         </div>
     </div>
 
-    <div *ngIf="group && isAdmin">Change group's picture :
-        <file-upload [chatId]="groupId" (onFile)="onPictureUpdate($event)"></file-upload>
-    </div>
-    <label *ngIf="isAdmin">Group's Name
-        <input placeholder="Title" [(ngModel)]="groupTitle"/>
-    </label>
-    <div *ngIf="mySelection.length > 0">
-        <div *ngFor="let selected of mySelection">
+    <div id="GroupForm" class="row">
+        <div *ngIf="group && isAdmin">Change group's picture :
+            <file-upload [chatId]="groupId" (onFile)="onPictureUpdate($event)"></file-upload>
+        </div>
+        <label *ngIf="isAdmin">Group's Name
+            <md-input-container>
+                <input mdInput placeholder="Title" [(ngModel)]="groupTitle">
+            </md-input-container>
+        </label>
+        <div *ngIf="mySelection.length > 0" class="row">
+            <md-list class="col-xs-offset-5 col-xs-2">
+                <md-list-item *ngFor="let selected of mySelection">
+                        <button md-button class="mat-warn" (click)="remove(selected)">
+                            <i class="material-icons">clear</i> {{selected.displayName}}
+                        </button>
+                </md-list-item>
+            </md-list>
+        </div>
+        <div>
             <div>
-                <span>{{selected.displayName}}</span>
-                <a (click)="remove(selected)">x</a>
+                <label for="contact">Contacts
+                    <md-input-container>
+                        <input mdInput id="contact" type="text" placeholder="Add contacts" [(ngModel)]="query"
+                               [ngModelOptions]="{standalone: true}" (keyup)=filter()>
+                    </md-input-container>
+                </label>
+            </div>
+            <div *ngIf="contactFiltred.length > 0" class="row">
+                <md-list class="col-xs-offset-5 col-xs-2">
+                    <md-list-item *ngFor="let contact of contactFiltred">
+                        <button md-button class="mat-primary" (click)="select(contact)">
+                            <i class="material-icons">add</i> {{contact.displayName}}
+                        </button>
+                    </md-list-item>
+                </md-list>
             </div>
         </div>
-    </div>
-    <div>
-        <div>
-            <label for="contact">Contacts
-                <input id="contact" type="text" placeholder="Add contacts" [(ngModel)]="query"
-                       [ngModelOptions]="{standalone: true}" (keyup)=filter()>
-            </label>
+        <label *ngIf="isAdmin">Publicly
+            <md-checkbox class="mat-primary" [(ngModel)]="publicly"></md-checkbox>
+        </label><br>
+
+        <button md-button class="mat-primary validate" *ngIf="!groupId" (click)="addGroup()">Create</button>
+        <button md-button class="mat-primary validate" *ngIf="groupId" (click)="updateGroup()">Update</button>
+
+        <div *ngIf="errorMessage !== ''">
+            <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
+                <button md-button (click)="errorMessage=''"><i class="material-icons">clear</i></button>
+                <p class="mat-body-1">{{ errorMessage }}</p>
+            </md-toolbar>
         </div>
-        <div *ngIf="contactFiltred.length > 0">
-            <ul *ngFor="let contact of contactFiltred">
-                <li>
-                    <a (click)="select(contact)">{{contact.displayName}}</a>
-                </li>
-            </ul>
+
+        <div *ngIf="successMessage !== ''">
+            <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
+                <button md-button (click)="successMessage=''"><i class="material-icons">clear</i></button>
+                <p class="mat-body-1">{{ successMessage }}</p>
+            </md-toolbar>
         </div>
-    </div>
-    <label *ngIf="isAdmin">Publicly
-        <input type="checkbox" [(ngModel)]="publicly">
-    </label><br>
-
-    <button *ngIf="!groupId" (click)="addGroup()">Create</button>
-    <button *ngIf="groupId" (click)="updateGroup()">Update</button>
-    <p *ngIf="error">Please add user before ^^</p>
-
-    <div *ngIf="errorMessage !== ''">
-        <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
-            <p class="mat-body-1">{{ errorMessage }}</p>
-            <button (click)="errorMessage=''">X</button>
-        </md-toolbar>
-    </div>
-
-    <div *ngIf="successMessage !== ''">
-        <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
-            <p class="mat-body-1">{{ successMessage }}</p>
-            <button (click)="successMessage=''">X</button>
-        </md-toolbar>
     </div>
 </div>
