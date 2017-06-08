@@ -1,21 +1,21 @@
 <div class="global-flex" >
-    <div class="col-md-12">
-        <md-input-container class="col-md-10">
+    <div class="col-sm-12">
+        <md-input-container class="col-sm-10">
             <input mdInput placeholder="Search" [(ngModel)]="query" (keyup)="search()">
         </md-input-container>
-        <div class="col-md-2 div-button-del">
-            <button class="buttondel col-md-12" (click)="clearRequest()"><i class="col-md-12 material-icons">format_paint</i></button>
+        <div class="col-sm-2 div-button-del">
+            <button class="buttondel col-sm-12" (click)="clearRequest()"><i class="col-sm-12 material-icons">format_paint</i></button>
         </div>
     </div>
     <br>
     <friendRequest-list></friendRequest-list>
-    <h2>Contacts</h2>
+    <h2 class="text-auto-width-title">Contacts</h2>
     <div *ngIf="profilesFind == null && profiles">
         <div *ngFor="let contact of (contacts | async)">
             <div [contextMenu]="basicMenu" [contextMenuSubject]="contact">
                 <button class="button-contact" [disabled]="contact.isBloqued" (click)="showMessages(contact.chatId)" >
                     <div class="row">
-                        <img class=" col-md-4 info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture | displayProfileImage" class="picture">
+                        <img class=" col-sm-4 info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture | displayProfileImage" class="picture">
                         <div>
                             <a class="info-button-contact" >{{contact.displayName}}</a>
                             <br>
@@ -31,10 +31,10 @@
         </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
             <div class="row">
-                <button class="col-md-12 searchuser" type="submit">
-                    <p class="col-md-10 textesearch" >Search In Qwirk</p>
-                    <div class="col-md-2">
-                        <i class="material-icons col-md-12">search</i>
+                <button class="col-sm-12 searchuser" type="submit">
+                    <p class="col-sm-10 textesearch" >Search In Qwirk</p>
+                    <div class="col-sm-2">
+                        <i class="material-icons col-sm-12">search</i>
                     </div>
                 </button>
             </div>
