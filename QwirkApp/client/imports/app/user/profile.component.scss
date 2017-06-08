@@ -6,11 +6,21 @@
 }
 
 .profile-ico {
-  margin-left: 10px;
+  padding-left: 10px;
+}
+
+.upload {
+  text-align: left;
+  cursor: pointer;
 }
 
 .profile-section {
   margin-bottom: 20px;
+}
+
+.bio {
+  box-shadow: 0 0 10px 2px #656565;
+  text-align: left;
 }
 
 .bio-input {
