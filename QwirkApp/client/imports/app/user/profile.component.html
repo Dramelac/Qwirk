@@ -1,10 +1,10 @@
 <div class="max-height global-flex" >
     <div class="div-titre-router">
         <div class="row petite-div-titre-router">
-            <div class="col-md-2 profile-ico" >
+            <div class="col-sm-2 profile-ico" >
                 <img src="asset/img/user.png">
             </div>
-            <div class="col-md-offset-1 col-md-5">
+            <div class="col-sm-offset-1 col-sm-5">
                 <p class="titre-routeur" *ngIf="profile && profile.username">{{ profile.username }}</p>
             </div>
         </div>
@@ -14,7 +14,7 @@
         <br>
         <div *ngIf="profileForm && (profile || contact)" layout="column" layout-fill layout-margin layout-padding>
 
-            <div class="col-md-12">
+            <div class="col-sm-12">
 
                 <p *ngIf="myProfile">
                     <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
@@ -56,7 +56,7 @@
 
             </div>
             <br>
-            <div class="col-md-offset-2 col-md-8">
+            <div class="col-sm-offset-2 col-sm-8">
                 <div *ngIf="error !== ''">
                     <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
                         <button md-button (click)="error=''"><i class="material-icons">clear</i></button>

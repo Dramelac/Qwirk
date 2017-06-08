@@ -31,6 +31,15 @@ button {
   outline: none;
 }
 
+.global-flex {
+  display: flex;
+  flex-flow: column;
+}
+
+.extend-flex {
+  flex-grow: 1;
+}
+
 .text {
   white-space: nowrap;
   overflow: hidden;
@@ -218,6 +227,14 @@ button {
   }
 }
 
+.text-auto-width-title {
+  font-size: 3vw;
+}
+
+.text-auto-width-small {
+  font-size: 1vw;
+}
+
 .monlogo {
   width: 300px;
   height: 300px;
@@ -231,19 +248,19 @@ button {
   margin-left: 0;
 }
 
-.col-md-10 {
+.col-sm-10 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-8 {
+.col-sm-8 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-12 {
+.col-sm-12 {
   padding-right: 0;
   padding-left: 0;
 
@@ -254,13 +271,13 @@ button {
   margin-left: 0px;
 }
 
-.col-md-7 {
+.col-sm-7 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-4 {
+.col-sm-4 {
   padding-right: 0;
   padding-left: 0;
 
@@ -271,31 +288,31 @@ button {
   font-size: 20px;
 }
 
-.col-md-3 {
+.col-sm-3 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-2 {
+.col-sm-2 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-9 {
+.col-sm-9 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-5 {
+.col-sm-5 {
   padding-right: 0;
   padding-left: 0;
 
 }
 
-.col-md-6 {
+.col-sm-6 {
   padding-right: 0;
   padding-left: 0;
 
@@ -506,11 +523,5 @@ input[type="file"] {
 #labelfileinput {
   margin-left: 0%;
   margin-top: 3%;
-}
-
-#wizzbutton {
-  color: green;
-  margin-left: 10%;
-  margin-top: 10%;
 }
 

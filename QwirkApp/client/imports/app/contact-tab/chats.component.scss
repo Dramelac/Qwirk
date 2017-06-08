@@ -15,7 +15,7 @@ h2 {
 
 .contacttab{
   position: relative;
-  max-height: 640px;
+  //max-height: 640px;
   overflow-x: hidden;
   flex-grow: 1;
 }
@@ -45,4 +45,7 @@ h2 {
 
 .add-button {
   margin-bottom: 10px;
+  width: 100%;
+  padding: 0;
+  font-size: 1.5vw;
 }
