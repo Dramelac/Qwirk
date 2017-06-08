@@ -59,14 +59,14 @@
 
         <div *ngIf="errorMessage !== ''">
             <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
-                <button md-button class="pull-right" (click)="errorMessage=''"><i class="material-icons">clear</i></button>
+                <button md-button (click)="errorMessage=''"><i class="material-icons">clear</i></button>
                 <p class="mat-body-1">{{ errorMessage }}</p>
             </md-toolbar>
         </div>
 
         <div *ngIf="successMessage !== ''">
             <md-toolbar class="mat-primary" layout="row" layout-fill layout-padding layout-margin>
-                <button md-button class="pull-right" (click)="successMessage=''"><i class="material-icons">clear</i></button>
+                <button md-button (click)="successMessage=''"><i class="material-icons">clear</i></button>
                 <p class="mat-body-1">{{ successMessage }}</p>
             </md-toolbar>
         </div>
