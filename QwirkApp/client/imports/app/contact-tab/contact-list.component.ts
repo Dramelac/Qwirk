@@ -112,10 +112,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
                 this.contacts = Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}});
                 this.inApp = true;
             }
-        }
-        if (this.query == "") {
-            this.clearRequest();
-
+        } else {
+            this.clearRequest(true);
         }
     }
 
@@ -154,7 +152,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
             }).count() || !!Contacts.collection.find({$and: [{ownerId: Meteor.userId()}, {friendId: friendId}]}).count();
     }
 
-    clearRequest(): void {
+    clearRequest(bypass?:boolean): void {
+        if (!this.query && !bypass) return;
         this.query = null;
         this.profilesFind = null;
         this.profiles = Profiles.find({userId: {$ne: this.currentUserId}});
