@@ -1,19 +1,20 @@
 import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./status.component.html";
-import {StatusToString} from "../../../../both/models/status.enum";
-import {Subscription} from "rxjs/Subscription";
-import {Profiles} from "../../../../both/collections/profile.collection";
-import {Profile} from "../../../../both/models/profile.model";
-import {Observable} from "rxjs/Observable";
+import style from "./status.component.scss";
+import {Subscription, Observable} from "rxjs";
+import {Profiles} from "../../../../both/collections";
+import {Profile, StatusToString, StatusToColorCode} from "../../../../both/models";
 import {MeteorObservable} from "meteor-rxjs";
+
 @Component({
     selector: 'status',
-    template
+    template,
+    styles: [style]
 })
-
 export class StatusComponent implements OnDestroy, OnInit {
     @Input("profileId") profileId: string;
     status : string;
+    colorCode: string;
     profileSub: Subscription;
     profiles: Observable<Profile[]>;
 
@@ -27,6 +28,7 @@ export class StatusComponent implements OnDestroy, OnInit {
                     let profile = Profiles.findOne({_id : this.profileId});
                     if (profile){
                         this.status = StatusToString(profile.status);
+                        this.colorCode = StatusToColorCode(profile.status);
                     }
                 })
             });
