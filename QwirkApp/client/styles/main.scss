@@ -31,6 +31,15 @@ button {
   outline: none;
 }
 
+.global-flex {
+  display: flex;
+  flex-flow: column;
+}
+
+.extend-flex {
+  flex-grow: 1;
+}
+
 .text {
   white-space: nowrap;
   overflow: hidden;
