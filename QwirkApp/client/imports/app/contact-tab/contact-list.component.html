@@ -26,6 +26,9 @@
                 </button>
             </div>
         </div>
+        <div *ngIf="!inApp && !haveFriend">
+            <span class="transparency">You have no contact yet.</span>
+        </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
             <div class="row">
                 <button class="col-md-12 searchuser" type="submit">

@@ -31,6 +31,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
     inApp: boolean = false;
     currentUserId: string;
     private exist: boolean = false;
+    haveFriend: boolean = false;
 
     @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
@@ -72,6 +73,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
                             MeteorObservable.autorun().subscribe(() => {
                                 if (result) {
                                     this.zone.run(() => {
+                                        this.haveFriend = false;
                                         for (let contact of result) {
                                             contact.profile = Profiles.findOne({_id: contact.profileId});
                                             if (contact.profile) {
@@ -85,6 +87,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
                                                     });
                                                 });
                                             }
+                                            this.haveFriend = true;
                                         }
                                     });
                                 }
