@@ -27,7 +27,8 @@ Meteor.methods({
             lastname: lastname,
             birthday: birthday,
             username: username,
-            picture: ""
+            picture: "",
+            biography: ""
         };
         let profileId = Profiles.collection.insert(profil);
         Meteor.users.update(Meteor.userId(), {$set: {"profile.id": profileId}});

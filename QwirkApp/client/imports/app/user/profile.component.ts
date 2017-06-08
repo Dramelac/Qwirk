@@ -5,7 +5,7 @@ import template from "./profile.component.html";
 import {Contact, File, Profile} from "../../../../both/models";
 import {Contacts, Files, Profiles} from "../../../../both/collections";
 import {InjectUser} from "angular2-meteor-accounts-ui";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit {
 
     pictureId: string;
 
-    constructor(private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
+    constructor(private route: ActivatedRoute, private formBuilder: FormBuilder) {
     }
 
 
@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
                         this.profileForm = this.formBuilder.group({
                             username: [this.contact.displayName, Validators.required]
                         });
-                        this.profile = {username:this.contact.displayName};
+                        this.profile = {username: this.contact.displayName};
                         this.myProfile = false;
                     });
                 });
@@ -56,6 +56,7 @@ export class ProfileComponent implements OnInit {
                                 username: [this.profile.username, Validators.required],
                                 firstname: [this.profile.firstname],
                                 lastname: [this.profile.lastname],
+                                biography: [this.profile.biography],
                                 email: [Meteor.user().emails[0].address, Validators.required],
                                 newPassword: [''],
                                 confirmPassword: [''],
@@ -108,10 +109,11 @@ export class ProfileComponent implements OnInit {
             });
         }
         if (this.myProfile && this.profileForm.valid) {
-            let profil = {
+            let profil: Profile = {
                 firstname: formValue.firstname,
                 lastname: formValue.lastname,
-                username: formValue.username
+                username: formValue.username,
+                biography: formValue.biography
             };
             Profiles.update(this.profile._id, {$set: profil});
             if (formValue.email != Meteor.user().emails[0].address) {

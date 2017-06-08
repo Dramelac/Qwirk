@@ -1,5 +1,4 @@
 import {CollectionObject} from "./collection-object.model";
-import {Contact} from "./contact.model"
 
 export interface Profile extends CollectionObject {
     userId?: string;
@@ -9,4 +8,5 @@ export interface Profile extends CollectionObject {
     status?: number;
     username?: string;
     picture?: string;
+    biography?: string;
 }
