@@ -17,7 +17,7 @@
                     <div class="row">
                         <img class=" col-md-4 info-button-contact" *ngIf="contact.profile" [src]="contact.profile.picture | displayProfileImage" class="picture">
                         <div>
-                            <a class="info-button-contact" >{{contact.displayName}}</a>
+                            <a id="contactname" class="info-button-contact" >{{contact.displayName}}</a>
                             <br>
                             <status class="info-button-contact"  *ngIf="contact.profileId" [profileId] ="contact.profileId"></status>
                             <i *ngIf="contact.isBloqued" style="float: left" class="info-button-contact" >Blocked</i>
