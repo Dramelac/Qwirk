@@ -5,10 +5,10 @@
     </md-toolbar>
 </div>
 
-<div class="col-sm-2">
+<div class="col-xs-2">
     <file-upload #upload [chatId]="chat._id" (onFile)="onFileUploaded($event)"></file-upload>
 </div>
-<div class="col-sm-8">
+<div class="col-xs-8">
     <form [formGroup]="addForm" (ngSubmit)="addMessage()">
 
         <md-input-container class="message-input">
@@ -19,6 +19,6 @@
 
     </form>
 </div>
-<div class="col-sm-2">
+<div class="col-xs-2">
     <button id="wizzbutton" md-button (click)="sendWizz()">WIZZ<i class="material-icons">snooze</i></button>
 </div>

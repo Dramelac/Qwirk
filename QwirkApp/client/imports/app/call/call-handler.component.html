@@ -1,13 +1,13 @@
 <div *ngIf="peerId || isCallActive">
     <div class="row div-button-sidenav">
         <button class="button-background" (click)="isHide = !isHide">
-            <span class="col-sm-12 show-call">
+            <span class="col-xs-12 show-call">
                 <i class="material-icons text">phone</i>
             </span>
         </button>
     </div>
 
-    <div id="call-modal" class="col-sm-12" [hidden]="isHide">
+    <div id="call-modal" class="col-xs-12" [hidden]="isHide">
         <div class="row call-section">
             <button class="btn btn-success" (click)="isHide = true">Hide</button>
             <div *ngIf="!isCallActive" class="row width-max">
@@ -17,7 +17,7 @@
             <div id="people" class="row">
                 <div *ngIf="isCallActive">
                     <div *ngFor="let user of userList">
-                        <div id="calledusers" class="col-sm-5 col-sm-offset-1">
+                        <div id="calledusers" class="col-xs-5 col-xs-offset-1">
                         <span>{{user.username}}</span><br/>
                         <video id="videocalleduser" [hidden]="!user.videoStream || !user.videoStream.enabled" [src]="user.videoURL"
                                class="theirVideo" autoplay [poster]="user.pictureId | displayProfileImage"></video>
@@ -29,7 +29,7 @@
             </div>
 
             <div id="me" class="row width-max">
-                <div id="me_row" class="col-sm-offset-9 col-sm-3">
+                <div id="me_row" class="col-xs-offset-9 col-xs-3">
                     <video id="videocallme" [hidden]="!myVideoStream || !myVideoStream.enabled" [src]="myVideo" class="myVideo"
                            onloadedmetadata="this.muted = true" muted autoplay [poster]="myPicture | displayProfileImage"></video>
                     <img id="imgcallme" [hidden]="myVideoStream && myVideoStream.enabled" [src]="myPicture | displayProfileImage"

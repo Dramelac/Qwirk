@@ -9,8 +9,8 @@
             <div [contextMenu]="chatMenu" [contextMenuSubject]="chat" class="row">
                 <div class="chatsbtn" *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
                     <div class="row">
-                        <img [src]="chat.picture | displayProfileImage" class="col-sm-4">
-                        <h3 class="text col-sm-8 title">{{chat.title}}</h3>
+                        <img [src]="chat.picture | displayProfileImage" class="col-xs-4">
+                        <h3 class="text col-xs-8 title">{{chat.title}}</h3>
                     </div>
                     <div class="row">
                         <div *ngIf="chat.lastMessage">
