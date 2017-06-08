@@ -221,13 +221,21 @@ button {
     -webkit-transform: rotate(360deg);
   }
 }
-
-.text-auto-width-title {
-  font-size: 3vw;
+@media (min-width: 768px) {
+  .text-auto-width-title {
+    font-size: 3vw;
+  }
+  .text-auto-width-small {
+    font-size: 1vw;
+  }
 }
-
-.text-auto-width-small {
-  font-size: 1vw;
+@media (max-width: 768px) {
+  .text-auto-width-title {
+    font-size: 6vw;
+  }
+  .text-auto-width-small {
+    font-size: 3vw;
+  }
 }
 
 .monlogo {

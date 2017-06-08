@@ -1,3 +1,14 @@
+@media (min-width: 768px) {
+  .add-button {
+    font-size: 1.5vw;
+  }
+}
+@media (max-width: 768px) {
+  .add-button {
+    margin-top: 20px;
+    font-size: 4vw;
+  }
+}
 .chatsbtn {
   width: 100%;
   border-top: #d1d1d1 1.5px solid;
@@ -45,7 +56,5 @@ h2 {
 
 .add-button {
   margin-bottom: 10px;
-  width: 100%;
   padding: 0;
-  font-size: 1.5vw;
 }
