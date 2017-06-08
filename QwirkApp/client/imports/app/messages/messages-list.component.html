@@ -48,7 +48,7 @@
                         <div *ngIf="message.type == 'wizz'" class="wizz-message col-xs-10 message-raw">
                             WIZZZZZZ
                         </div>
-                        <span class="message-date col-xs-1 pull-right">{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
+                        <span class="message-date col-xs-2">{{ message.createdAt | amDateFormat: 'HH:mm' }}</span>
                         <span *ngIf="message.isNew" class="new-message-tag"><i class="material-icons">markunread</i></span>
 
                     </div>
