@@ -85,7 +85,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                     MeteorObservable.subscribe('profiles', this.distantUserId).subscribe(() => {
                         MeteorObservable.autorun().subscribe(() => {
                             let profile = Profiles.findOne({userId: this.distantUserId});
-                            if (profile) {
+                            if (profile && this.chat) {
                                 this.chat.title = profile.username;
                                 this.chat.userStatus = StatusToString(profile.status);
 
