@@ -78,20 +78,43 @@ export class AddGroupComponent implements OnInit, OnDestroy {
 
     filter() {
         if (this.query !== "") {
-            Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}}).subscribe(contacts => {
-                if (this.group) {
-                    for (let contact of contacts) {
-                        if (!_.contains(this.group.user, contact.friendId)) {
-                            this.contactFiltred.push(contact);
-                        }
-                    }
-                } else {
+            /*Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}}).subscribe(contacts => {
+             if (this.group) {
+             for (let contact of contacts) {
+             if (!_.contains(this.group.user, contact.friendId)) {
+             this.contactFiltred.push(contact);
+             }
+             }
+             } else {
+             this.contactFiltred = contacts;
+             }
+             });*/
+            let contacts = Contacts.collection.find({displayName: {$regex: ".*" + this.query + ".*"}}).map((c) => {
+                return c;
+            });
+            if(contacts){
+                if(this.group){
+                    this.filterGroup(contacts);
+                }else {
                     this.contactFiltred = contacts;
                 }
-            });
-
+            }
         } else {
             this.contactFiltred = [];
+        }
+
+    }
+    private filterGroup(contacts : Contact[]){
+        for(let contact of contacts){
+            if(!_.contains(this.group.user, contact.friendId)){
+               if(this.contactFiltred.length > 0){
+                   if(!_.contains(this.contactFiltred.map((c)=> {return c.friendId}),contact.friendId)){
+                       this.contactFiltred.push(contact);
+                   }
+               } else {
+                   this.contactFiltred.push(contact);
+               }
+            }
         }
     }
 
