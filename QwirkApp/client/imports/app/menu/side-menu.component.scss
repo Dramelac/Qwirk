@@ -15,11 +15,28 @@
     padding-top: 12px;
     padding-bottom: 12px;
   }
+
+  .sidemenu-void {
+    min-height: 10%;
+    flex: 1 1 auto;
+  }
+
+  .sidemenu {
+    height: 100vh;
+  }
 }
 
 @media (max-width: 768px) {
   .logo-reduce {
     width: 50%;
+  }
+
+  .sidemenu-void {
+    height: 0;
+  }
+
+  .sidemenu {
+    height: 100%;
   }
 
 }
@@ -29,15 +46,9 @@
 }
 
 .sidemenu {
-  height: 100vh;
   background-color: #303030;
   flex-flow: column;
   display: flex;
-}
-
-.sidemenu-void {
-  min-height: 10%;
-  flex: 1 1 auto;
 }
 
 .div-button-sidenav {
@@ -50,7 +61,7 @@
   height: 100vh;
 }
 
-.menudroite{
+.menudroite {
   height: 100vh;
   overflow: auto;
 }

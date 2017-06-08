@@ -3,7 +3,8 @@
         <div class="sidebar-nav">
             <div class="navbar navbar-default button-background" role="navigation">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target=".sidebar-navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -15,34 +16,45 @@
                     <ul class="nav navbar-nav sidemenu">
                         <li class="active">
                             <div class="div-button-sidenav">
-                            <button class="button-background" (click)="button(0)" data-target=".sidebar-navbar-collapse" data-toggle="collapse">
-                                <img class="col-xs-12" src="asset/img/home.png" >
-                            </button>
-                            </div>
-                        </li>
-                        <li><div class="div-button-sidenav">
-                            <button class="button-background" (click)="button(0)" data-target=".sidebar-navbar-collapse" data-toggle="collapse">
-                                <img class="col-xs-12" src="asset/img/comments.png" >
-                            </button>
-                        </div></li>
-                        <li><div class="div-button-sidenav">
-                            <button class="button-background" (click)="button(1)" data-target=".sidebar-navbar-collapse" data-toggle="collapse">
-                                <img class="col-xs-12" src="asset/img/user.png" >
-                            </button>
-                        </div></li>
-                        <li>
-                            <div class="div-button-sidenav">
-                                <button class="button-background" (click)="button(2)" data-target=".sidebar-navbar-collapse" data-toggle="collapse">
-                                    <img  class="col-xs-12" src="asset/img/users.png" >
+                                <button class="button-background" (click)="button(0)"
+                                        data-target=".sidebar-navbar-collapse" data-toggle="collapse">
+                                    <img class="col-sm-12" src="asset/img/home.png">
                                 </button>
                             </div>
                         </li>
-                        <li><call-handler></call-handler></li>
+                        <li>
+                            <div class="div-button-sidenav">
+                                <button class="button-background" (click)="button(0)"
+                                        data-target=".sidebar-navbar-collapse" data-toggle="collapse">
+                                    <img class="col-sm-12" src="asset/img/comments.png">
+                                </button>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="div-button-sidenav">
+                                <button class="button-background" (click)="button(1)"
+                                        data-target=".sidebar-navbar-collapse" data-toggle="collapse">
+                                    <img class="col-sm-12" src="asset/img/user.png">
+                                </button>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="div-button-sidenav">
+                                <button class="button-background" (click)="button(2)"
+                                        data-target=".sidebar-navbar-collapse" data-toggle="collapse">
+                                    <img class="col-sm-12" src="asset/img/users.png">
+                                </button>
+                            </div>
+                        </li>
+                        <li>
+                            <call-handler></call-handler>
+                        </li>
                         <li class="sidemenu-void"></li>
                         <li>
                             <div class="row div-button-sidenav">
-                                <button class="button-background" (click)="logout()" data-target=".sidebar-navbar-collapse" data-toggle="collapse">
-                                    <img  class="col-xs-12" src="asset/img/left_arrow.png" >
+                                <button class="button-background" (click)="logout()"
+                                        data-target=".sidebar-navbar-collapse" data-toggle="collapse">
+                                    <img class="col-sm-12" src="asset/img/left_arrow.png">
                                 </button>
                             </div>
                         </li>
@@ -59,7 +71,7 @@
                 <img class="logo logo-reduce" src="logoqwirk.png">
             </div>
             <div class="row center-text">
-                <user-status ></user-status>
+                <user-status></user-status>
             </div>
             <div class="row extend-flex">
                 <div>
