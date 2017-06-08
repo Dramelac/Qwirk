@@ -59,15 +59,8 @@
             <div class="col-md-offset-2 col-md-8">
                 <div *ngIf="error !== ''">
                     <md-toolbar class="mat-warn" layout="row" layout-fill layout-padding layout-margin>
-                        <div class="col-md-6">
-                            <p class="mat-body-1 success">{{ error }}</p>
-                        </div>
-
-                        <div class="col-md-offset-6">
-                            <button class="cancel red" (click)="error=''">
-                                <img class="col-md-7" src="asset/img/delete.png">
-                            </button>
-                        </div>
+                        <button md-button class="pull-right" (click)="error=''"><i class="material-icons">clear</i></button>
+                        <p class="mat-body-1">{{ error }}</p>
                     </md-toolbar>
                 </div>
                 <div *ngIf="success !== ''">
