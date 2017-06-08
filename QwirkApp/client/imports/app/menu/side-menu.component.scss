@@ -1,5 +1,28 @@
+@media (min-width: 768px) {
+  .sidebar-nav .navbar .navbar-collapse {
+    padding: 0;
+    max-height: none;
+  }
+  .sidebar-nav .navbar ul {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
 .sidemenu {
-  height: 100%;
+  height: 100vh;
   background-color: #303030;
   flex-flow: column;
   display: flex;
