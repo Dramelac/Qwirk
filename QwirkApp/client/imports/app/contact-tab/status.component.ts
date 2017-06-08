@@ -1,9 +1,9 @@
 import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./status.component.html";
 import style from "./status.component.scss";
-import {Subscription, Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Profiles} from "../../../../both/collections";
-import {Profile, StatusToString, StatusToColorCode} from "../../../../both/models";
+import {Profile, StatusToColorCode, StatusToString} from "../../../../both/models";
 import {MeteorObservable} from "meteor-rxjs";
 
 @Component({
@@ -13,32 +13,64 @@ import {MeteorObservable} from "meteor-rxjs";
 })
 export class StatusComponent implements OnDestroy, OnInit {
     @Input("profileId") profileId: string;
-    status : string;
-    colorCode: string;
-    profileSub: Subscription;
+    @Input("usersId") usersId: string[];
+    status: any[];
+    profileSub: Subscription[];
     profiles: Observable<Profile[]>;
 
-    constructor( private zone :NgZone){
+    constructor(private zone: NgZone) {
 
     };
+
     ngOnInit(): void {
-        this.profileSub = MeteorObservable.subscribe("profileContact",this.profileId).subscribe(() => {
+        this.profileSub = [];
+        this.status = [];
+        if (this.profileId) {
+            this.loadProfile(this.profileId);
+        }
+        if (this.usersId) {
+            this.usersId.forEach((id) => {
+                if (id !== Meteor.userId()) this.loadUserProfile(id)
+            });
+        }
+    }
+
+    loadProfile(id: string) {
+        this.profileSub.push(MeteorObservable.subscribe("profileContact", id).subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.zone.run(() => {
-                    let profile = Profiles.findOne({_id : this.profileId});
-                    if (profile){
-                        this.status = StatusToString(profile.status);
-                        this.colorCode = StatusToColorCode(profile.status);
+                    let profile = Profiles.findOne({_id: id});
+                    if (profile) {
+                        this.status.push({
+                            text: StatusToString(profile.status),
+                            color: StatusToColorCode(profile.status)
+                        });
                     }
                 })
             });
-        });
+        }));
+    }
+
+    loadUserProfile(id: string) {
+        this.profileSub.push(MeteorObservable.subscribe("profiles", id).subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                this.zone.run(() => {
+                    let profile = Profiles.findOne({userId: id});
+                    if (profile) {
+                        this.status.push({
+                            text: StatusToString(profile.status),
+                            color: StatusToColorCode(profile.status)
+                        });
+                    }
+                })
+            });
+        }));
     }
 
     ngOnDestroy(): void {
-        if(this.profileSub){
-            this.profileSub.unsubscribe();
-        }
+        this.profileSub.forEach((sub) => {
+            sub.unsubscribe()
+        });
     }
 
 

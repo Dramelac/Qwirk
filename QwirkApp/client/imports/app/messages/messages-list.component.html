@@ -3,7 +3,7 @@
         <div class="petite-div-titre-router">
             <div class="col-xs-2 imagestatut" >
                 <img class="picture-head" *ngIf="chat" [src]="chat.picture | displayProfileImage">
-                <p *ngIf="chat">{{chat.userStatus}}</p>
+                <status *ngIf="chat && chat.user" [usersId]="chat.user"></status>
             </div>
             <div class="col-xs-7">
                 <p class="titre-routeur col-xs-6" *ngIf="chat" [contextMenu]="chatMenu"
