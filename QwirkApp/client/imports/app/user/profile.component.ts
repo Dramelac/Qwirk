@@ -56,6 +56,7 @@ export class ProfileComponent implements OnInit {
                                 username: [this.profile.username, Validators.required],
                                 firstname: [this.profile.firstname],
                                 lastname: [this.profile.lastname],
+                                birthday: [this.profile.birthday],
                                 biography: [this.profile.biography],
                                 email: [Meteor.user().emails[0].address, Validators.required],
                                 newPassword: [''],
@@ -113,7 +114,8 @@ export class ProfileComponent implements OnInit {
                 firstname: formValue.firstname,
                 lastname: formValue.lastname,
                 username: formValue.username,
-                biography: formValue.biography
+                biography: formValue.biography,
+                birthday: formValue.birthday
             };
             Profiles.update(this.profile._id, {$set: profil});
             if (formValue.email != Meteor.user().emails[0].address) {

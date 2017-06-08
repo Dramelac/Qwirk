@@ -29,7 +29,7 @@
                           layout="column" layout-fill layout-padding layout-margin>
 
                         <div class="row">
-                            <md-input-container *ngIf="myProfile" class="col-xs-offset-2 col-xs-2"><input mdInput formControlName="email" type="email"
+                            <md-input-container *ngIf="myProfile" class="col-xs-offset-1 col-xs-2"><input mdInput formControlName="email" type="email"
                                                                                                           placeholder="E-Mail"></md-input-container>
                             <md-input-container class="col-xs-2"><input mdInput formControlName="username" type="text" placeholder="Display name">
                             </md-input-container>
@@ -37,12 +37,15 @@
                                                                                                           placeholder="First name"></md-input-container>
                             <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput formControlName="lastname" type="text"
                                                                                                           placeholder="Last name"></md-input-container>
+                            <md-input-container *ngIf="myProfile" class="col-xs-2">
+                                <input mdInput placeholder="Birthday" formControlName="birthday" type="date">
+                            </md-input-container>
                         </div>
                         <div class="row">
                             <md-input-container *ngIf="myProfile" class="col-xs-offset-3 col-xs-2"><input mdInput formControlName="newPassword" type="password"
                                                                                                           placeholder="New Password"></md-input-container>
                             <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput formControlName="confirmPassword" type="password"
-                                                                                                          placeholder="Confirm Password"></md-input-container>
+                                                                                                          placeholder="Confirm"></md-input-container>
                             <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput formControlName="oldPassword" type="password"
                                                                                                           placeholder="Old Password"></md-input-container>
                         </div>
