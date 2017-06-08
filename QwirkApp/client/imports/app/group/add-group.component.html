@@ -1,10 +1,10 @@
 <div class="max-height global-flex">
     <div class="div-titre-router">
         <div class="row petite-div-titre-router">
-            <div class="col-md-2">
+            <div class="col-sm-2">
                 <img class="picture-head" [src]="groupPictureId | displayProfileImage">
             </div>
-            <div class="col-md-offset-1 col-md-5">
+            <div class="col-sm-offset-1 col-sm-5">
                 <p class="titre-routeur">
                     <span *ngIf="!group">New Group</span>
                     <span *ngIf="group">Edit {{group.title}}</span>
@@ -23,7 +23,7 @@
             </md-input-container>
         </label>
         <div *ngIf="mySelection.length > 0" class="row">
-            <md-list class="col-md-offset-5 col-md-2">
+            <md-list class="col-sm-offset-5 col-sm-2">
                 <md-list-item *ngFor="let selected of mySelection">
                         <button md-button class="mat-warn" (click)="remove(selected)">
                             <i class="material-icons">clear</i> {{selected.displayName}}
@@ -41,7 +41,7 @@
                 </label>
             </div>
             <div *ngIf="contactFiltred.length > 0" class="row">
-                <md-list class="col-md-offset-5 col-md-2">
+                <md-list class="col-sm-offset-5 col-sm-2">
                     <md-list-item *ngFor="let contact of contactFiltred">
                         <button md-button class="mat-primary" (click)="select(contact)">
                             <i class="material-icons">add</i> {{contact.displayName}}

@@ -1,7 +1,7 @@
-<h2 *ngIf="type === 'Chats' || !type">Chats</h2>
+<h2 *ngIf="type === 'Chats' || !type" class="text-auto-width-title">Chats</h2>
 <div *ngIf="type === 'Groups'">
-    <h2>Groups</h2>
-    <button md-button class="mat-primary add-button col-md-12" (click)="createGroup()">Create Group <i class="material-icons">add_circle_outline</i></button>
+    <h2 class="text-auto-width-title">Groups</h2>
+    <button md-button class="mat-primary add-button text-auto-width-small" (click)="createGroup()">Create Group <i class="material-icons">add_circle_outline</i></button>
 </div>
 <div class="row" >
     <div class="contacttab">
@@ -9,8 +9,8 @@
             <div [contextMenu]="chatMenu" [contextMenuSubject]="chat" class="row">
                 <div class="chatsbtn" *ngIf="!chat.blocked" (click)="showMessages(chat._id)">
                     <div class="row">
-                        <img [src]="chat.picture | displayProfileImage" class="col-md-4">
-                        <h3 class="text col-md-8 title">{{chat.title}}</h3>
+                        <img [src]="chat.picture | displayProfileImage" class="col-sm-4">
+                        <h3 class="text col-sm-8 title">{{chat.title}}</h3>
                     </div>
                     <div class="row">
                         <div *ngIf="chat.lastMessage">
