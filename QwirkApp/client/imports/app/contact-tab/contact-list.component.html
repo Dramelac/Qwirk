@@ -38,15 +38,15 @@
     </div>
     <div *ngIf="profilesFind">
         <div *ngFor="let profile of profilesFind">
-            <div>
-                <img [src]="profile.picture | displayProfileImage" class="picture">
-                <div>
-                    <p>{{profile.username}}</p>
+            <div class="row button-contact">
+                <img class="col-md-4" [src]="profile.picture | displayProfileImage" class="picture">
+                <div class="div-titre-icone">
+                    <p id="request-contact-name">{{profile.username}}</p>
                     <div *ngIf="!requestSent(profile.userId)">
-                        <button (click)="sendFriendRequest(profile.userId)">Add</button>
+                        <button md-button class="mat-primary add-button" (click)="sendFriendRequest(profile.userId)">Add <i class="material-icons">add_circle_outline</i></button>
                     </div>
-                    <div *ngIf="requestSent(profile.userId)">
-                        <p>Envoyée</p>
+                    <div class="icon-done" *ngIf="requestSent(profile.userId)">
+                        <p><i class="material-icons">done_all</i></p>
                     </div>
                 </div>
             </div>
