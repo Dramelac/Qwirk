@@ -4,6 +4,7 @@ import template from "./message-form.component.html";
 import style from "./message-form.component.scss";
 import {Chat, ChatType, File, MessageType} from "../../../../both/models";
 import {Profiles} from "../../../../both/collections";
+import * as Moment from "moment";
 
 @Component({
     selector: 'message-form',
@@ -15,6 +16,8 @@ export class MessageFormComponent implements OnInit {
     @Input('chat') chat: Chat;
 
     error: string;
+
+    lastWizz: Date;
 
     constructor(private formBuilder: FormBuilder, private zone :NgZone) {
     }
@@ -153,6 +156,13 @@ export class MessageFormComponent implements OnInit {
     }
 
     sendWizz() {
+        if(this.lastWizz){
+            if (Moment().isBefore(Moment(this.lastWizz).add(5, "seconds"))){
+                this.error = "You can't spam wizz";
+                return;
+            }
+        }
+        this.lastWizz = new Date();
         Meteor.call("addMessage", MessageType.WIZZ, this.chat._id, "wizz",
             (error, result) => {
                 if (error) {

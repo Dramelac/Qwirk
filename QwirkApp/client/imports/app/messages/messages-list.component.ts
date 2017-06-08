@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {Subscription} from "rxjs/Subscription";
 import {MeteorObservable} from "meteor-rxjs";
+import {Observable, Subscriber, Subscription} from "rxjs";
 import {Chats, Contacts, Files, Messages, Profiles} from "../../../../both/collections";
-import {Chat, ChatType, Message, MessageType} from "../../../../both/models";
+import {Chat, ChatType, Message, MessageType, StatusToString} from "../../../../both/models";
 import template from "./messages-list.component.html";
 import style from "./messages-list.component.scss";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -11,8 +11,6 @@ import * as Autolinker from "autolinker";
 import "jquery";
 import "jquery-ui";
 import * as _ from "underscore";
-import {Observable, Subscriber} from "rxjs";
-import {StatusToString} from "../../../../both/models/status.enum";
 
 @Component({
     selector: 'messages-list',
@@ -227,8 +225,8 @@ export class MessagesListComponent implements OnInit, OnDestroy {
 
     wizz() {
         $("#ChatList").effect("shake", {times: 4, distance: 25, direction: "left"});
-        setTimeout(()=>{this.scrollDown()},800);
-        let audio = new Audio("/asset/wizz.wav");
+        setTimeout(()=>{this.scrollDown()},700);
+        let audio = new Audio("asset/wizz.wav");
         audio.play();
     }
 
