@@ -228,6 +228,15 @@ button {
   .text-auto-width-small {
     font-size: 1vw;
   }
+  .big-screen {
+    visibility: visible;
+  }
+
+  .small-screen {
+    visibility: hidden;
+    height: 0;
+    padding: 0 !important;
+  }
 }
 @media (max-width: 768px) {
   .text-auto-width-title {
@@ -236,6 +245,24 @@ button {
   .text-auto-width-small {
     font-size: 3vw;
   }
+
+  .big-screen {
+    visibility: hidden;
+    height: 0;
+    padding: 0 !important;
+  }
+
+  .small-screen {
+    visibility: visible;
+  }
+
+}
+
+.nav-text {
+  color: white;
+  font-size: 7vw;
+  vertical-align: middle;
+  padding-top: 5vw;
 }
 
 .monlogo {

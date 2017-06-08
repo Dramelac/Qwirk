@@ -1,9 +1,17 @@
 <div *ngIf="peerId || isCallActive">
-    <div class="row div-button-sidenav">
+    <div class="row div-button-sidenav big-screen">
         <button class="button-background" (click)="isHide = !isHide">
-            <span class="col-xs-12 show-call">
+            <span class="col-sm-12 show-call">
                 <i class="material-icons text">phone</i>
             </span>
+        </button>
+    </div>
+    <div class="row div-button-sidenav small-screen">
+        <button class="button-background" (click)="isHide = !isHide">
+            <span class="col-xs-offset-2 col-xs-3 show-call">
+                <i class="material-icons text">phone</i>
+            </span>
+            <span class="col-xs-7 nav-text">Call</span>
         </button>
     </div>
 
