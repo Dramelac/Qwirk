@@ -1,7 +1,7 @@
 <h2 *ngIf="type === 'Chats' || !type">Chats</h2>
 <div *ngIf="type === 'Groups'">
     <h2>Groups</h2>
-    <button md-button class="mat-primary add-button col-md-12" (click)="createGroup()">Create Group <i class="material-icons">add_circle_outline</i></button>
+    <button md-button class="mat-primary add-button" (click)="createGroup()">Create Group <i class="material-icons">add_circle_outline</i></button>
 </div>
 <div class="row" >
     <div class="contacttab">
