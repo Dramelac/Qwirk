@@ -31,12 +31,7 @@
         </div>
         <form *ngIf="inApp" (click)="moreSearch = true" (ngSubmit)="search()">
             <div class="row">
-                <button class="col-md-12 searchuser" type="submit">
-                    <p class="col-md-10 textesearch" >Search In Qwirk</p>
-                    <div class="col-md-2">
-                        <i class="material-icons col-md-12">search</i>
-                    </div>
-                </button>
+                <button md-button class="mat-primary add-button col-md-12" (click)="createGroup()">Search in Qwirk <i class="material-icons">search</i></button>
             </div>
 
         </form>
