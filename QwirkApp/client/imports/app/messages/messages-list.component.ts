@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import {MeteorObservable} from "meteor-rxjs";
 import {Observable, Subscriber, Subscription} from "rxjs";
 import {Chats, Contacts, Files, Messages, Profiles} from "../../../../both/collections";
@@ -31,7 +31,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
 
     waitForRead: string[] = [];
 
-    constructor(private route: ActivatedRoute, private router: Router) {
+    constructor(private route: ActivatedRoute, private router: Router, private zone: NgZone) {
     }
 
     ngOnInit() {
@@ -40,6 +40,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                 .map(params => params["chatId"])
             .subscribe(chat => {
                 this.chatId = chat;
+                this.chat = null;
 
                 Meteor.subscribe("files", this.chatId);
                 this.messageSubscribe();

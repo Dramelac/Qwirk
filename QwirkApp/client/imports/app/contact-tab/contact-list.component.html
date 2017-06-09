@@ -18,7 +18,7 @@
                          [src]="contact.profile.picture | displayProfileImage">
                     <span class="row col-xs-8">
                             <span id="contactname" class="info-button-contact col-xs-12">{{contact.displayName}}</span>
-                            <status class="info-button-contact col-xs-offset-3 col-xs-6" *ngIf="contact.profileId"
+                            <status class="info-button-contact col-xs-offset-1 col-xs-10" *ngIf="contact.profileId"
                                     [profileId]="contact.profileId"></status>
                             <i *ngIf="contact.isBloqued" class="info-button-contact col-xs-12 pull-left">Blocked</i>
                         </span>
