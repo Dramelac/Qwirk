@@ -134,6 +134,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                                         });
                                     });
                                     message.ownerName = profile.username;
+                                    message.ownerProfileId = profile._id;
                                 } else {
                                     console.log("Error loading distant profile");
                                 }

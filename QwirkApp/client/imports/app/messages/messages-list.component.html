@@ -23,12 +23,12 @@
             <div>{{day.timestamp}}</div>
             <div *ngFor="let message of day.messages" class="row">
                 <div *ngIf="message.ownerName && message.type != 'announce'" class="col-xs-offset-1 col-xs-1">
-                    <div class="pull-right user-message-info">
+                    <a class="pull-right user-message-info" [routerLink]="['/profile/'+message.ownerProfileId]">
                         <span class="center-text">{{message.ownerName}}</span>
                         <br>
                         <img [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture"
                              alt="pic">
-                    </div>
+                    </a>
                 </div>
                 <div *ngIf="message.type != 'announce'" [class]="'col-xs-9 message message-' + message.ownership">
                     <div class="row bulle-message" >

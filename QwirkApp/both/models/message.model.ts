@@ -13,6 +13,7 @@ export interface Message extends CollectionObject {
     content?: string;
     createdAt?: Date;
     ownerId?: string;
+    ownerProfileId?: string;
     ownership?: string;
     type?: MessageType,
     ownerName?: string;
