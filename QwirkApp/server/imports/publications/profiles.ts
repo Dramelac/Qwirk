@@ -30,6 +30,26 @@ Meteor.publish('profiles', function (userId: string): Mongo.Cursor<Profile> {
     });
 });
 
+Meteor.publish('profileId', function (id: string): Mongo.Cursor<Profile> {
+    if (!this.userId || !id) {
+        return;
+    }
+
+    let contact = Contacts.findOne({ownerId: this.userId, profileId: id, isBloqued: false});
+    if (contact) {
+
+        return Profiles.collection.find({
+            _id: id
+        });
+    }
+
+    return Profiles.collection.find({
+        _id: id
+    }, {
+        fields: publicProfileFilter
+    });
+});
+
 Meteor.publish('profile', function (): Mongo.Cursor<Profile> {
     if (!this.userId) {
         return;

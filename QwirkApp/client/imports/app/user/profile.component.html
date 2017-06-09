@@ -15,7 +15,7 @@
 
     <div id="profileList" class="row">
         <br>
-        <div *ngIf="profileForm && (profile || contact)" layout="column" layout-fill layout-margin layout-padding>
+        <div *ngIf="profile || contact" layout="column" layout-fill layout-margin layout-padding>
 
             <div class="col-xs-12">
                 <div class="row profile-section">
@@ -32,11 +32,11 @@
 
                 <div class="row profile-section" *ngIf="friendProfile">
                     <span class="col-xs-offset-1 col-xs-3">Username : {{profile.username}}</span>
-                    <span class="col-xs-3">Name : {{profile.lastname}} {{profile.firstname}}</span>
-                    <span class="col-xs-offset-1 col-md-3">Birthday : {{profile.birthday}}</span>
+                    <span class="col-xs-3" *ngIf="profile.firstname && profile.lastname">Name : {{profile.lastname}} {{profile.firstname}}</span>
+                    <span class="col-xs-offset-1 col-md-3" *ngIf="profile.birthday">Birthday : {{profile.birthday}}</span>
                 </div>
 
-                <div class="row">
+                <div class="row" *ngIf="profileForm">
                     <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
                           layout="column" layout-fill layout-padding layout-margin>
 
@@ -123,7 +123,7 @@
 
 
         </div>
-        <div *ngIf="!profileForm">
+        <div *ngIf="!profileForm && !contact && !profile">
             <p>Loading ...</p>
         </div>
     </div>

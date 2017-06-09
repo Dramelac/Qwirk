@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
     profile: Profile;
     myProfile: boolean = true;
     friendProfile: boolean = false;
+    isContact: boolean = false;
 
     pictureId: string;
 
@@ -45,6 +46,7 @@ export class ProfileComponent implements OnInit {
                             });
                             this.profile = {username: this.contact.displayName};
                             this.myProfile = false;
+                            this.isContact = true;
                             MeteorObservable.subscribe('profileContact', this.contact.profileId).subscribe(() => {
                                 MeteorObservable.autorun().subscribe(() => {
                                     this.zone.run(()=>{
@@ -55,6 +57,19 @@ export class ProfileComponent implements OnInit {
                                             this.friendProfile = true;
                                         } else {
                                             this.profile = {username: this.contact.displayName};
+                                        }
+                                    });
+                                });
+                            });
+                        } else {
+                            MeteorObservable.subscribe('profileId', this.profileId).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    this.zone.run(()=>{
+                                        this.profile = Profiles.findOne({_id:this.profileId});
+                                        if (this.profile){
+                                            this.loadPicture();
+                                            this.myProfile = false;
+                                            this.friendProfile = true;
                                         }
                                     });
                                 });
