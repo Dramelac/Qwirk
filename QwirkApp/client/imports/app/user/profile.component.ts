@@ -7,6 +7,7 @@ import {Contacts, Files, Profiles} from "../../../../both/collections";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {ActivatedRoute} from "@angular/router";
 import {MeteorObservable} from "meteor-rxjs";
+import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
 
 @Component({
     selector: 'profile',
@@ -171,6 +172,20 @@ export class ProfileComponent implements OnInit {
                 this.success = "Change saved !";
             }
         }
+    }
+
+    addContact(): void {
+        Meteor.call("addFriendRequest", this.profile.userId, (error, result) => {
+        });
+    }
+
+    requestSent(): boolean {
+        return !!FriendsRequest.collection.find({
+                $and: [
+                    {initiator: Meteor.userId()},
+                    {destinator: this.profile.userId}
+                ]
+            }).count() || !!Contacts.collection.find({$and: [{ownerId: Meteor.userId()}, {friendId: this.profile.userId}]}).count();
     }
 
 }
