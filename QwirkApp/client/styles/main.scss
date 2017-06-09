@@ -27,6 +27,11 @@ body {
 a:hover, a:focus {
   text-decoration: none;
 }
+
+a {
+  padding: 0 !important;
+}
+
 button {
   outline: none;
 }

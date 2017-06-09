@@ -1,5 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from "@angular/core";
 import template from "./menu-context.component.html";
+import style from "./menu-context.component.scss";
 import {Contacts} from "../../../../both/collections/contact.collection";
 import {Contact} from "../../../../both/models/contact.model";
 import {Router} from "@angular/router";
@@ -9,7 +10,8 @@ import * as _ from "underscore";
 
 @Component({
     selector: 'context',
-    template
+    template,
+    styles: [style]
 })
 
 export class ContextComponent implements OnInit, OnDestroy {
