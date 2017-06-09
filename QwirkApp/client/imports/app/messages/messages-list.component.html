@@ -5,11 +5,11 @@
                 <img class="picture-head" *ngIf="chat" [src]="chat.picture | displayProfileImage">
                 <status *ngIf="chat && chat.user" [usersId]="chat.user"></status>
             </div>
-            <div class="col-xs-7">
+            <div class="col-lm-7 col-xs-5">
                 <p class="titre-routeur col-xs-6" *ngIf="chat" [contextMenu]="chatMenu"
                    [contextMenuSubject]="chat">{{chat.title}}</p>
             </div>
-            <div class="col-xs-3">
+            <div class="col-lm-3 col-xs-5">
                 <div class="row pull-right">
                     <call-action *ngIf="chat" [chat]="chat"></call-action>
                 </div>

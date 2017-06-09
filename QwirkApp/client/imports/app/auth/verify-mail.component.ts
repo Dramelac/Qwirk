@@ -11,16 +11,19 @@ export class VerifyMailComponent implements OnInit, OnDestroy {
     token: string;
     paramsSub: Subscription;
 
+    error :string;
+
     constructor(private route: ActivatedRoute) {}
 
     ngOnInit() {
+        this.error = "";
         this.paramsSub = this.route.params
             .map(params => params["token"])
             .subscribe(token => {
                 this.token = token;
                 Accounts.verifyEmail(this.token, (err) => {
                     if (err){
-                        console.log(err);
+                        this.error = err.reason;
                     }
                 })
             });
