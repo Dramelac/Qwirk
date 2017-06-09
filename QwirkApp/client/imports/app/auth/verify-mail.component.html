@@ -1,3 +1,15 @@
-<span>Email verified !</span>
+<div class="row">
+    <div class="center-block center-text col-lm-10 col-xs-9">
 
-<a md-button [routerLink]="['/']">Home page</a>
+        <div *ngIf="error !== ''" class="row col-xs-12">
+            <md-toolbar class="mat-warn">
+                <button md-button (click)="error=''"><i class="material-icons">clear</i></button>
+                <p class="mat-body-1">{{ error }}</p>
+            </md-toolbar>
+        </div>
+
+        <span *ngIf="success" class="row center-text">Email verified !</span>
+
+        <a md-button [routerLink]="['/']" class="row center-text">Home page</a>
+    </div>
+</div>

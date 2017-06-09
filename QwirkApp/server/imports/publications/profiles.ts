@@ -6,11 +6,11 @@ let publicProfileFilter = {
     _id: 1,
     userId: 1,
     username: 1,
-    picture: 1
+    picture: 1,
+    biography: 1
 };
 
-Meteor.publish('profiles', function (userId: string,
-                                     profileBatchCounter: number): Mongo.Cursor<Profile> {
+Meteor.publish('profiles', function (userId: string): Mongo.Cursor<Profile> {
     if (!this.userId || !userId) {
         return;
     }
@@ -20,17 +20,32 @@ Meteor.publish('profiles', function (userId: string,
 
         return Profiles.collection.find({
             userId: userId
-        }, {
-            sort: {createdAt: -1},
-            limit: 30 * profileBatchCounter
         });
     }
 
     return Profiles.collection.find({
         userId: userId
     }, {
-        sort: {createdAt: -1},
-        limit: 30 * profileBatchCounter,
+        fields: publicProfileFilter
+    });
+});
+
+Meteor.publish('profileId', function (id: string): Mongo.Cursor<Profile> {
+    if (!this.userId || !id) {
+        return;
+    }
+
+    let contact = Contacts.findOne({ownerId: this.userId, profileId: id, isBloqued: false});
+    if (contact) {
+
+        return Profiles.collection.find({
+            _id: id
+        });
+    }
+
+    return Profiles.collection.find({
+        _id: id
+    }, {
         fields: publicProfileFilter
     });
 });

@@ -110,6 +110,28 @@ export class ContactListComponent implements OnInit, OnDestroy {
                 this.searchInQwirk();
             } else {
                 this.contacts = Contacts.find({displayName: {$regex: ".*" + this.query + ".*"}});
+                this.contacts.subscribe((result: Contact[]) => {
+                    MeteorObservable.autorun().subscribe(() => {
+                        if (result) {
+                            this.zone.run(() => {
+                                for (let contact of result) {
+                                    contact.profile = Profiles.findOne({_id: contact.profileId});
+                                    if (contact.profile) {
+                                        let picId: string = contact.profile.picture;
+                                        contact.profile.picture = "";
+                                        MeteorObservable.subscribe("file", picId).subscribe(() => {
+                                            MeteorObservable.autorun().subscribe(() => {
+                                                this.zone.run(() => {
+                                                    contact.profile.picture = picId;
+                                                });
+                                            });
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
                 this.inApp = true;
             }
         } else {

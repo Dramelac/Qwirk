@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import {MeteorObservable} from "meteor-rxjs";
 import {Observable, Subscriber, Subscription} from "rxjs";
 import {Chats, Contacts, Files, Messages, Profiles} from "../../../../both/collections";
@@ -31,7 +31,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
 
     waitForRead: string[] = [];
 
-    constructor(private route: ActivatedRoute, private router: Router) {
+    constructor(private route: ActivatedRoute, private router: Router, private zone: NgZone) {
     }
 
     ngOnInit() {
@@ -40,6 +40,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                 .map(params => params["chatId"])
             .subscribe(chat => {
                 this.chatId = chat;
+                this.chat = null;
 
                 Meteor.subscribe("files", this.chatId);
                 this.messageSubscribe();
@@ -87,7 +88,6 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                             let profile = Profiles.findOne({userId: this.distantUserId});
                             if (profile && this.chat) {
                                 this.chat.title = profile.username;
-                                this.chat.userStatus = StatusToString(profile.status);
 
                                 MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
                                     MeteorObservable.autorun().subscribe(() => {
@@ -134,6 +134,7 @@ export class MessagesListComponent implements OnInit, OnDestroy {
                                         });
                                     });
                                     message.ownerName = profile.username;
+                                    message.ownerProfileId = profile._id;
                                 } else {
                                     console.log("Error loading distant profile");
                                 }

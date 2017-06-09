@@ -14,7 +14,7 @@
     </div>
 
     <div id="GroupForm" class="row">
-        <div *ngIf="group && isAdmin">Change group's picture :
+        <div *ngIf="group && isAdmin" class="label-text">Change group's picture
             <file-upload [chatId]="groupId" (onFile)="onPictureUpdate($event)"></file-upload>
         </div>
         <label *ngIf="isAdmin">Group's Name

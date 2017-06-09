@@ -1,10 +1,13 @@
-<div class="max-height global-flex" >
+<div class="max-height global-flex">
     <div class="div-titre-router">
         <div class="row petite-div-titre-router">
-            <div class="col-xs-2 profile-ico" >
+            <div class="col-xs-4 profile-ico" *ngIf="myProfile">
                 <img src="asset/img/user.png">
             </div>
-            <div class="col-xs-offset-1 col-xs-5">
+            <div class="col-xs-4 profile-ico" *ngIf="friendProfile">
+                <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
+            </div>
+            <div class="col-xs-offset-1 col-xs-7">
                 <p class="titre-routeur" *ngIf="profile && profile.username">{{ profile.username }}</p>
             </div>
         </div>
@@ -12,47 +15,95 @@
 
     <div id="profileList" class="row">
         <br>
-        <div *ngIf="profileForm && (profile || contact)" layout="column" layout-fill layout-margin layout-padding>
+        <div *ngIf="profile || contact" layout="column" layout-fill layout-margin layout-padding>
 
             <div class="col-xs-12">
-
-                <p *ngIf="myProfile">
-                    <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
-                    <br>
-                    <file-upload *ngIf="myProfile" (onFile)="onPictureUpdate($event)"></file-upload>
-                </p>
-
-
-                <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
-                      layout="column" layout-fill layout-padding layout-margin>
-
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="email" type="email"
-                                                                 placeholder="E-Mail"></md-input-container>
-                    <br>
-                    <md-input-container><input mdInput formControlName="username" type="text" placeholder="Display name">
-                    </md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="firstname" type="text"
-                                                                 placeholder="First name"></md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="lastname" type="text"
-                                                                 placeholder="Last name"></md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="newPassword" type="password"
-                                                                 placeholder="New Password"></md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="confirmPassword" type="password"
-                                                                 placeholder="Confirm Password"></md-input-container>
-                    <br>
-                    <md-input-container *ngIf="myProfile"><input mdInput formControlName="oldPassword" type="password"
-                                                                 placeholder="Old Password"></md-input-container>
-
-
-                    <div layout="row" layout-align="space-between center">
-                        <button md-raised-button class="mat-primary" type="submit" aria-label="profile">Edit Profile
-                        </button>
+                <div class="row profile-section">
+                    <div *ngIf="myProfile || friendProfile">
+                        <div class="col-xs-offset-2 col-xs-5" *ngIf="myProfile">
+                            <img alt="picture" [src]="pictureId | displayProfileImage" class="picture-thumbs">
+                        </div>
+                        <file-upload *ngIf="myProfile" (onFile)="onPictureUpdate($event)"
+                                     class="col-xs-5 upload"></file-upload>
+                        <p *ngIf="friendProfile" class="col-xs-offset-3 col-xs-6 bio">
+                            Biography:<br><br>{{profile.biography}}</p>
                     </div>
-                </form>
+                </div>
+
+                <div class="row profile-section" *ngIf="friendProfile">
+                    <span class="col-xs-offset-1 col-xs-3">Username : {{profile.username}}</span>
+                    <span class="col-xs-3" *ngIf="profile.firstname && profile.lastname">Name : {{profile.lastname}} {{profile.firstname}}</span>
+                    <span class="col-xs-offset-1 col-md-3" *ngIf="profile.birthday">Birthday : {{profile.birthday}}</span>
+                    <button md-button class="mat-primary" *ngIf="!isContact && !requestSent()" (click)="addContact()">Add to contact <i class="material-icons">add_circle_outline</i></button>
+                    <span md-button class="mat-primary" *ngIf="!isContact && requestSent()" (click)="addContact()">Request sent !</span>
+                </div>
+
+                <div class="row" *ngIf="profileForm">
+                    <form [formGroup]="profileForm" #f="ngForm" (ngSubmit)="save()"
+                          layout="column" layout-fill layout-padding layout-margin>
+
+                        <div class="row">
+                            <md-input-container *ngIf="myProfile" class="col-xs-offset-1 col-xs-2"><input mdInput
+                                                                                                          formControlName="email"
+                                                                                                          type="email"
+                                                                                                          placeholder="E-Mail">
+                            </md-input-container>
+                            <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput
+                                                                                          formControlName="username"
+                                                                                          type="text"
+                                                                                          placeholder="Username">
+                            </md-input-container>
+                            <md-input-container *ngIf="friendProfile" class="col-xs-offset-5 col-xs-2"><input mdInput
+                                                                                                              formControlName="username"
+                                                                                                              type="text"
+                                                                                                              placeholder="Display name">
+                            </md-input-container>
+                            <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput
+                                                                                          formControlName="firstname"
+                                                                                          type="text"
+                                                                                          placeholder="First name">
+                            </md-input-container>
+                            <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput
+                                                                                          formControlName="lastname"
+                                                                                          type="text"
+                                                                                          placeholder="Last name">
+                            </md-input-container>
+                            <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput
+                                                                                          formControlName="birthday"
+                                                                                          type="date"
+                                                                                          placeholder="Birthday">
+                            </md-input-container>
+                        </div>
+
+                        <div class="row">
+                            <md-input-container *ngIf="myProfile" class="col-xs-offset-3 col-xs-2"><input mdInput
+                                                                                                          formControlName="newPassword"
+                                                                                                          type="password"
+                                                                                                          placeholder="New Password">
+                            </md-input-container>
+                            <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput
+                                                                                          formControlName="confirmPassword"
+                                                                                          type="password"
+                                                                                          placeholder="Confirm">
+                            </md-input-container>
+                            <md-input-container *ngIf="myProfile" class="col-xs-2"><input mdInput
+                                                                                          formControlName="oldPassword"
+                                                                                          type="password"
+                                                                                          placeholder="Old Password">
+                            </md-input-container>
+                        </div>
+                        <md-input-container *ngIf="myProfile" class="bio-input"><textarea mdInput
+                                                                                          formControlName="biography"
+                                                                                          placeholder="Biography"></textarea>
+                        </md-input-container>
+                        <br>
+                        <div class="row" layout-align="space-between center">
+                            <button md-raised-button class="mat-primary" type="submit" aria-label="profile">Edit Profile
+                            </button>
+                        </div>
+                        <br>
+                    </form>
+                </div>
 
             </div>
             <br>
@@ -74,7 +125,7 @@
 
 
         </div>
-        <div *ngIf="!profileForm">
+        <div *ngIf="!profileForm && !contact && !profile">
             <p>Loading ...</p>
         </div>
     </div>

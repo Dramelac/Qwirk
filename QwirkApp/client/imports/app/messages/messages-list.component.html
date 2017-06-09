@@ -3,13 +3,13 @@
         <div class="petite-div-titre-router">
             <div class="col-xs-2 imagestatut" >
                 <img class="picture-head" *ngIf="chat" [src]="chat.picture | displayProfileImage">
-                <p *ngIf="chat">{{chat.userStatus}}</p>
+                <status *ngIf="chat && chat.user" [usersId]="chat.user"></status>
             </div>
-            <div class="col-xs-7">
+            <div class="col-lm-7 col-xs-5">
                 <p class="titre-routeur col-xs-6" *ngIf="chat" [contextMenu]="chatMenu"
                    [contextMenuSubject]="chat">{{chat.title}}</p>
             </div>
-            <div class="col-xs-3">
+            <div class="col-lm-3 col-xs-5">
                 <div class="row pull-right">
                     <call-action *ngIf="chat" [chat]="chat"></call-action>
                 </div>
@@ -23,14 +23,15 @@
             <div>{{day.timestamp}}</div>
             <div *ngFor="let message of day.messages" class="row">
                 <div *ngIf="message.ownerName && message.type != 'announce'" class="col-xs-offset-1 col-xs-1">
-                    <div class="pull-right">
+                    <a class="pull-right user-message-info" [routerLink]="['/profile/'+message.ownerProfileId]">
                         <span class="center-text">{{message.ownerName}}</span>
+                        <br>
                         <img [src]="message.ownerPictureId | displayProfileImage" class="tiny-profile-picture"
                              alt="pic">
-                    </div>
+                    </a>
                 </div>
                 <div *ngIf="message.type != 'announce'" [class]="'col-xs-9 message message-' + message.ownership">
-                    <div class="row">
+                    <div class="row bulle-message" >
                         <div *ngIf="message.type == 'text'" class="col-xs-10 message-raw"
                              [innerHTML]="message.content"></div>
                         <div *ngIf="message.type == 'picture'" class="col-xs-10 message-raw">

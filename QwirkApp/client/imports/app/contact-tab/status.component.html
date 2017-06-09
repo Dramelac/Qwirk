@@ -1,3 +1,6 @@
-<div *ngIf="status">
-    <p>{{status}}</p>
+<div class="row">
+    <div *ngFor="let obj of status" class="col-xs-4 block">
+        <span class="dot" [style.background-color]="obj.color"></span>
+        {{obj.text}}
+    </div>
 </div>

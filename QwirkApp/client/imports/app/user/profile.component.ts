@@ -1,12 +1,13 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, NgZone, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import style from "./profile.component.scss";
 import template from "./profile.component.html";
 import {Contact, File, Profile} from "../../../../both/models";
 import {Contacts, Files, Profiles} from "../../../../both/collections";
 import {InjectUser} from "angular2-meteor-accounts-ui";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {MeteorObservable} from "meteor-rxjs";
+import {FriendsRequest} from "../../../../both/collections/friend-request.collection";
 
 @Component({
     selector: 'profile',
@@ -23,10 +24,12 @@ export class ProfileComponent implements OnInit {
     success: string;
     profile: Profile;
     myProfile: boolean = true;
+    friendProfile: boolean = false;
+    isContact: boolean = false;
 
     pictureId: string;
 
-    constructor(private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
+    constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private zone: NgZone) {
     }
 
 
@@ -37,12 +40,42 @@ export class ProfileComponent implements OnInit {
                 MeteorObservable.subscribe('myContacts').subscribe(() => {
                     MeteorObservable.autorun().subscribe(() => {
                         this.contact = Contacts.findOne({$and: [{ownerId: Meteor.userId()}, {profileId: this.profileId}]});
-                        //console.log(this.contact);
-                        this.profileForm = this.formBuilder.group({
-                            username: [this.contact.displayName, Validators.required]
-                        });
-                        this.profile = {username:this.contact.displayName};
-                        this.myProfile = false;
+                        if (this.contact){
+                            //console.log(this.contact);
+                            this.profileForm = this.formBuilder.group({
+                                username: [this.contact.displayName, Validators.required]
+                            });
+                            this.profile = {username: this.contact.displayName};
+                            this.myProfile = false;
+                            this.isContact = true;
+                            MeteorObservable.subscribe('profileContact', this.contact.profileId).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    this.zone.run(()=>{
+                                        this.profile = Profiles.findOne({_id:this.contact.profileId});
+                                        if (this.profile){
+                                            this.loadPicture();
+                                            this.profile.username = this.contact.displayName;
+                                            this.friendProfile = true;
+                                        } else {
+                                            this.profile = {username: this.contact.displayName};
+                                        }
+                                    });
+                                });
+                            });
+                        } else {
+                            MeteorObservable.subscribe('profileId', this.profileId).subscribe(() => {
+                                MeteorObservable.autorun().subscribe(() => {
+                                    this.zone.run(()=>{
+                                        this.profile = Profiles.findOne({_id:this.profileId});
+                                        if (this.profile){
+                                            this.loadPicture();
+                                            this.myProfile = false;
+                                            this.friendProfile = true;
+                                        }
+                                    });
+                                });
+                            });
+                        }
                     });
                 });
             } else {
@@ -56,17 +89,15 @@ export class ProfileComponent implements OnInit {
                                 username: [this.profile.username, Validators.required],
                                 firstname: [this.profile.firstname],
                                 lastname: [this.profile.lastname],
+                                birthday: [this.profile.birthday],
+                                biography: [this.profile.biography],
                                 email: [Meteor.user().emails[0].address, Validators.required],
                                 newPassword: [''],
                                 confirmPassword: [''],
                                 oldPassword: ['']
                             });
 
-                            MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
-                                MeteorObservable.autorun().subscribe(() => {
-                                    this.pictureId = this.profile.picture;
-                                });
-                            });
+                            this.loadPicture();
                         }
                     })
                 });
@@ -74,6 +105,14 @@ export class ProfileComponent implements OnInit {
         });
         this.error = '';
         this.success = '';
+    }
+
+    loadPicture(){
+        MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
+            MeteorObservable.autorun().subscribe(() => {
+                this.pictureId = this.profile.picture;
+            });
+        });
     }
 
     onPictureUpdate(file: File) {
@@ -108,10 +147,12 @@ export class ProfileComponent implements OnInit {
             });
         }
         if (this.myProfile && this.profileForm.valid) {
-            let profil = {
+            let profil: Profile = {
                 firstname: formValue.firstname,
                 lastname: formValue.lastname,
-                username: formValue.username
+                username: formValue.username,
+                biography: formValue.biography,
+                birthday: formValue.birthday
             };
             Profiles.update(this.profile._id, {$set: profil});
             if (formValue.email != Meteor.user().emails[0].address) {
@@ -131,6 +172,20 @@ export class ProfileComponent implements OnInit {
                 this.success = "Change saved !";
             }
         }
+    }
+
+    addContact(): void {
+        Meteor.call("addFriendRequest", this.profile.userId, (error, result) => {
+        });
+    }
+
+    requestSent(): boolean {
+        return !!FriendsRequest.collection.find({
+                $and: [
+                    {initiator: Meteor.userId()},
+                    {destinator: this.profile.userId}
+                ]
+            }).count() || !!Contacts.collection.find({$and: [{ownerId: Meteor.userId()}, {friendId: this.profile.userId}]}).count();
     }
 
 }

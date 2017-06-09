@@ -2,7 +2,7 @@ import {Component, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./user-status.component.html";
 import style from "./user-status.component.scss";
 import {InjectUser} from "angular2-meteor-accounts-ui";
-import {Profile} from "../../../../both/models/profile.model";
+import {Profile, StatusToColorCode} from "../../../../both/models";
 import {Profiles} from "../../../../both/collections/profile.collection";
 import {MeteorObservable} from "meteor-rxjs";
 import {Subscription} from "rxjs/Subscription";
@@ -39,7 +39,7 @@ export class UserStatusComponent implements OnInit, OnDestroy {
                     this.profile = Profiles.findOne({userId: Meteor.userId()});
                     if (this.profile) {
                         this.selectedStatus = this.profile.status;
-                        this.colorStatus(this.selectedStatus);
+                        this.color = StatusToColorCode(this.selectedStatus);
                         MeteorObservable.subscribe("file", this.profile.picture).subscribe(() => {
                             MeteorObservable.autorun().subscribe(() => {
                                 this.pictureId = this.profile.picture;
@@ -76,31 +76,11 @@ export class UserStatusComponent implements OnInit, OnDestroy {
 
             Profiles.update(this.profile._id, {$set: {status: value}});
 
-            this.colorStatus(value);
+            this.color = StatusToColorCode(value)
 
         } else {
             console.log("Error no profile selected.");
         }
     }
 
-    colorStatus(statusid): void {
-        this.zone.run(()=>{
-            switch (statusid) {
-                case 0:
-                    this.color = 'gray';
-                    break;
-                case 1:
-                    this.color = '#4caf50';
-                    break;
-                case 2:
-                    this.color = 'orange';
-                    break;
-                case 3:
-                    this.color = '#f44336';
-                    break;
-                default:
-                    this.color = "gray";
-            }
-        });
-    }
 }
