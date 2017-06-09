@@ -2,7 +2,7 @@ import {Component, Input, NgZone, OnDestroy, OnInit} from "@angular/core";
 import template from "./status.component.html";
 import style from "./status.component.scss";
 import {Observable, Subscription} from "rxjs";
-import {Profiles} from "../../../../both/collections";
+import {Profiles, Contacts} from "../../../../both/collections";
 import {Profile, StatusToColorCode, StatusToString} from "../../../../both/models";
 import {MeteorObservable} from "meteor-rxjs";
 
@@ -57,10 +57,19 @@ export class StatusComponent implements OnDestroy, OnInit {
                 this.zone.run(() => {
                     let profile = Profiles.findOne({userId: id});
                     if (profile) {
-                        this.status.push({
-                            text: StatusToString(profile.status),
+                        let tempStatus = {
+                            text: profile.username,
                             color: StatusToColorCode(profile.status)
+                        };
+                        MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
+                            MeteorObservable.autorun().subscribe(() => {
+                                let contact = Contacts.findOne({profileId : profile._id});
+                                if (contact) {
+                                    tempStatus.text = contact.displayName;
+                                }
+                            });
                         });
+                        this.status.push(tempStatus);
                     }
                 })
             });
