@@ -8,12 +8,12 @@ function checkUser(modifier): boolean {
     if (modifier.$push) {
         if (modifier.$push.user.$each) {
             let schema = {$push: {user: {$each: modifier.$push.user.$each}}};
-            if (modifier == schema.toString) {
+            if (modifier == schema.toString()) {
                 return true;
             }
         } else {
             let schema = {$push: {user: modifier.$push.user}};
-            if (modifier.toString == schema.toString) {
+            if (modifier.toString() == schema.toString()) {
                 return true;
             }
         }

@@ -15,7 +15,6 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 body {
@@ -28,6 +27,11 @@ body {
 a:hover, a:focus {
   text-decoration: none;
 }
+
+a {
+  padding: 0 !important;
+}
+
 button {
   outline: none;
 }
@@ -49,6 +53,10 @@ button {
 
 .max-height {
   height: 100vh;
+}
+
+.no-overflow {
+  overflow: hidden;
 }
 
 .new-message-tag {
@@ -475,7 +483,6 @@ button {
 
 .titre-routeur {
   position: relative;
-  margin-left: 10px;
   margin-top: auto;
   margin-bottom: auto;
   font-size: 40px;

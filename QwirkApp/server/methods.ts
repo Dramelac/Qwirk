@@ -20,6 +20,7 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
                 'User already have a profile');
         }
+        Accounts.sendVerificationEmail(Meteor.userId());
         let profil: Profile = {
             userId: Meteor.userId(),
             status: Status.Online,
