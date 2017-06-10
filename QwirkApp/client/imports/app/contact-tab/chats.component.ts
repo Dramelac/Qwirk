@@ -29,12 +29,15 @@ export class ChatsComponent implements OnInit, OnDestroy {
 
     @ViewChild(ContextMenuComponent) public chatMenu: ContextMenuComponent;
 
+    notifiedMessage: string[];
+
     ngOnInit(): void {
         if(!this.type){
             this.type = null;
         }
         this.profilesSub = [];
         this.contactSub = [];
+        this.notifiedMessage = [];
         this.chatSub = MeteorObservable.subscribe('chats').subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
                 this.chats = this.findChats();
@@ -105,7 +108,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
                     if (!_.contains(message.readBy, Meteor.userId())) {
                         message.isNew = true;
                         if (Moment().isBefore(Moment(message.createdAt).add(5, "seconds"))) {
-                            this.notifMesage(chat.title);
+                            this.notifMessage(chat.title, message._id);
                         }
                     }
                 });
@@ -143,7 +146,11 @@ export class ChatsComponent implements OnInit, OnDestroy {
         });
     }
 
-    notifMesage(name: string) {
+    notifMessage(name: string, id: string) {
+        if (_.contains(this.notifiedMessage, id)){
+            return;
+        }
+        this.notifiedMessage.push(id);
         if (Notification.permission === "granted") {
             let notification = new Notification("Qwirk",{
                 icon: "favicon.png",
