@@ -41,6 +41,7 @@ export class StatusComponent implements OnDestroy, OnInit {
                 this.zone.run(() => {
                     let profile = Profiles.findOne({_id: id});
                     if (profile) {
+                        this.status = [];
                         this.status.push({
                             text: StatusToString(profile.status),
                             color: StatusToColorCode(profile.status)
@@ -54,26 +55,36 @@ export class StatusComponent implements OnDestroy, OnInit {
     loadUserProfile(id: string) {
         this.profileSub.push(MeteorObservable.subscribe("profiles", id).subscribe(() => {
             MeteorObservable.autorun().subscribe(() => {
-                this.zone.run(() => {
-                    let profile = Profiles.findOne({userId: id});
-                    if (profile) {
-                        let tempStatus = {
-                            text: profile.username,
-                            color: StatusToColorCode(profile.status)
-                        };
-                        MeteorObservable.subscribe('contact',profile._id).subscribe(() => {
-                            MeteorObservable.autorun().subscribe(() => {
-                                let contact = Contacts.findOne({profileId : profile._id});
-                                if (contact) {
-                                    tempStatus.text = contact.displayName;
-                                }
-                            });
+                let profile = Profiles.findOne({userId: id});
+                if (profile) {
+                    let tempStatus = {
+                        text: profile.username,
+                        color: StatusToColorCode(profile.status)
+                    };
+                    MeteorObservable.subscribe('contact', profile._id).subscribe(() => {
+                        MeteorObservable.autorun().subscribe(() => {
+                            let contact = Contacts.findOne({profileId: profile._id});
+                            if (contact) {
+                                tempStatus.text = contact.displayName;
+                            }
                         });
-                        this.status.push(tempStatus);
-                    }
-                })
-            });
+                    });
+                    this.pushStatus(tempStatus);
+                }
+            })
         }));
+    }
+
+    pushStatus(status: any) {
+        let index = this.status.indexOf(this.status.filter((u) => {
+            return u.text === status.text;
+        })[0]);
+        this.zone.run(() => {
+            if (index >= 0) {
+                this.status.splice(index, 1);
+            }
+            this.status.push(status);
+        });
     }
 
     ngOnDestroy(): void {
