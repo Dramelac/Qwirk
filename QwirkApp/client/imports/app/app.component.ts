@@ -2,7 +2,8 @@ import {Component, OnInit} from "@angular/core";
 import template from "./app.component.html";
 import style from "./app.component.scss";
 import {InjectUser} from "angular2-meteor-accounts-ui";
-import {Router} from "@angular/router";
+import {Profiles} from "../../../both/collections";
+import {Status} from "../../../both/models";
 
 //Remove typing false positive
 declare let Notification: any;
@@ -14,7 +15,7 @@ declare let Notification: any;
 })
 @InjectUser('user')
 export class AppComponent implements OnInit {
-    constructor(private router: Router) {
+    constructor() {
     }
 
     ngOnInit(): void {
@@ -27,6 +28,16 @@ export class AppComponent implements OnInit {
                     Notification.permission = permission;
                 }
             });
+        }
+        Tracker.autorun(function () {
+            if(Meteor.user()) {
+                Profiles.update(Meteor.user().profile.id, {$set: {status: Status.Online}});
+            }
+        });
+        window.onbeforeunload = function () {
+            if (Meteor.user()){
+                Profiles.update(Meteor.user().profile.id, {$set: {status: Status.Offline}});
+            }
         }
 
     }
